@@ -1,1 +1,17 @@
-\todo{Opisać swoje artykuły do 8 kwietnia, nie zapominajmy o bibliografi i cytowaniu}
+\todo{Opisać swoje artykuły do 8 kwietnia, nie zapominajmy o bibliografi i cytowaniu} 
+
+AnswerBus~\cite{zheng2002answerbus} jest systemem odpowiadającym na pytania ogólne, bazującym na wyszkuiwaniu informacji, opartym o~analizę zdań. System przyjmuje pytania w~sześciu językach (angielskim, niemieckim, francuskim, hiszpańskim, włoskim i~portugalskim) oraz odpowiada po angielsku. Odpowiedzi wyszukuje z~internetu, posiłkując się pięcioma różnymi wyszukiwarkami internetowymi m.in. Google czy AltaVista.
+
+Przedstawione rozwiązanie składa się z~kilku komponentów, przetwarzających liniowo otrzymane pytanie. W pierwszej kolejności pytanie trafia do modułu rozpoznającego język. Jeżeli pytanie jest po angielsku to trafia ono dalej, natomiast jeżeli nie, to zostaje ono przetłumaczone wykorzystując internetową usługę tłumacza. Pytanie w~języku angielskim jest następnie analizowane, w~celu określenia typu pytania. Na podstawie typu, wybierane są trzy z~pięciu najbardziej odpowiednich przeglądarek. Wybrane rozwiązania są następnie odpytywane o~specjalnie przygotowane zapytanie, a~następnie z~otrzymanych dokumentów tekstowych wybierane są zdania, potencjalnie zawierające odpowiedź na pytanie. Ostatnim krokiem jest ocena wybranych zdań i~zwrócenie najlepszych wyników użytkownikowi~\cite{zheng2002answerbus}.  
+
+System AnswerBus, podobnie jak większość tego typu rozwiązań, określa typ postawionego pytania. Oprócz oczywistych typów, na przykład w~pytaniu \emph{Jak daleko}, określa typ \texttt{odległość}, system stara się ocenić dodatkowe parametry typu oczekiwany rząd wielkości (w~odpowiedzi na przykładowe pytanie oczekujemy odległości w~kilometrach a~nie w~centymetrach). Stwierdzenie typu pytania, pozwala na dokładniejszy dobór wyszukiwarki, od bardzo ogólnej jak Google do specjalistycznych jak Yahoo News~\cite{zheng2002answerbus}.
+
+Analiza odpowiedzi sprowadza się do oceny otrzymanego zdania na podstawie treści pytania. Oczekiwana odpowiedź powinna zawierać jak najwięcej wyrazów z~zapytania. Do oceny odpowiedzi, nie są brane pod uwagę wyrazy nie przenoszące szczególnej informacji typu przyimki, zaimki, spójniki czy okoliczniki. Do oceny odpowiedzi stosuje wzór~\ref{eqn:ocena-answerbus},gdzie $q$ to liczba pasujących słów pytania a~$Q$ to liczba wszystkich wyrazów w~odpowiedzi~\cite{zheng2002answerbus}.
+
+\begin{equation}
+    \label{eqn:ocena-answerbus}
+    q \geq  \sqrt{Q - 1}  + 1
+\end{equation}
+
+Oprócz zliczania słów, system wykrywa powiązania pomiędzy rzeczownikami a~zaimkami i~w~momencie wykrycia zaimka, stara się dokonać podstawienia bazując na zdaniu poprzednim. Na ocenę wpływają również obecność synonimów słów kluczowych oraz pozycja wyniku w~wyszukiwarce~\cite{zheng2002answerbus}.
+
