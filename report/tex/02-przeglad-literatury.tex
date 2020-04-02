@@ -26,3 +26,29 @@ Drugim komponent systemu AskMSR zajmuje się wyszukiwaniem \emph{n-gramów} w~zw
 Przygotowane \emph{n-gramy} są przekazywane do trzeciego modułu filtrowania. Moduł filtrowania, na podstawie ręcznie przygotowanych filtrów opartych o~wyrażenia regularne, określa jeden z~siedmiu typów pytania, a~następnie filtruje \emph{n-gramy}, zawężając potencjalny zestaw odpowiedzi. Ostatnim elementem systemu jest moduł łączenia, który wiąże ze sobą nakładające się \emph{n-gramy}, sukcesywnie budując większe zdania, normalnie niemożliwe do zbudowania wyłącznie poprzez tworzenie \emph{n-gramów}. Ocena połączonych \emph{n-gramów} jest określana na podstawie wyżej ocenianego składnika. Łączenie odbywa się do momentu aż nie można łączyć żadynch odpowiedzi~\cite{brill2002analysis}.
 
 Autorzy systemu zwracają uwagę że najwiekszy wpływ na jakość zwracanych odpowiedzi mają wpływ moduły filtrowania oraz łączenia \emph{n-gramów}. System został przetestowany przy pomocy pytań TREC-9~\cite{voorhees2001trec}. Najbardziej problematyczne okazały się pytania rozpoczynające się od \emph{jak?}, natomiast najlepiej radził sobie z~pytaniami rozpoczynającymi się od \emph{kto?}, z~dużą liczbą typowych dla języka słów~\cite{brill2002analysis}.
+
+\opracowanyartykul{question answering systems ibm watson}
+W pracy~\cite{lapshin2012question} przedstawiona została ogólna struktura systemu do odpowiadania na pytania ogólne. Autor podzielił proces odpowiadania na kilka odrębnych faz:
+\begin{itemize}
+    \item określanie typu pytania,
+    \item przetwarzanie pytania,
+    \item określenie kontekstu,
+    \item przeszukiwanie bazy wiedzy,
+    \item konstruowanie odpowiedzi.
+\end{itemize}
+
+Oprócz tego, w~pracy zostały określone obostrzenia, które powinien spełniać system:
+\begin{itemize}
+    \item interaktywność,
+    \item odpowiadanie w~czasie rzeczywistym,
+    \item logiczne wnioskowanie,
+    \item profilowanie użytkownika,
+    \item odpowiadanie w~różnych językach.
+\end{itemize}
+
+Przykładowym systemem, spełniającym przedstawione wymagania, jest \emph{DeepQA}, znany obecnie pod nazwą \emph{IBM Watson}. W~pierwszym etapie, system analizuje pytania, określając jego klasę, typ oczekiwanej odpowiedzi oraz buduje związki logiczne pomiędzy wyrazami w~pytaniu. Dzięki temu, jest on w~stanie zbudować odpowiednie zapytanie do bazy wiedzy, którą w~tym przypadku jest sieć WWW. W~kolejnym kroku, \emph{Watson} tworzy hipotezy odpowiedzi, które następnie sprawdza, poszukując dowodów oraz dokonując analizy krytycznej źródeł. Ostatecznie, ze zbioru odpowiedzi wybierana jest ta najbardziej prawdopodobna i~to ona zostaje zwrócona użytkownikowi~\cite{lapshin2012question}.
+
+Najważniejszym elementem całego systemu jest moduł klasyfikacji odpowiedzi. Poprawna klasyfikacja jest odpowiedzialna za największy przyrost poprawnych odpowiedzi. System korzysta ze zbioru kategorii pytań, nazywany ontologią. Pierwsze zbiory określały od 13 do 18 kategorii pytań, natomiast w~późniejszych pracach, zaczęto dzielić kategorię na kategorię główne i~szczegółowe, przykładowo w~\cite{li2002learning} określono sześć typów głównych i prawie pięćdziesiąt typów szczegółowych. Do określania typu pytania najczęściej wykorzystywane są klasyfikatory regułowe oraz statystyczne. Tego typu naiwne podejście jest bardzo proste i~daje dobre rezultaty~\cite{lapshin2012question}.
+
+To co pozwala dobrze oceniać system \emph{IBM Watson} to nie tylko dobre wyniki w~testach na pytaniach z~konferencji TREC, ale również potężny sukces biznesowy, który firma IBM osiągnęła sprzedając swoje rozwiązanie\footnote{https://www.ibm.com/watson}. W~połączeniu z~otwartą chmurą, nowoczesne przedsiębiorstwa mogą wykorzystać Watsona do tworzenia inteligentnych systemów zarządzania oraz wspierania ludzi w~przemyśle, medycynie i~logistyce. Najbardziej znanym przykładem użycia systemu \emph{IBM Watson} jest jego udział w~programie \emph{Jeopardy!}, w~którym to uczestnicy odpowiadają na zróżnicowane i~skomplikowane pytania~\cite{lapshin2012question}. 
+
