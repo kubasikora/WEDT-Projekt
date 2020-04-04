@@ -52,3 +52,32 @@ Najważniejszym elementem całego systemu jest moduł klasyfikacji odpowiedzi. P
 
 To co pozwala dobrze oceniać system \emph{IBM Watson} to nie tylko dobre wyniki w~testach na pytaniach z~konferencji TREC, ale również potężny sukces biznesowy, który firma IBM osiągnęła sprzedając swoje rozwiązanie\footnote{https://www.ibm.com/watson}. W~połączeniu z~otwartą chmurą, nowoczesne przedsiębiorstwa mogą wykorzystać Watsona do tworzenia inteligentnych systemów zarządzania oraz wspierania ludzi w~przemyśle, medycynie i~logistyce. Najbardziej znanym przykładem użycia systemu \emph{IBM Watson} jest jego udział w~programie \emph{Jeopardy!}, w~którym to uczestnicy odpowiadają na zróżnicowane i~skomplikowane pytania~\cite{lapshin2012question}. 
 
+
+\opracowanyartykul{A Practical QA System in Restricted Domains}
+Praca ~\cite{restrictedWeather} przedstawia opis systemu odpowiadającego na pytania stworzonego dla robota pracującego w~warunkach domowych. Autorzy zauważyli, że systemy tego typu są wykorzystywane przeważnie w~ograniczonych dziedzinach takich jak pogoda czy program stacji telewizyjnych oraz, że dla użytkowników takich systemów znacznie ważniejsza jest precyzja uzyskanych odpowiedzni. Artykuł skupił swoją uwagę na opisie systemu umożliwiającemy zadawanie pytań na temat pogody. 
+
+Proces odpowiadania na pytania jest trójfazowy: 
+\begin{itemize}
+	\item przetworzenie zapytania w języku naturalnym na zapytanie SQL,
+	\item realizacja zapytania,
+	\item konwersja otrzymanego rezultatu na język naturalny.
+\end{itemize}
+Stworzony system składa się z trzech elementów: 
+\begin{itemize}
+	\item silnika IE, 
+	\item DBMS, 
+	\item silnika QA.
+\end{itemize}
+
+Dane wykorzystywane do odpowiedzi na pytania pochodzą z~wybranych przez autorów, połowicznie ustrukuryzowanych stron internetowych Korea Meteorological Administration. Moduł silnika IE co godzinę pobiera z~odpowiedniej strony internetowej najnowsze dokumenty, parsuje je w~celu wydobycia zdyskretyzowanych informacji i zapisuje je w bazie danych. 
+
+Silnik QA służy do analizowania zapytań oraz konwertowania uzyskanych odpowiedzi na język naturalny. Autorzy \cite{restrictedWeather} wydzielili skończoną liczbę tematów (związanych z pogodą) o~jakie może zapytać użytkownik. Są to między innymi: temperatura powietrza, prędkość wiatru, opady. Analiza pytania polega na ekstrakcji słów kluczowych dotyczących m.in.: tematu pytania, miejsca, czasu. Aby móc zidentyfikować dokładnie intencje człowieka, przy użyciu specjalnego modułu, wyszczególnione z~zapytania słowa kluczowe są konwertowane na konretne terminy stosowane w systemie. Dzięki temu pytanie o konieczność wzięcia parasola jest traktowane tak samo jak pytanie czy pada aktualnie deszcz. W~kolejnym etapie przetwarzania pytania system zamienia wyrażenia czasowe takie jak \textit{dzisiaj} i~\textit{jutro} na wartości bezwzględne.
+
+Autorzy \cite{restrictedWeather} zwrócili uwagę na fakt, że użytkownicy robotów domowych przy zadawaniu pytań często pomijają niektóre informacje związne~z lokalizacją i~czasem. Z~tego powodu system wykorzystuje stworzony profil użytkownika by uzupełnić brakujące informacje.
+
+Tak przetworzone dane są wejściem dla klasyfikatora drzewiastego, którego zadaniem jest znalezienie dokładnie do jakiego typu query należy przyporządkować pytanie. Każdemu liściowi drzewa decyzyjnego przypisany jest konkretny schemat zapytania SQL oraz konkretny schemat odpowiedzi. System odrzuci pytanie, jeśli klasyfikator nie znajdzie odpowiedniego query.
+
+Przedstawiony przez autorów \cite{restrictedWeather} system został przetestowany przez 10 osób i~ zostało zadane łacznie 50 pytań. Uzyskano $\num{90.9}$\% poprawnych odpowiedzi, podczas gdy pokrycie wyniosło $\num{75}$\%. Należy jednak zwrócić na ograniczenia i~sposób działania systemu. Pobiera on dane tylko ze zdefiniowanych przez autorów stron internetowych oraz generowane odpowiedzi są schematyczne.
+
+
+
