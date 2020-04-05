@@ -87,7 +87,7 @@ Hipisek jest płytkim systemem odpowiadania na pytania, bazującym na wiedzy poz
 System hipisek wykorzystuje algorytm wyszukiwania informacji oraz bazuje na narzędziach lingwistycznych. System zakłada, że odpowiedź na pytanie użytkownika znajduje się bezpośrednio w~dokumencie, dlatego zwracany jest zbiór zdań z~dokumentu.
 Zadaniem systemu jest przekształcenie pytania użytkownika do zbioru zapytań do slnika wyszukiwań a~następnie dokonania oceny uzyskanych odpowiedzi i~zwrócenia najlepszej.
 
-Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url artykułu. Artykuły są indeksowane przy użyciu darmowego silnika indeksowania Sphinx \cite{sphinx}. 
+Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url artykułu. Artykuły są indeksowane przy użyciu mechanizmu indeksowania w darmowym silniku zapytań Sphinx \cite{sphinx}. 
 
 Pierwszym krokiem przetwarzania zapytania jest jest znalezienie bazowej formy wyrazu. W tym celu system wykorzystuje słownik języka polskiego \textit{Dylemat}. Pytanie jest przekształcane w strukturę QQuery zawierającą pozycje:
 \begin{itemize}
@@ -103,19 +103,19 @@ W procesie translacji wykorzystywane są dwie metody:
 	\item podejście oparte na zasadach, 
 	\item podejście heurystyczne.
 \end{itemize}
-W celu przekształcenia pytania w formalizm wykorzystane zostało narzędzie Spejd \cite{spejd}. Zasada ta przekształca zdanie w swoistego rodzaju strukturę składającą się ze znanych elementów przy jednoczesnym sprawdzaniu odpowiednich warunków. Jeśli nie udało się przekształcić pytania zykorzystując narzędzie Spejd, system heurystycznie tworzy strukturę bazując na podejściu heurystycznym. Zbudowana struktura QQuery za pomocą metod reformułacji jest przekształcana do formy odpowiedniej dla silnika zapytań.
+W celu przekształcenia pytania w formalizm wykorzystane zostało narzędzie Spejd \cite{spejd}. Zasada ta przekształca zdanie w swoistego rodzaju strukturę składającą się ze znanych elementów przy jednoczesnym sprawdzaniu odpowiednich warunków. Jeśli nie udało się przekształcić pytania wykorzystując narzędzie Spejd, system tworzy strukturę bazując na podejściu heurystycznym. Zbudowana struktura QQuery za pomocą metod reformułacji jest przekształcana do formy odpowiedniej do silnika zapytań.
 
-Formowane są trzy rodzaje zapytań do silkia:
+Formowane są trzy rodzaje zapytań:
 \begin{itemize}
 	\item bazowane na frazach,
 	\item bazowane na temacie,
 	\item zbioru słów z zapytania.
 \end{itemize}
 
-Sphinx wykorzystuje schemat Okapi BM25 w celu oceniania jakości dokumentów. System przetwarza dalej tylko najwyżej ocenione dokuemnty.
+Sphinx wykorzystuje schemat Okapi BM25 w celu oceniania jakości dokumentów. System przetwarza dalej tylko najwyżej ocenione dokumenty.
 
 Każdy dokuemnt otrzymuje dwie oceny: akceptacyjną oraz jakościową. Na oceny wpłwa między innymi: metoda uzyskania dokuemntu, obecność tematu oraz akcji, liczba ograniczeń pytania spełniona przez potencjalną odpowiedź, data publikacji.
 
-Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
+Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych ze zbiorami nazw. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
 
 Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym w konkursie TREC.
