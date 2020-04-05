@@ -77,7 +77,45 @@ Autorzy \cite{restrictedWeather} zwrócili uwagę na fakt, że użytkownicy robo
 
 Tak przetworzone dane są wejściem dla klasyfikatora drzewiastego, którego zadaniem jest znalezienie dokładnie do jakiego typu query należy przyporządkować pytanie. Każdemu liściowi drzewa decyzyjnego przypisany jest konkretny schemat zapytania SQL oraz konkretny schemat odpowiedzi. System odrzuci pytanie, jeśli klasyfikator nie znajdzie odpowiedniego query.
 
-Przedstawiony przez autorów \cite{restrictedWeather} system został przetestowany przez 10 osób i~ zostało zadane łacznie 50 pytań. Uzyskano $\num{90.9}$\% poprawnych odpowiedzi, podczas gdy pokrycie wyniosło $\num{75}$\%. Należy jednak zwrócić na ograniczenia i~sposób działania systemu. Pobiera on dane tylko ze zdefiniowanych przez autorów stron internetowych oraz generowane odpowiedzi są schematyczne.
+Przedstawiony przez autorów \cite{restrictedWeather} system został przetestowany przez 10 osób i~ zostało zadane łacznie 50 pytań. Uzyskano $\num{90.9}$\% poprawnych odpowiedzi, podczas gdy pokrycie wyniosło $\num{75}$\%. Należy jednak zwrócić uwagę na ograniczenia i~sposób działania systemu. Pobiera on dane tylko ze zdefiniowanych przez autorów stron internetowych oraz generowane odpowiedzi są schematyczne~\cite{restrictedWeather}.
 
+\opracowanyartykul{Named entity recognition in a Polish question answering system}
+Pozycja \cite{polishQAS} opisuje budowę systemu odpowiadania na pytania w~języku polskim hipisek oraz opisuje wykorzystanie modułu rozpoznawania nazw.
 
+Hipisek jest płytkim systemem odpowiadania na pytania, bazującym na wiedzy pozyskanej z bazy danych artykułów. Autorzy zaimplementowali proste metody bazujące na formułowaniu zapytań internetowych a~następnie wzbogacili system o narzędzie do rozpoznawania nazw Named Entity Recognition (NER). 
 
+System hipisek wykorzystuje algorytm wyszukiwania informacji oraz bazuje na narzędziach lingwistycznych. System zakłada, że odpowiedź na pytanie użytkownika znajduje się bezpośrednio w~dokumencie, dlatego zwracany jest zbiór zdań z~dokumentu.
+Zadaniem systemu jest przekształcenie pytania użytkownika do zbioru zapytań do slnika wyszukiwań a~następnie dokonania oceny uzyskanych odpowiedzi i~zwrócenia najlepszej.
+
+Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url artykułu. Artykuły są indeksowane przy użyciu darmowego silnika indeksowania Sphinx \cite{sphinx}. 
+
+Pierwszym krokiem przetwarzania zapytania jest jest znalezienie bazowej formy wyrazu. W tym celu system wykorzystuje słownik języka polskiego \textit{Dylemat}. Pytanie jest przekształcane w strukturę QQuery zawierającą pozycje:
+\begin{itemize}
+	\item TOPIC - przedmiot zapytania,
+	\item ACTION - główny czasownik w pytaniu,
+	\item CONSTRAINTS - ograniczenia, pozostałe leksemy z~pytania zawierające wymagane informacje,
+	\item TYPE - pytanie może dotyczyć miejsca, czasu lub osoby.
+\end{itemize}
+Dodatkowo w strukturze umieszczane są znalezione synonimy bazowych form słów.
+
+W procesie translacji wykorzystywane są dwie metody: 
+\begin{itemize}
+	\item podejście oparte na zasadach, 
+	\item podejście heurystyczne.
+\end{itemize}
+W celu przekształcenia pytania w formalizm wykorzystane zostało narzędzie Spejd \cite{spejd}. Zasada ta przekształca zdanie w swoistego rodzaju strukturę składającą się ze znanych elementów przy jednoczesnym sprawdzaniu odpowiednich warunków. Jeśli nie udało się przekształcić pytania zykorzystując narzędzie Spejd, system heurystycznie tworzy strukturę bazując na podejściu heurystycznym. Zbudowana struktura QQuery za pomocą metod reformułacji jest przekształcana do formy odpowiedniej dla silnika zapytań.
+
+Formowane są trzy rodzaje zapytań do silkia:
+\begin{itemize}
+	\item bazowane na frazach,
+	\item bazowane na temacie,
+	\item zbioru słów z zapytania.
+\end{itemize}
+
+Sphinx wykorzystuje schemat Okapi BM25 w celu oceniania jakości dokumentów. System przetwarza dalej tylko najwyżej ocenione dokuemnty.
+
+Każdy dokuemnt otrzymuje dwie oceny: akceptacyjną oraz jakościową. Na oceny wpłwa między innymi: metoda uzyskania dokuemntu, obecność tematu oraz akcji, liczba ograniczeń pytania spełniona przez potencjalną odpowiedź, data publikacji.
+
+Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
+
+Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym w konkursie TREC.
