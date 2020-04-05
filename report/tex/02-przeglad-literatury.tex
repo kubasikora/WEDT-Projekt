@@ -136,3 +136,30 @@ Jako komponenty zależne od języka, autor wydzielił:
 W~przypadku przetwarzania bazy wiedzy, autor podkreśla że klasyczny \emph{stemming} nie zdaje egzaminu oraz że o~wiele lepsze wyniki uzyskuje się przy użyciu pełnych analizatorów morfologicznych, które przetwarzają tekst wolniej jednak gwarantują znalezienie każdej formy językowej dla przetwarzanego segmentu.
 
 Mimo wielu różnic, autor podkreśla że kilka operacji, skutecznie używanych w~systemach do odpowiadania w~języku angielskim, może sprawdzić się w~systemach obsługujących język polski. Taką operacją jest między innymi indeksowanie bazy wiedzy, w~celu przyspieszenia wyszukiwania tekstu oraz wyszukiwanie relacji pomiędzy wyrazami, wykorzystując narzędzia typu \emph{WordNet}.
+
+\opracowanyartykul{A survey of Text Question Answering Techniques~\cite{gupta2012survey}}
+
+Według~\cite{gupta2012survey}, proces automatycznego odpowiadania na pytania można podzielić na trzy oddzielne fazy: klasyfikację pytania, wydobycie informacji z~bazy wiedzy oraz wydobycie/generacja odpowiedzi. Te trzy fazy są wyróżnialne w~każdym systemie do odpowiadania na pytania, niezależnie od wykorzystanego mechanizmu. Autorzy wyodrębnili cztery różne podejścia do rozwiązania postawionego problemu, wyróżniając systemy oparte~o:
+\begin{itemize}
+	\item przeszukiwanie sieci WWW,
+	\item wyszukiwanie w~bazie dokumentów tekstowych,
+	\item wyszukiwanie w~zamkniętej bazie danych,
+	\item reguły i~dopasowywanie do wzorca.
+\end{itemize}
+
+Autorzy podkreślają jak ważne jest automatyczne wydobycie informacji z~przygotowanego dokumentu. W~celu poprawnego wydobycia poszukiwanych informacji z~dokumentu należy w~pierwszej kolejności dokonać filtrowania akapitów. Zazwyczaj dokonuje się tego wykorzystując dopasowywanie do słów kluczowych zapytania. Im więcej razy w~tekście wystąpi słowo kluczowe, tym większa szansa na to że nie zostanie ono odfiltrowane. Następnie, każdemu pozostałemu akapitowi należy przyporządkować liczbę, ocenę jakości tekstu.
+Dobór funkcji oceniającej jest zależny od typu przetwarzanych dokumentów oraz typu pytania. Ocenione akapity należy posortować a~następnie, rozpoczynając od pierwszego, przeprowadzić proces leksykalnego i~syntaktycznego wydobycia wiedzy z~tekstu~\cite{gupta2012survey}.
+
+Aby odpowiednio ocenić akapity, należy przed przetwarzaniem dokumentów dokonać klasyfikacji pytania. Autorzy~\cite{gupta2012survey} wyodrębnili osiem klas głównych pytań odpowiadających na pytania:
+\begin{itemize}
+	\item co?,
+	\item jak?,
+	\item dlaczego?,
+	\item który/która/które/którzy?,
+	\item gdzie?,
+	\item czyji/kogo?
+	\item kiedy?,
+	\item pytania funkcjonalne.
+\end{itemize}
+
+Pierwsze siedem klas pytań jest łatwo rozróżnialnych, za pomocą stosownych reguł logicznych i~wyrażeń regularnych. Największą trudność sprawiają pytania funkcjonalne typu \emph{Nazwij piłkarza który strzelił jedyną bramkę w~finale Euro 2016}. Pytania tego typu wymagają szczególnego traktowania i~najczęściej wymagają maszynowego rozumienia tekstu.
