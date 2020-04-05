@@ -131,5 +131,58 @@ Ostateczne odpowiedzi systemu były w większości przypadków generowane na pod
 
 Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w innych przypadkach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w internecie w niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
 
+Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym na konferencjach TREC \cite{brill2001data}.
 
+\opracowanyartykul{issues of polish QA~\cite{przybyla2012issues}}
+W~pracy~\cite{przybyla2012issues}, autor opisuje budowę typowego systemu do odpowiadania na pytania otwarte, porównując które elementy takiego rozwiązania są zależne od języka. Oprócz tego, podkreślone zostały cechy języka polskiego, jako języka słowiańskiego, które utrudniają automatyczne przetwarzanie oraz generację tekstu.
 
+Główną cechą czyniącą przetwarzanie tekstów w~języku polskim trudnym, jest mnogość form językowych. Fleksyjność języków słowiańskich pozwala na określanie roli wyrazu w~zdaniu na podstawie końcówki, a~nie jak w~języku angielskim na podstawie pozycji w~zdaniu. Przykładowo zdanie \emph{Jan zjadł rybę} oraz \emph{Rybę zjadł Jan}, znaczą to samo, mimo inaczej położonego akcentu, natomiast zdania \emph{John ate a~fish} i~\emph{A~fish ate John} znaczą zupełnie co innego. Co więcej, złożona odmiana rzeczowników sprawia że rozpoznawanie nazw własnych jest jeszcze trudniejsze~\cite{przybyla2012issues}.
+
+Jako komponenty zależne od języka, autor wydzielił:
+\begin{itemize}
+	\item przetwarzanie bazy wiedzy,
+	\item przetwarzanie pytania,
+	\item generacja odpowiedzi,
+	\item rozwijanie anafor.
+\end{itemize}
+
+W~przypadku przetwarzania bazy wiedzy, autor podkreśla że klasyczny \emph{stemming} nie zdaje egzaminu oraz że o~wiele lepsze wyniki uzyskuje się przy użyciu pełnych analizatorów morfologicznych, które przetwarzają tekst wolniej jednak gwarantują znalezienie każdej formy językowej dla przetwarzanego segmentu.
+
+Mimo wielu różnic, autor podkreśla że kilka operacji, skutecznie używanych w~systemach do odpowiadania w~języku angielskim, może sprawdzić się w~systemach obsługujących język polski. Taką operacją jest między innymi indeksowanie bazy wiedzy, w~celu przyspieszenia wyszukiwania tekstu oraz wyszukiwanie relacji pomiędzy wyrazami, wykorzystując narzędzia typu \emph{WordNet}.
+
+\opracowanyartykul{A survey of Text Question Answering Techniques~\cite{gupta2012survey}}
+Według~\cite{gupta2012survey}, proces automatycznego odpowiadania na pytania można podzielić na trzy oddzielne fazy: klasyfikację pytania, wydobycie informacji z~bazy wiedzy oraz wydobycie/generacja odpowiedzi. Te trzy fazy są wyróżnialne w~każdym systemie do odpowiadania na pytania, niezależnie od wykorzystanego mechanizmu. Autorzy wyodrębnili cztery różne podejścia do rozwiązania postawionego problemu, wyróżniając systemy oparte~o:
+\begin{itemize}
+	\item przeszukiwanie sieci WWW,
+	\item wyszukiwanie w~bazie dokumentów tekstowych,
+	\item wyszukiwanie w~zamkniętej bazie danych,
+	\item reguły i~dopasowywanie do wzorca.
+\end{itemize}
+
+Autorzy podkreślają jak ważne jest automatyczne wydobycie informacji z~przygotowanego dokumentu. W~celu poprawnego wydobycia poszukiwanych informacji z~dokumentu należy w~pierwszej kolejności dokonać filtrowania akapitów. Zazwyczaj dokonuje się tego wykorzystując dopasowywanie do słów kluczowych zapytania. Im więcej razy w~tekście wystąpi słowo kluczowe, tym większa szansa na to że nie zostanie ono odfiltrowane. Następnie, każdemu pozostałemu akapitowi należy przyporządkować liczbę, ocenę jakości tekstu.
+Dobór funkcji oceniającej jest zależny od typu przetwarzanych dokumentów oraz typu pytania. Ocenione akapity należy posortować a~następnie, rozpoczynając od pierwszego, przeprowadzić proces leksykalnego i~syntaktycznego wydobycia wiedzy z~tekstu~\cite{gupta2012survey}.
+
+Aby odpowiednio ocenić akapity, należy przed przetwarzaniem dokumentów dokonać klasyfikacji pytania. Autorzy~\cite{gupta2012survey} wyodrębnili osiem klas głównych pytań odpowiadających na pytania:
+\begin{itemize}
+	\item co?,
+	\item jak?,
+	\item dlaczego?,
+	\item który/która/które/którzy?,
+	\item gdzie?,
+	\item czyji/kogo?
+	\item kiedy?,
+	\item pytania funkcjonalne.
+\end{itemize}
+
+Pierwsze siedem klas pytań jest łatwo rozróżnialnych, za pomocą stosownych reguł logicznych i~wyrażeń regularnych. Największą trudność sprawiają pytania funkcjonalne typu \emph{Nazwij piłkarza który strzelił jedyną bramkę w~finale Euro 2016}. Pytania tego typu wymagają szczególnego traktowania i~najczęściej wymagają maszynowego rozumienia tekstu.
+
+\opracowanyartykul{Data-Intensive Question Answering}
+Pozycja \cite{brill2001data} opisuje wykorzystanie systemu AskMSR oraz AskMSR2 na konferencji TREC-9 w~2001 roku. Jako że analiza systemów została przedstawiona w~punkcie \ref{askmr} tego rozdziału (\cite{brill2002analysis}), w~opisie artykułu pominięte zostaną kwestie poruszone powyżej.
+
+Główną modyfikacją systemów AskMSR oraz AskMSR na potrzeby konferencji TREC było dodanie fazy sprawdzającej wystąpnie potencjalnej odpowiedzi w zbiorze dokumentów TREC. System po znalezieniu n~najlepszych odpowierdzi z~zasobów internetowych, wyszukiwał ich w~bazie danych TREC-9. W~tym celu wykorzystany został system Okapi IR. Zapytanie polegało na stworzeniu query skłądającego się ze słów użytych w~potencjalnej odpowiedzi. Następnie znalezione dokuemnty zostały ocenione.
+
+Autorzy \cite{brill2001data} na tym etapie generacji odpowiedzi nie wykorzystywali specjalnych zabiegów lingwistycznych w~celu zwiększenia precyzji ani pokrycia. Do dalszego przetwarzania wybierane były najwyżej ocenione dokumenty dla każdej potencjalnej odpowiedzi.
+
+Ostateczne odpowiedzi systemu były w większości przypadków generowane na podstawie najwyżej ocenianych dokumentów wspierających potencjalne odpowiedzi. Wyjątkiem od reguły była sytuacji, gdzie jeden dokuemnt powtarzał się w~kilku potencjalnych odpowiedziach.
+
+Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w~innych przypadkach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w~internecie w~niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
