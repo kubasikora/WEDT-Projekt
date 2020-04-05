@@ -16,7 +16,7 @@ Analiza odpowiedzi sprowadza się do oceny otrzymanego zdania na podstawie treś
 
 Oprócz zliczania słów, system wykrywa powiązania pomiędzy rzeczownikami a~zaimkami i~w~momencie wykrycia zaimka, stara się dokonać podstawienia bazując na zdaniu poprzednim. Na ocenę wpływają również obecność synonimów słów kluczowych oraz pozycja wyniku w~wyszukiwarce~\cite{zheng2002answerbus}.
 
-\opracowanyartykul{asmr}
+\opracowanyartykul{asmr}\label{askmr}
 System AskMSR~\cite{brill2002analysis} jest systemem zajmującym się odpowiadaniem na pytania ogólne. W~tym celu przeszukuje on sieć WWW, wykorzystując internetowe wyszukiwarki. Celem autorów w~tym projekcie, było stworzenie systemu odpowiadającego na pytania, bez przeprowadzania zaawansowanej analizy lingwistycznej zarówno pytania,jak i~potenjalnych odpowiedzi. Głównym założeniem był fakt olbrzymiej redundancji odpowiedzi w~sieci WWW.
 
 Zasadniczo, system składa się z~czterech modułów. Pierwszy z~nich na podstawie pytania buduje zapytania do wyszukiwarki internetowej. Każde z~zapytań, zawiera pewną część oryginalnego pytania. Im więcej wyrazów oryginalnego zapytania znajduje się w~przygotowanym zapytaniu, tym z~większą wagą będą brane pod uwagę odpowiedzi na nie otrzymane.Po konstrukcji zapytań, są one wysyłane do wyszukiwarki internetowej. Do dalszych modułów wysyłane są jedynie krótkie wyrywki dokumentu, przesyłane wraz z~linkami~\cite{brill2002analysis}.
@@ -118,4 +118,18 @@ Każdy dokuemnt otrzymuje dwie oceny: akceptacyjną oraz jakościową. Na oceny 
 
 Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych ze zbiorami nazw. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
 
-Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym w konkursie TREC.
+Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym w konkursie TREC \cite{polishQAS}.
+
+\opracowanyartykul{Data-Intensive Question Answering}
+Pozycja \cite{brill2001data} opisuje wykorzystanie systemu AskMSR oraz AskMSR2 na konferencji TREC-9 w 2001 roku. Jako że analiza systemów została przedstawiona w punkcie \ref{askmr} tego rozdziału (\cite{brill2002analysis}), w opisie artykułu pominięte zostaną kwestie poruszone powyżej.
+
+Główną modyfikacją systemów AskMSR oraz AskMSR na potrzeby konferencji TREC było dodanie fazy sprawdzającej wystąpnie potencjalnej odpowiedzi w zbiorze dokumentów TREC. System po znalezieniu n najlepszych odpowierdzi z zasobów internetowych, wyszukiwał ich w bazie danych TREC-9. W tym celu wykorzystany został system Okapi IR. Zapytanie polegało na stworzeniu query skłądającego się ze słów użytych w potencjalnej odpowiedzi. Następnie znalezione dokuemnty zostały ocenione.
+
+Autorzy \cite{brill2001data} na tym etapie generacji odpowiedzi nie wykorzystywali specjalnych zabiegów lingwistycznych w celu zwiększenia precyzji ani pokrycia. Do dalszego przetwarzania wybierane były najwyżej ocenione dokumenty dla każdej potencjalnej odpowiedzi.
+
+Ostateczne odpowiedzi systemu były w większości przypadków generowane na podstawie najwyżej ocenianych dokumentów wspierających potencjalne odpowiedzi. Wyjątkiem od reguły była sytuacji, gdzie jeden dokuemnt powtarzał się w kilku potencjalnych odpowiedziach.
+
+Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w innych przypadkach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w internecie w niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
+
+
+
