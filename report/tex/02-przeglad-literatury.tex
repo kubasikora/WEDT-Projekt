@@ -119,3 +119,20 @@ Każdy dokuemnt otrzymuje dwie oceny: akceptacyjną oraz jakościową. Na oceny 
 Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych ze zbiorami nazw. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
 
 Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym w konkursie TREC.
+
+\opracowanyartykul{issues of polish QA~\cite{przybyla2012issues}}
+W~pracy~\cite{przybyla2012issues}, autor opisuje budowę typowego systemu do odpowiadania na pytania otwarte, porównując które elementy takiego rozwiązania są zależne od języka. Oprócz tego, podkreślone zostały cechy języka polskiego, jako języka słowiańskiego, które utrudniają automatyczne przetwarzanie oraz generację tekstu.
+
+Główną cechą czyniącą przetwarzanie tekstów w~języku polskim trudnym, jest mnogość form językowych. Fleksyjność języków słowiańskich pozwala na określanie roli wyrazu w~zdaniu na podstawie końcówki, a~nie jak w~języku angielskim na podstawie pozycji w~zdaniu. Przykładowo zdanie \emph{Jan zjadł rybę} oraz \emph{Rybę zjadł Jan}, znaczą to samo, mimo inaczej położonego akcentu, natomiast zdania \emph{John ate a~fish} i~\emph{A~fish ate John} znaczą zupełnie co innego. Co więcej, złożona odmiana rzeczowników sprawia że rozpoznawanie nazw własnych jest jeszcze trudniejsze~\cite{przybyla2012issues}.
+
+Jako komponenty zależne od języka, autor wydzielił:
+\begin{itemize}
+	\item przetwarzanie bazy wiedzy,
+	\item przetwarzanie pytania,
+	\item generacja odpowiedzi,
+	\item rozwijanie anafor.
+\end{itemize}
+
+W~przypadku przetwarzania bazy wiedzy, autor podkreśla że klasyczny \emph{stemming} nie zdaje egzaminu oraz że o~wiele lepsze wyniki uzyskuje się przy użyciu pełnych analizatorów morfologicznych, które przetwarzają tekst wolniej jednak gwarantują znalezienie każdej formy językowej dla przetwarzanego segmentu.
+
+Mimo wielu różnic, autor podkreśla że kilka operacji, skutecznie używanych w~systemach do odpowiadania w~języku angielskim, może sprawdzić się w~systemach obsługujących język polski. Taką operacją jest między innymi indeksowanie bazy wiedzy, w~celu przyspieszenia wyszukiwania tekstu oraz wyszukiwanie relacji pomiędzy wyrazami, wykorzystując narzędzia typu \emph{WordNet}.
