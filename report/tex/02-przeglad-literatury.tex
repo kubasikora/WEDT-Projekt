@@ -186,3 +186,23 @@ Autorzy \cite{brill2001data} na tym etapie generacji odpowiedzi nie wykorzystywa
 Ostateczne odpowiedzi systemu były w większości przypadków generowane na podstawie najwyżej ocenianych dokumentów wspierających potencjalne odpowiedzi. Wyjątkiem od reguły była sytuacji, gdzie jeden dokuemnt powtarzał się w~kilku potencjalnych odpowiedziach.
 
 Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w~innych przypadkach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w~internecie w~niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
+
+\opracowanyartykul{An English language question answering system for a large relational database}
+Pozycja \cite{waltz1978english} opisuje sposób działania oraz budowę systemu odpowiadania na pytania PLANES. System ten został stworzony w celu zapewnienia wygodnego interfejsu do bazy danych związanej z samolotami dla amerykańskiego wojska w drugiej połowie lat 70-tych ubiegłego wieku.
+
+Artykuł \cite{waltz1978english} opisuje budowę całego systemu, ale z perspektywy tworzenia nowego systemu istotne są tylko kwestie związane z konstrukcją parsera. Przetwarzanie zapytania składa się z czterech etapów: parsowania pytania, konstrukcji odpowiedniego query, dokonania jego oceny oraz wykonania zapytania i zwrócenia odpowiedzi. Założenia z jakich wyszli autorzy systemu to: wykorzystywanie specyficznego słownictwa przez użytkowników a co za tym idzie brak dwuznaczności oraz fakt, że użytkownicy systemu nie wpisują długich zapytań.
+
+System podzielił parsowanie pytania na kilka etapów. W pierwszym dokonywana była poprawa literówek oraz konwersja słów do ich kanoniczneg postaci. W drugim etapie wykorzystywane były podsieci ATN, których zadaniem było połączenie frazy ze zdefiniowanym w systemie znaczeniem. Dla każdego rodzaju obiektu (na przykład czas, rodzaje samolotów, rodzaje usterek) zaimplementowana została osobna podsieć identyfikująca znaczenie. 
+
+Zaletą systemu było szybkie odrzucanie słów nie niosących żadnej informacji, które przez autorów \cite{waltz1978english} zostały nazwane szumami. Identyfikowane one były za pomocą osobnej podsieci. 
+
+System, jeśli udało mu się znaleźć znaczenie jednego słowa używając danej podsieci, starał się wykorzystać ją ponownie w procesie identyfikacji kolejnego słowa.
+
+Po przeanalizowaniu wszystkich słów oraz odrzuceniu szumów system aktualizował rejestr kontekstu, który został zaimplementowany w postaci stosu. W rejestrze tym znajdują się ostatie zapytania wraz z ostatnio wykrytymi frazami, ostatnio użytymi query oraz znalezionymi odpowiedziami. Do rejestru zostały wrzucane w tej fazie parsowania kanoniczne formy słów wraz z ich znaczeniem. Rejestr ten gra istotną rolę w procesie ustalania niesprecyzowanych zmiennych. Służy między innymi do znajdowania właściwych znaczeń zaimków.
+
+Jeśli system nie jest w stanie jednoznaczie odtworzyć znaczenia danego słowa, to tworzone są struktury zwane ramkami pojęć (ang. concept case frames). Struktura składa się z czasownika oraz części rzeczownikowych, do każdej przypisany jest wzór query. System testuje struktury oraz sprawdza, czy ich wykorzystanie może mieć sens. Jeśli wynik testowania jest pozytywny dla większej niż jednej struktury, system prosi użytkownika o wybranie znaczenia oraz zwraca znalezione ramki.
+
+Tak stworzone struktury przekzywane są następnie do modułu tworzącego zapytania. Proces tworzenia zapytania rozpoczyna się od próby identyfikacji tablic potrzebnych do znalezienia danych. Następnie moduł sprawca jakiej odpowiedzi oczekuje użytkownik, czyli jakiej domeny powinien być zwrócony wynik. Jako że system był tworzony w latach 70-tych, dużym wyzwaniem było przetważanie złożonych zapytań.
+
+Przed rozpoczęciem realizacji zapytania, PLANES przekazywał użytkownikowi stworzone query oraz umożliwił wprowadzanie korekt. Dane zwrócone z bazy danych były przekazywane do generatora odpowiedzi, który na podstawie rodzaju zwróconych danych oraz polecenia użytkownika konwertował je do postaci grafu lub tabeli\cite{waltz1978english}.
+
