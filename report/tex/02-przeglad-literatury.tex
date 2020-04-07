@@ -206,3 +206,69 @@ Tak stworzone struktury przekzywane są następnie do modułu tworzącego zapyta
 
 Przed rozpoczęciem realizacji zapytania, PLANES przekazywał użytkownikowi stworzone query oraz umożliwił wprowadzanie korekt. Dane zwrócone z bazy danych były przekazywane do generatora odpowiedzi, który na podstawie rodzaju zwróconych danych oraz polecenia użytkownika konwertował je do postaci grafu lub tabeli\cite{waltz1978english}.
 
+\opracowanyartykul{Question Analysis for Polish Question Answering}
+Artykuł \cite{przybyla-2013-question} poświęcony jest przedstawieniu różnych sposobów analizy pytań dla systemów QA oraz ich skuteczności w systemach przetwarzających pytania w języku polskim. Analiza pytania polega na przetworzeniu zadanego pytania na formę umożliwiającą wyszukanie odpowiedzi w systemie tzw. model pytania. Model ten zawiera zapytanie do wyszukiwarki oraz typ pytania składający się z ogólnego typu pytania oraz typ bytu nazwanego. Typ bytu nazwanego wskazuje typ oczekiwanej odpowiedzi. Przykładowo dla pytania "Jakiego pseudonimu używał X?" bytem nazwanym jest pseudonim. Autor zwraca uwagę, że problem analizy pytań może być pominięty, o ile system QA będzie otrzymywał informację o typie pytania lub spodziewał się konkretnego typu pytań.
+
+Jednym ze sposobów rozpoznawania typu pytania, opisanym w artykule \cite{przybyla-2013-question}, jest metoda dopasowywania wzorców. Metoda ta polega na stworzeniu wyrażenia regularnego, do którego porównywane jest pytanie. To podejście autor stosuje do jednoznacznych pytań (czy?, kiedy?), dla których można określić typ spodziewanej odpowiedzi. 
+
+Dla niejednoznacznych schematów (jaki?, który?) autor proponuje podejście ujednoznaczniania. W tym celu należy zinterpretować pytanie, następnie wybrać pierwszą grupę nominalną po zaimku, poszukać odpowiadającego jej leksemu w plWordNet, pobrać listę hiperonimów odpowiedniego synsetu i zwrócić odpowiedni typ bytu nazwanego (gdy lista zawiera synset skojarzony z typem bytu nazwanego) lub brak znalezienia typu (w przeciwnym wypadku).
+
+Ostatnią metodą do rozpoznawania typu pytania jest wykorzystanie uniwersalnego klasyfikatora uczenia maszynowego (drzewo decyzyjne, las losowy).
+
+Podstawowym sposobem na tworzenie zapytania do wyszukiwania, przedstawionym w artykule, było użycie wyrazów z pytania za wyjątkiem zaimka pytającego. Poszczególne wyrazy w zapytaniu mogą być połączone przez alternatywę lub koniunkcję. Należy wziąć pod uwagę to, że początkowe zapytanie do wyszukiwarki może nie zwrócić oczekiwanych rezultatów i rozważyć skrócenie zapytania bądź wydłużenie poprzez wykorzystanie synonimów. 
+
+Dodatkowo należy wziąć pod uwagę dużą rolę odmiany wyrazów w języku polskim i zastosować stemming bądź fuzzy queries (możliwość różnicy pomiędzy zapytaniem a~wyszukiwanym tekstem).
+
+W rezultacie najlepsza okazała się metoda łącząca dopasowywanie wzorców z ujednolicaniem za pomocą WordNetu. W przypadku zapytań, najlepsze wyniki uzyskano dla łączenia wszystkich wyrazów z pytania za pomocą alternatywy. 
+
+\opracowanyartykul{Learning Surface Text Patterns for a Question Answering System}
+Artykuł \cite{ravichandran-hovy-2002-learning} poświęcony jest tematyce wykorzystania wzorców tekstowych w systemach QA. Autorzy zauważają, że odpowiedzi na większość pytań można zlokalizować w tekście poprzez znalezienie charakterystycznych wzorców. Przykładowo, aby odszukać rok urodzenia danej osoby, należy odnaleźć tekst pasujący do wzorca: “<NAME> was born in <BIRTHDATE>”.
+
+Artykuł skupia się na temacie automatycznej generacji wzorców oraz ocenie ich precyzji. Autorzy prezentują algorytm, który samodzielnie tworzy wzorce na podstawie pary: wyraz-pytanie (question term)i wyraz-odpowiedź (answer term). 
+
+Aby stworzyć wzorzec należy dla danego typu pytania (np. BIRTHYEAR), wyszukać w zbiorze tekstów zdania zawierające wyraz-pytanie i wyraz-odpowiedź  – przykładowo „Mozart 1756”. Ze znalezionych zdań buduje się drzewa sufiksowe, aby znaleźć wszystkie podciągi zdania o różnych długościach. Te podciągi, które zawierają zarówno wyraz-pytanie i wyraz-odpowiedź, tworzą wzorzec (<NAME> was born on <ANSWER>). Algorytm można usprawnić wprowadzając rozszerzenie, które pozwala na określenie spodziewanej długości odpowiedzi dla niektórych typów pytań. 
+
+Autorzy przetestowali tworzenie wzorców przy wykorzystaniu korpusu TREC oraz wyszukiwarki internetowej. Z uwagi na redundancję danych, większą precyzję osiągnęły wzorce stworzone na podstawie tekstów z internetu. 
+
+Wśród wad wykorzystania wzorców tekstowych, autorzy wymieniają ignorowanie informacji na temat typu spodziewanej odpowiedzi. Do wzorca może zostać dopasowany każdy pasujący zwrot bez względu na typ części mowy. Kolejną wadą jest zagrożenie powstania zbyt ogólnikowych wzorców w przypadku niektórych pytań. Problem ten występuje między innymi w przypadku pytań o definicję. Autorzy podkreślają także istotną wagę odpowiedniego doboru przykładów (wyraz-pytanie i wyraz-odpowiedź), na podstawie których tworzone są wzorce oraz potrzebę korzystania z dużej bazy tekstów. Podejście z dopasowywaniem wzorców, nie sprawdza się najlepiej przy tekstach, w których pytanie i odpowiedź znajdują się w dalekiej odległości od siebie (“<QUESTION>, (<dużo wyrazów>)*, lies on <ANSWER>”). Poważnym ograniczeniem metody jest także to, że może być stosowana tylko do pytań o jednym wyrazie-pytania. Przykładowo w pytaniu “Which county does the city of Long Beach lie?” są dwa wyrazy-pytania: „county” i „Long Beach”, dlatego algorytm zaproponowany przez autorów nie sprawdzi się. Problemem jest także występowanie różnych form danego zwrotu (Gandhi może zostać zapisany także jako “Mahatma Gandhi”, “Mohandas Karamchand Gandhi) czy różnych form zapisu. 
+
+Zaletą tej metody jest natomiast to, że można ją wykorzystywać dla wielu języków, ponieważ nie bierze pod uwagę cech specyficznych dla danego języka.
+
+\opracowanyartykul{IBM's Statistical Question Answer System}
+W artykule \cite{Ittycheriah00ibm'sstatistical} zaprezentowana została ogólna budowa systemu IBM, który wykorzystuje klasyfikator maksymalnej entropii do określania rodzaju pytania oraz typu spodziewanej odpowiedzi, a także do oznaczania klasy bytów występujących w tekście. 
+
+System składa się z czterech głównych modułów: klasyfikacji rodzaju pytania i odpowiedzi, rozszerzenia zapytania/wyszukiwania informacji, oznaczania klasy bytów występujących w wyszukanym tekście (named entity marking), wyboru odpowiedzi. 
+
+W systemie, określenie typu odpowiedzi polega na przyporządkowaniu do pytania etykiety określającej szukany byt. Do określenia typu bytu, autorzy korzystają z kategorii MUC, opisanej w artykule \cite{chinchor-robinson-1998-appendix}, lub przyporządkują typ PHRASE, gdy typu nie da się określić. Za przyporządkowanie tych etykiet odpowiada model maksymalnej entropii. 
+
+Drugim opisanym aspektem systemu był moduł wyszukiwania informacji. Autorzy proponują podejście dwuetapowe. Pierwszy etap polega na przeszukaniu bazy danych encyklopedii. Wyszukane fragmenty są oceniane za pomocą schematu Okapi opisanej w artykule \cite{RobertsonOkapi}. Ustępy o najwyższym wyniku są następnie użyte do rozszerzenia zapytania za pomocą techniki LCA. Drugi etap polega na wyszukaniu w korpusie TREC-9 rozszerzonego zapytania.
+
+Przedostatnim modułem jest oznaczenie klasy bytów występujących w wybranych ustępach. Klasyfikator maksymalnej entropii przyporządkuje każdemu słowu kategorię MUC \cite{chinchor-robinson-1998-appendix}. Tak zmodyfikowany ustęp wraz z spodziewanym typem odpowiedzi stanowi wejście do ostatniego modułu.
+
+Każdy ustęp przekazany do ostatniego modułu dzielony jest na zdania. Wokół każdego zdania formowane jest okno. Każde okno jest oceniane na podstawie pięciu parametrów. Dodatkowo brana pod uwagę jest obecność lub brak spodziewanego typu odpowiedzi. Na koniec wybieranych jest 50 lub 250 bajtów najbardziej dopasowanych okien. 
+
+\opracowanyartykul{High Performance Question/Answering}
+W artykule \cite{hpqa} opisano charakterystyczne aspekty systemu Question/Answer, dzięki którym system cechuje się wysoką dokładnością przy odpowiadaniu na pytania. Autorzy przekonują, że na skuteczność systemu QA wpływa nie tylko rozpoznawanie typu spodziewanej odpowiedzi, ale także zmiany leksykalne, morfologiczne i semantyczne przeprowadzone na słowach kluczowych.
+
+Pierwszym ważnym aspektem systemu Question/Answer jest stworzona przez autorów taksonomia odpowiedzi (ANSWER TYP TAXONOMY), która umożliwiła znaleźć spodziewany typ odpowiedzi dla większości zapytań. Każdy węzeł w stworzonej taksonomii połączony jest z jedną lub więcej pod-hierarchii bazy WordNet. 
+
+Aby znaleźć odpowiednią kategorię za pomocą tej taksonomii, należy przeprowadzić operację na zapytaniu, aby określić który wyraz determinuje typ spodziewanej odpowiedzi. W tym celu autorzy zaimplementowali własną wersję parsera Collinsa, która z zapytania tworzy drzewo wyprowadzenia (ang. parse tree). Znaleziony korzeń drzewa zmapowany na odpowiednie pojęcie w stworzonej taksonomii odpowiedzi stanowi spodziewany typ odpowiedzi. 
+
+Otrzymane drzewo służy także autorom do skonstruowania zapytania do wyszukiwarki, ponieważ można z niego odczytać zależności pomiędzy słowami w pytaniu i stworzyć listę uporządkowaną. Uporządkowane w kolejności słowa z listy tworzą zapytanie. 
+
+Kolejną cechą charakterystyczną dla systemu Q/A jest występowanie pętli przy wyszukiwaniu fragmentów z potencjalnymi odpowiedziami. Jeżeli w odpowiedzi na dane zapytanie znaleziono zbyt małą lub zbyt dużą liczbę paragrafów, pętla pozwala na powrót do tworzenia zapytania, w celu zwiększenia lub zmniejszenia liczby słów w zapytaniu. Następnie sprawdzane jest podobieństwo w zależnościach pomiędzy pytaniem a potencjalną odpowiedzią. Jeżeli podobieństwo jest niewystarczające, druga pętla pozwala na zmiany leksykalne, morfologiczne lub znaczeniowe w zapytaniu. 
+
+Innym podejściem do odnalezienia paragrafów z potencjalnymi odpowiedziami opisanym w artykule było wykorzystanie modelu perceptronu. Do jego nauki posłużyły pary ustępów: pierwszy zawierający prawidłową odpowiedź, drugi będący paragrafem otrzymanym przy wykorzystaniu pętli.
+
+Ostatnią opisaną właściwością systemu było szukanie podobieństwa pomiędzy zadanym pytaniem, a pytaniami zadanymi w przeszłości. Jeżeli podobne pytanie występowało w przeszłości, tworzy się grupę zawierającą oba pytania.
+
+\opracowanyartykul{The structure and performance of Open-Domain QA System}
+W artykule \cite{moldovan-etal-2000-structure} przedstawiona została budowa i opisane najważniejsze aspekty systemu QA o nazwie LASSO. Składa się on z trzech etapów: przetwarzania pytania, indeksowania ustępów i przetwarzania odpowiedzi. 
+
+Pierwszy etap ma za zadanie określić typ pytania, spodziewany typ odpowiedzi, określić tzw. answer focus oraz zbudować zapytanie na podstawie pytania. W kolejnym etapie, za pomocą stworzonego zapytania,  należy odnaleźć paragrafy zawierające odpowiedź na zadane pytanie. W ostatnim etapie należy wyodrębnić odpowiedź na pytanie w wybranym paragrafie.
+
+Ważnym aspektem pierwszego etapu jest stworzenie zapytania do wyszukiwarki. W opisywanym systemie do tego celu można zastosować 8 heurystyk. Do zapytania dodają wyrazy z pytania, które spełniają następujące wymagania: słowa tworzące cytaty (oprócz stop-słów), nazwy własne, wyrazy tworzące grupę nominalną, wszystkie rzeczowniki i ich określenia przymiotnikowe, wszystkie czasowniki, wyraz stanowiący centrum pytania (tzw. question focus). Do stworzenia początkowego zapytania wykorzystywane są tylko początkowe warunki. Jeżeli wyszukiwarka zwróci zbyt małą lub dużą liczbę paragrafów, wykorzystuje się pozostałe heurystyki, aby dodać więcej słów do zapytania lub usuwa wyrazy z zapytania. 
+
+Do wyszukania stosuje się silnik, bazujący na logice boolowskiej.  Powstał on na bazie silnika Zprise IR, który porównuje paragrafy bazując na podobieństwie kosinusowym. Po odnalezieniu fragmentów z potencjalnymi odpowiedziami, są one oceniane i sortowane ze względu na: taką samą sekwencję słów we fragmencie i zapytaniu, największej odległości pomiędzy słowami kluczowymi w paragrafie i liczby brakujących słów kluczy w paragrafie. 
+
+Ostatni etap przetwarza znalezione fragmenty w celu stworzenia odpowiedzi na zapytanie. Do tego celu wykorzystywany jest zmodyfikowany Brill tagger. Parser umożliwia wyodrębnienie z paragrafów fragmentów będących potencjalnymi odpowiedziami na pytanie. Fragmenty te, tworzące okna odpowiedzi, są następnie oceniane pod względem:  odległości potencjalnej odpowiedzi od pozostałych słów kluczy w oknie, pasujących słów kluczy w oknie, liczby słów kluczy będących w tym samym zdaniu co kandydat na odpowiedź, liczby słów kluczy będących w tym samym poddrzewie wyprowadzenia co potencjalna odpowiedź, i najlepszy z nich stanowi odpowiedź na pytanie.
