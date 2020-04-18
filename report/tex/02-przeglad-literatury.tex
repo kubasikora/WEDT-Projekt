@@ -1,139 +1,213 @@
-\todo{Opisać swoje artykuły do 8 kwietnia, nie zapominajmy o bibliografi i cytowaniu} 
 
-\opracowanyartykul{answerbus}
-AnswerBus~\cite{zheng2002answerbus} jest systemem odpowiadającym na pytania ogólne, bazującym na wyszkuiwaniu informacji, opartym o~analizę zdań. System przyjmuje pytania w~sześciu językach (angielskim, niemieckim, francuskim, hiszpańskim, włoskim i~portugalskim) oraz odpowiada po angielsku. Odpowiedzi wyszukuje z~internetu, posiłkując się pięcioma różnymi wyszukiwarkami internetowymi m.in. Google czy AltaVista.
+Podczas przygotowań przeanalizowane zostało w sumie piętnaście publikacji naukowych dotyczących systemów odpowiadania na pytania. Naszym celem było stworzenie jak najszerszego opisu trudności towarzyszących tworzeniu systemów QA oraz znalezienie rozwiązań dla typowych problemów. Aby stworzyć przekrój problemu należało znaleźć zarówno pozycje opisujące zagadnienia związane z systemami odpowiadającymi na pytania ogólnw, jak i na pytania z ograniczonych dziedziń. Jako że postanowiliśmy zmierzyć się ze stworzeniem systemu odpowiadającemu na pytania w języku polskim, konieczne było także znalezienie literatury opisującej specyfikę tych systemów.
 
-Przedstawione rozwiązanie składa się z~kilku komponentów, przetwarzających liniowo otrzymane pytanie. W pierwszej kolejności pytanie trafia do modułu rozpoznającego język. Jeżeli pytanie jest po angielsku to trafia ono dalej, natomiast jeżeli nie, to zostaje ono przetłumaczone wykorzystując internetową usługę tłumacza. Pytanie w~języku angielskim jest następnie analizowane, w~celu określenia typu pytania. Na podstawie typu, wybierane są trzy z~pięciu najbardziej odpowiednich przeglądarek. Wybrane rozwiązania są następnie odpytywane o~specjalnie przygotowane zapytanie, a~następnie z~otrzymanych dokumentów tekstowych wybierane są zdania, potencjalnie zawierające odpowiedź na pytanie. Ostatnim krokiem jest ocena wybranych zdań i~zwrócenie najlepszych wyników użytkownikowi~\cite{zheng2002answerbus}.  
+\subsection{Systemy odpowiadające na pytania ogólne}\label{subsec:lit:op}
 
-System AnswerBus, podobnie jak większość tego typu rozwiązań, określa typ postawionego pytania. Oprócz oczywistych typów, na przykład w~pytaniu \emph{Jak daleko}, określa typ \emph{odległość}, system stara się ocenić dodatkowe parametry typu oczekiwany rząd wielkości (w~odpowiedzi na przykładowe pytanie oczekujemy odległości w~kilometrach a~nie w~centymetrach). Stwierdzenie typu pytania, pozwala na dokładniejszy dobór wyszukiwarki, od bardzo ogólnej jak Google do specjalistycznych jak Yahoo News~\cite{zheng2002answerbus}.
+\opracowanyartykul{The structure and performance of Open-Domain QA System~\cite{moldovan-etal-2000-structure}}
+W artykule \cite{moldovan-etal-2000-structure} przedstawiona została budowa i opisane najważniejsze aspekty systemu QA o nazwie LASSO. Składa się on z trzech etapów: przetwarzania pytania, indeksowania ustępów i przetwarzania odpowiedzi. 
 
-Analiza odpowiedzi sprowadza się do oceny otrzymanego zdania na podstawie treści pytania. Oczekiwana odpowiedź powinna zawierać jak najwięcej wyrazów z~zapytania. Do oceny odpowiedzi, nie są brane pod uwagę wyrazy nie przenoszące szczególnej informacji typu przyimki, zaimki, spójniki czy okoliczniki. Do oceny odpowiedzi stosuje wzór~\ref{eqn:ocena-answerbus},gdzie $q$ to liczba pasujących słów pytania a~$Q$ to liczba wszystkich wyrazów w~odpowiedzi~\cite{zheng2002answerbus}.
+Pierwszy etap ma za zadanie określić typ pytania, spodziewany typ odpowiedzi, określić tzw. answer focus oraz zbudować zapytanie na podstawie pytania. W kolejnym etapie, za pomocą stworzonego zapytania,  należy odnaleźć paragrafy zawierające odpowiedź na zadane pytanie. W ostatnim etapie należy wyodrębnić odpowiedź na pytanie w wybranym paragrafie.
+
+Ważnym aspektem pierwszego etapu jest stworzenie zapytania do wyszukiwarki. W opisywanym systemie do tego celu można zastosować 8 heurystyk. Do zapytania dodają wyrazy z pytania, które spełniają następujące wymagania: słowa tworzące cytaty (oprócz stop-słów), nazwy własne, wyrazy tworzące grupę nominalną, wszystkie rzeczowniki i ich określenia przymiotnikowe, wszystkie czasowniki, wyraz stanowiący centrum pytania (tzw. question focus). Do stworzenia początkowego zapytania wykorzystywane są tylko początkowe warunki. Jeżeli wyszukiwarka zwróci zbyt małą lub dużą liczbę paragrafów, wykorzystuje się pozostałe heurystyki, aby dodać więcej słów do zapytania lub usuwa wyrazy z zapytania. 
+
+Do wyszukania stosuje się silnik, bazujący na logice boolowskiej.  Powstał on na bazie silnika Zprise IR, który porównuje paragrafy bazując na podobieństwie kosinusowym. Po odnalezieniu fragmentów z potencjalnymi odpowiedziami, są one oceniane i sortowane ze względu na: taką samą sekwencję słów we fragmencie i zapytaniu, największej odległości pomiędzy słowami kluczowymi w paragrafie i liczby brakujących słów kluczy w paragrafie. 
+
+Ostatni etap przetwarza znalezione fragmenty w celu stworzenia odpowiedzi na zapytanie. Do tego celu wykorzystywany jest zmodyfikowany Brill tagger. Parser umożliwia wyodrębnienie z paragrafów fragmentów będących potencjalnymi odpowiedziami na pytanie. Fragmenty te, tworzące okna odpowiedzi, są następnie oceniane pod względem:  odległości potencjalnej odpowiedzi od pozostałych słów kluczy w oknie, pasujących słów kluczy w oknie, liczby słów kluczy będących w tym samym zdaniu co kandydat na odpowiedź, liczby słów kluczy będących w tym samym poddrzewie wyprowadzenia co potencjalna odpowiedź, i najlepszy z~nich stanowi odpowiedź na pytanie\cite{moldovan-etal-2000-structure}.
+
+\opracowanyartykul{Answerbus question answering system~\cite{zheng2002answerbus}}
+AnswerBus~\cite{zheng2002answerbus} jest systemem odpowiadającym na pytania ogólne, bazującym na wyszkuiwaniu informacji, opartym o~analizę zdań. System przyjmuje pytania w~sześciu językach (angielskim, niemieckim, francuskim, hiszpańskim, włoskim i~portugalskim) oraz odpowiada po angielsku. Odpowiedzi wyszukiwane są w~ internecie, posiłkując się pięcioma różnymi wyszukiwarkami m.in. Google czy AltaVista.
+
+Przedstawione rozwiązanie składa się z~kilku komponentów, przetwarzających liniowo otrzymane pytanie. W pierwszej kolejności pytanie trafia do modułu rozpoznającego język. Jeżeli pytanie jest sformułowane w języku angielskim to trafia ono bez modyfikacji dalej, pytania sformułowane w pozostanych językach są tłumaczone za pomocą internetowego translatora. Kolejnym krokiem jest analiza pytania w~celu wydobycia typu pytania. Znaleziony rodzaj pytania determinuje, które wyszukiwarki zostaną wykorzystane w kolejnym etapie. System selekcjonuje trzy z~pięciu rozważanych wyszukiwarek. Wybrane rozwiązania są następnie odpytywane o~specjalnie przygotowane zapytanie, a~następnie z~otrzymanych dokumentów tekstowych wybierane są zdania, potencjalnie zawierające odpowiedź na pytanie. Ostatnim krokiem jest ocena wybranych zdań i~zwrócenie najlepszych wyników użytkownikowi~\cite{zheng2002answerbus}.  
+
+System AnswerBus, podobnie jak większość tego rodzaju rozwiązań, określa typ postawionego pytania. Oprócz oczywistych typów, na przykład pytaniu \emph{Jak daleko} przypodządkowany jest rodzaj \emph{odległość}, system stara się ocenić dodatkowe parametry między innymi oczekiwany rząd wielkości (w~odpowiedzi na przykładowe pytanie oczekujemy odległości w~kilometrach a~nie w~centymetrach). Stwierdzenie typu pytania, pozwala na dokładniejszy dobór wyszukiwarki, od bardzo ogólnej jak Google do specjalistycznych jak Yahoo News~\cite{zheng2002answerbus}.
+
+Analiza odpowiedzi sprowadza się do oceny otrzymanego zdania na podstawie treści pytania. Oczekiwana odpowiedź powinna zawierać jak najwięcej wyrazów z~zapytania. Nie powinna jednak uwzględniać słów nie niosących informacji takich jak przyimkni, zaimki, spójniki czy okoliczniki. Do oceny odpowiedzi stosuje wzór~\ref{eqn:ocena-answerbus},gdzie $q$ to liczba pasujących słów pytania a~$Q$ to liczba wszystkich wyrazów w~odpowiedzi~\cite{zheng2002answerbus}.
 
 \begin{equation}
-    \label{eqn:ocena-answerbus}
-    q \geq  \sqrt{Q - 1}  + 1
+\label{eqn:ocena-answerbus}
+q \geq  \sqrt{Q - 1}  + 1
 \end{equation}
 
-Oprócz zliczania słów, system wykrywa powiązania pomiędzy rzeczownikami a~zaimkami i~w~momencie wykrycia zaimka, stara się dokonać podstawienia bazując na zdaniu poprzednim. Na ocenę wpływają również obecność synonimów słów kluczowych oraz pozycja wyniku w~wyszukiwarce~\cite{zheng2002answerbus}.
+Oprócz zliczania słów, system wykrywa powiązania pomiędzy rzeczownikami a~zaimkami i~w~momencie wykrycia zaimka dokonywane jest zastąpienie zamika odpowiadającym mu rzeczownikiem. Na ocenę wpływają również obecność synonimów słów kluczowych oraz pozycja wyniku w~wyszukiwarce~\cite{zheng2002answerbus}.
 
-\opracowanyartykul{asmr}\label{askmr}
-System AskMSR~\cite{brill2002analysis} jest systemem zajmującym się odpowiadaniem na pytania ogólne. W~tym celu przeszukuje on sieć WWW, wykorzystując internetowe wyszukiwarki. Celem autorów w~tym projekcie, było stworzenie systemu odpowiadającego na pytania, bez przeprowadzania zaawansowanej analizy lingwistycznej zarówno pytania,jak i~potenjalnych odpowiedzi. Głównym założeniem był fakt olbrzymiej redundancji odpowiedzi w~sieci WWW.
+\opracowanyartykul{An analysis of the askmr question-answering system~\cite{brill2002analysis}}\label{askmr}
+System AskMSR~\cite{brill2002analysis} jest systemem zajmującym się odpowiadaniem na pytania ogólne. W~tym celu przeszukuje on sieć WWW, wykorzystując różne internetowe wyszukiwarki. Celem autorów, było stworzenie systemu odpowiadającego na pytania, bez przeprowadzania zaawansowanej analizy lingwistycznej zarówno pytania,jak i~potenjalnych odpowiedzi. Głównym założeniem był fakt olbrzymiej redundancji odpowiedzi w~sieci WWW.
 
-Zasadniczo, system składa się z~czterech modułów. Pierwszy z~nich na podstawie pytania buduje zapytania do wyszukiwarki internetowej. Każde z~zapytań, zawiera pewną część oryginalnego pytania. Im więcej wyrazów oryginalnego zapytania znajduje się w~przygotowanym zapytaniu, tym z~większą wagą będą brane pod uwagę odpowiedzi na nie otrzymane.Po konstrukcji zapytań, są one wysyłane do wyszukiwarki internetowej. Do dalszych modułów wysyłane są jedynie krótkie fragmenty dokumentu, tzw. \emph{snippety}, przesyłane wraz z~linkami~\cite{brill2002analysis}.
+Zasadniczo, system składa się z~czterech modułów. Pierwszy z~nich na podstawie pytania buduje zapytania do wyszukiwarki internetowej. Każde z~zapytań, zawiera pewną część oryginalnego pytania. Im więcej wyrazów oryginalnego zapytania znajduje się w~przygotowanym zapytaniu, tym z~większą wagą będą brane pod uwagę otrzymane na nie odpowiedzi. Skonstruowane zapytania są wysyłane do wyszukiwarki internetowej. Dalsze moduły przetważają jedynie krótkie fragmenty dokumentów, tzw. \emph{snippety} oraz przesyłane są linki~\cite{brill2002analysis}.
 
 Drugim komponent systemu AskMSR zajmuje się wyszukiwaniem \emph{n-gramów} w~zwróconych odpowiedziach. W~tekstach wyszukiwane są tylko unigramy, bigramy oraz trigramy. Każdy z~\emph{n-gramów} jest oceniany na podstawie wcześniejszej oceny zapytania. Do oceny wliczana jest również liczba unikalnych odpowiedzi zwróconych przez system zawierający dany \emph{n-gram}~\cite{brill2002analysis}.
 
-Przygotowane \emph{n-gramy} są przekazywane do trzeciego modułu filtrowania. Moduł filtrowania, na podstawie ręcznie przygotowanych filtrów opartych o~wyrażenia regularne, określa jeden z~siedmiu typów pytania, a~następnie filtruje \emph{n-gramy}, zawężając potencjalny zestaw odpowiedzi. Ostatnim elementem systemu jest moduł łączenia, który wiąże ze sobą nakładające się \emph{n-gramy}, sukcesywnie budując większe zdania, normalnie niemożliwe do zbudowania wyłącznie poprzez tworzenie \emph{n-gramów}. Ocena połączonych \emph{n-gramów} jest określana na podstawie wyżej ocenianego składnika. Łączenie odbywa się do momentu aż nie można łączyć żadynch odpowiedzi~\cite{brill2002analysis}.
+Przygotowane \emph{n-gramy} są przekazywane do trzeciego modułu - filtrowania. Moduł filtrowania, na podstawie ręcznie przygotowanych filtrów opartych na~wyrażeniach regularnych, określa jeden z~siedmiu typów pytania, a~następnie filtruje \emph{n-gramy}, zawężając potencjalny zestaw odpowiedzi. Ostatnim elementem systemu jest moduł łączenia, który wiąże ze sobą nakładające się \emph{n-gramy}, sukcesywnie budując coraz większe zdania, których konstrukcja nie byłaby możlwia wyłącznie poprzez tworzenie \emph{n-gramów}. Ocena połączonych \emph{n-gramów} jest określana na podstawie wyżej ocenianego składnika. Łączenie odbywa się do momentu aż system nie będzie mógł połączyć żadynch odpowiedzi~\cite{brill2002analysis}.
 
-Autorzy systemu zwracają uwagę że najwiekszy wpływ na jakość zwracanych odpowiedzi mają wpływ moduły filtrowania oraz łączenia \emph{n-gramów}. System został przetestowany przy pomocy pytań TREC-9~\cite{voorhees2001trec}. Najbardziej problematyczne okazały się pytania rozpoczynające się od \emph{jak?}, natomiast najlepiej radził sobie z~pytaniami rozpoczynającymi się od \emph{kto?}, z~dużą liczbą typowych dla języka słów~\cite{brill2002analysis}.
+Autorzy systemu zwracają uwagę, że najwiekszy wpływ na jakość zwracanych odpowiedzi mają wpływ moduły filtrowania oraz łączenia \emph{n-gramów}. System został przetestowany przy pomocy pytań TREC-9~\cite{voorhees2001trec}. Najbardziej problematyczne okazały się pytania rozpoczynające się od \emph{jak?}, natomiast najlepiej radził sobie z~pytaniami rozpoczynającymi się od \emph{kto?}, z~dużą liczbą typowych dla języka słów~\cite{brill2002analysis}.
 
-\opracowanyartykul{question answering systems ibm watson}
+\opracowanyartykul{Data-Intensive Question Answering~\cite{brill2001data}}
+Pozycja \cite{brill2001data} opisuje wykorzystanie systemu AskMSR oraz AskMSR2 na konferencji TREC-9 w 2001 roku. Jako że analiza systemów została przedstawiona powyżej (pozycja \cite{brill2002analysis}), w opisie artykułu pominięte zostaną kwestie poruszone powyżej.
+
+Główną modyfikacją systemów AskMSR oraz AskMSR na potrzeby konferencji TREC było dodanie fazy sprawdzającej wystąpnie potencjalnej odpowiedzi w zbiorze dokumentów TREC. System po znalezieniu n najlepszych odpowierdzi z zasobów internetowych, wyszukiwał ich w bazie danych TREC-9. W tym celu wykorzystany został system Okapi IR. Zapytanie polegało na stworzeniu query skłądającego się ze słów użytych w potencjalnej odpowiedzi. Znalezione dokumenty były następnie poddawane ocenie.
+
+Autorzy \cite{brill2001data} na tym etapie generacji odpowiedzi nie wykorzystywali specjalnych zabiegów lingwistycznych w celu zwiększenia precyzji ani pokrycia. Do dalszego przetwarzania wybierane były najwyżej ocenione dokumenty dla każdej z potencjalnej odpowiedzi.
+
+Ostateczne odpowiedzi systemu były w większości przypadków generowane na podstawie najwyżej ocenianych dokumentów wspierających potencjalne odpowiedzi. Wyjątkiem od reguły była sytuacji, gdzie jeden dokuemnt powtarzał się w kilku potencjalnych odpowiedziach.
+
+Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w innych zastosowaniach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w internecie w niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
+
+\opracowanyartykul{IBM's Statistical Question Answer System~\cite{Ittycheriah00ibm'sstatistical}}
+W artykule \cite{Ittycheriah00ibm'sstatistical} zaprezentowana została ogólna budowa systemu IBM, który wykorzystuje klasyfikator maksymalnej entropii do określania rodzaju pytania oraz typu spodziewanej odpowiedzi, a także do oznaczania klasy bytów występujących w tekście. 
+
+System składa się z czterech głównych modułów: klasyfikacji rodzaju pytania i odpowiedzi, rozszerzenia zapytania/wyszukiwania informacji, oznaczania klasy bytów występujących w wyszukanym tekście (named entity marking), wyboru odpowiedzi. 
+
+W systemie, określenie typu odpowiedzi polega na przyporządkowaniu do pytania etykiety określającej szukany byt. Do określenia typu bytu, autorzy korzystają z kategorii MUC, opisanej w artykule \cite{chinchor-robinson-1998-appendix}, lub przyporządkują typ PHRASE, gdy typu nie da się określić. Za przyporządkowanie tych etykiet odpowiada model maksymalnej entropii. 
+
+Drugim opisanym aspektem systemu był moduł wyszukiwania informacji. Autorzy proponują podejście dwuetapowe. Pierwszy etap polega na przeszukaniu bazy danych encyklopedii. Wyszukane fragmenty są oceniane za pomocą schematu Okapi opisanej w artykule \cite{RobertsonOkapi}. Ustępy o najwyższym wyniku są następnie użyte do rozszerzenia zapytania za pomocą techniki LCA. Drugi etap polega na wyszukaniu w korpusie TREC-9 rozszerzonego zapytania.
+
+Przedostatnim modułem jest oznaczenie klasy bytów występujących w wybranych ustępach. Klasyfikator maksymalnej entropii przyporządkuje każdemu słowu kategorię MUC \cite{chinchor-robinson-1998-appendix}. Tak zmodyfikowany ustęp wraz z spodziewanym typem odpowiedzi stanowi wejście do ostatniego modułu.
+
+Każdy ustęp przekazany do ostatniego modułu dzielony jest na zdania. Wokół każdego zdania formowane jest okno. Każde okno jest oceniane na podstawie pięciu parametrów. Dodatkowo brana pod uwagę jest obecność lub brak spodziewanego typu odpowiedzi. Na koniec wybieranych jest 50 lub 250 bajtów najbardziej dopasowanych okien\cite{Ittycheriah00ibm'sstatistical}. 
+
+\opracowanyartykul{Question-answering systems: Developement and prospects~\cite{lapshin2012question}}
 W pracy~\cite{lapshin2012question} przedstawiona została ogólna struktura systemu do odpowiadania na pytania ogólne. Autor podzielił proces odpowiadania na kilka odrębnych faz:
 \begin{itemize}
-    \item określanie typu pytania,
-    \item przetwarzanie pytania,
-    \item określenie kontekstu,
-    \item przeszukiwanie bazy wiedzy,
-    \item konstruowanie odpowiedzi.
+	\item określanie typu pytania,
+	\item przetwarzanie pytania,
+	\item określenie kontekstu,
+	\item przeszukiwanie bazy wiedzy,
+	\item konstruowanie odpowiedzi.
 \end{itemize}
 
 Oprócz tego, w~pracy zostały określone obostrzenia, które powinien spełniać system:
 \begin{itemize}
-    \item interaktywność,
-    \item odpowiadanie w~czasie rzeczywistym,
-    \item logiczne wnioskowanie,
-    \item profilowanie użytkownika,
-    \item odpowiadanie w~różnych językach.
+	\item interaktywność,
+	\item odpowiadanie w~czasie rzeczywistym,
+	\item logiczne wnioskowanie,
+	\item profilowanie użytkownika,
+	\item odpowiadanie w~różnych językach.
 \end{itemize}
 
-Przykładowym systemem, spełniającym przedstawione wymagania, jest \emph{DeepQA}, znany obecnie pod nazwą \emph{IBM Watson}. W~pierwszym etapie, system analizuje pytania, określając jego klasę, typ oczekiwanej odpowiedzi oraz buduje związki logiczne pomiędzy wyrazami w~pytaniu. Dzięki temu, jest on w~stanie zbudować odpowiednie zapytanie do bazy wiedzy, którą w~tym przypadku jest sieć WWW. W~kolejnym kroku, \emph{Watson} tworzy hipotezy odpowiedzi, które następnie sprawdza, poszukując dowodów oraz dokonując analizy krytycznej źródeł. Ostatecznie, ze zbioru odpowiedzi wybierana jest ta najbardziej prawdopodobna i~to ona zostaje zwrócona użytkownikowi~\cite{lapshin2012question}.
+Przykładowym systemem, spełniającym przedstawione wymagania, jest \emph{DeepQA}, znany obecnie pod nazwą \emph{IBM Watson}. W~pierwszym etapie przetwarzania, system analizuje pytania, określając jego klasę, typ oczekiwanej odpowiedzi oraz buduje związki logiczne pomiędzy wyrazami w~pytaniu. Dzięki temu, jest on w~stanie zbudować odpowiednie zapytanie do bazy wiedzy, którą w~tym przypadku jest sieć WWW. W~kolejnym kroku, \emph{Watson} tworzy hipotezy odpowiedzi, które następnie sprawdza, poszukując dowodów oraz dokonując analizy krytycznej źródeł. Ostatecznie, ze zbioru odpowiedzi wybierana jest ta najbardziej prawdopodobna i~to ona zostaje zwrócona użytkownikowi~\cite{lapshin2012question}.
 
 Najważniejszym elementem całego systemu jest moduł klasyfikacji odpowiedzi. Poprawna klasyfikacja jest odpowiedzialna za największy przyrost poprawnych odpowiedzi. System korzysta ze zbioru kategorii pytań, nazywany ontologią. Pierwsze zbiory określały od 13 do 18 kategorii pytań, natomiast w~późniejszych pracach, zaczęto dzielić kategorię na kategorię główne i~szczegółowe, przykładowo w~\cite{li2002learning} określono sześć typów głównych i prawie pięćdziesiąt typów szczegółowych. Do określania typu pytania najczęściej wykorzystywane są klasyfikatory regułowe oraz statystyczne. Tego typu naiwne podejście jest bardzo proste i~daje dobre rezultaty~\cite{lapshin2012question}.
 
 To co pozwala dobrze oceniać system \emph{IBM Watson} to nie tylko dobre wyniki w~testach na pytaniach z~konferencji TREC, ale również potężny sukces biznesowy, który firma IBM osiągnęła sprzedając swoje rozwiązanie\footnote{https://www.ibm.com/watson}. W~połączeniu z~otwartą chmurą, nowoczesne przedsiębiorstwa mogą wykorzystać Watsona do tworzenia inteligentnych systemów zarządzania oraz wspierania ludzi w~przemyśle, medycynie i~logistyce. Najbardziej znanym przykładem użycia systemu \emph{IBM Watson} jest jego udział w~programie \emph{Jeopardy!}, w~którym to uczestnicy odpowiadają na zróżnicowane i~skomplikowane pytania~\cite{lapshin2012question}. 
 
+\opracowanyartykul{Learning Surface Text Patterns for a Question Answering System~\cite{ravichandran-hovy-2002-learning}}
+Artykuł \cite{ravichandran-hovy-2002-learning} poświęcony jest tematyce wykorzystania wzorców tekstowych w systemach QA. Autorzy zauważają, że odpowiedzi na większość pytań można zlokalizować w tekście poprzez znalezienie charakterystycznych wzorców. Przykładowo, aby odszukać rok urodzenia danej osoby, należy odnaleźć tekst pasujący do wzorca: “<NAME> was born in <BIRTHDATE>”.
 
-\opracowanyartykul{A Practical QA System in Restricted Domains}
-Praca ~\cite{restrictedWeather} przedstawia opis systemu odpowiadającego na pytania stworzonego dla robota pracującego w~warunkach domowych. Autorzy zauważyli, że systemy tego typu są wykorzystywane przeważnie w~ograniczonych dziedzinach takich jak pogoda czy program stacji telewizyjnych oraz, że dla użytkowników takich systemów znacznie ważniejsza jest precyzja uzyskanych odpowiedzni. Artykuł skupił swoją uwagę na opisie systemu umożliwiającemy zadawanie pytań na temat pogody. 
+Artykuł skupia się na temacie automatycznej generacji wzorców oraz ocenie ich precyzji. Autorzy prezentują algorytm, który samodzielnie tworzy wzorce na podstawie pary: wyraz-pytanie (question term)i wyraz-odpowiedź (answer term). 
 
-Proces odpowiadania na pytania jest trójfazowy: 
+Aby stworzyć wzorzec należy dla danego typu pytania (np. BIRTHYEAR), wyszukać w zbiorze tekstów zdania zawierające wyraz-pytanie i wyraz-odpowiedź  – przykładowo „Mozart 1756”. Ze znalezionych zdań buduje się drzewa sufiksowe, aby znaleźć wszystkie podciągi zdania o różnych długościach. Te podciągi, które zawierają zarówno wyraz-pytanie i wyraz-odpowiedź, tworzą wzorzec (<NAME> was born on <ANSWER>). Algorytm można usprawnić wprowadzając rozszerzenie, które pozwala na określenie spodziewanej długości odpowiedzi dla niektórych typów pytań. 
+
+Autorzy przetestowali tworzenie wzorców przy wykorzystaniu korpusu TREC oraz wyszukiwarki internetowej. Z~uwagi na redundancję danych, większą precyzję osiągnęły wzorce stworzone na podstawie tekstów z internetu. 
+
+Wśród wad wykorzystania wzorców tekstowych, autorzy wymieniają ignorowanie informacji na temat typu spodziewanej odpowiedzi. Do wzorca może zostać dopasowany każdy pasujący zwrot bez względu na typ części mowy. Kolejną wadą jest zagrożenie powstania zbyt ogólnikowych wzorców w przypadku niektórych pytań. Problem ten występuje między innymi w przypadku pytań o definicję. Autorzy podkreślają także istotną wagę odpowiedniego doboru przykładów (wyraz-pytanie i wyraz-odpowiedź), na podstawie których tworzone są wzorce oraz potrzebę korzystania z dużej bazy tekstów. Podejście z dopasowywaniem wzorców, nie sprawdza się najlepiej przy tekstach, w których pytanie i odpowiedź znajdują się w dalekiej odległości od siebie (“<QUESTION>, (<dużo wyrazów>)*, lies on <ANSWER>”). Poważnym ograniczeniem metody jest także to, że może być stosowana tylko do pytań o jednym wyrazie-pytania. Przykładowo w pytaniu “Which county does the city of Long Beach lie?” są dwa wyrazy-pytania: „county” i „Long Beach”, dlatego algorytm zaproponowany przez autorów nie sprawdzi się. Problemem jest także występowanie różnych form danego zwrotu (Gandhi może zostać zapisany także jako “Mahatma Gandhi”, “Mohandas Karamchand Gandhi) czy różnych form zapisu. 
+
+Zaletą tej metody jest natomiast to, że można ją wykorzystywać dla wielu języków, ponieważ nie bierze pod uwagę cech specyficznych dla danego języka\cite{ravichandran-hovy-2002-learning}.
+
+\opracowanyartykul{High Performance Question/Answering~\cite{hpqa}}
+W artykule \cite{hpqa} opisano charakterystyczne aspekty systemu Question/Answer, dzięki którym system cechuje się wysoką dokładnością przy odpowiadaniu na pytania. Autorzy przekonują, że na skuteczność systemu QA wpływa nie tylko rozpoznawanie typu spodziewanej odpowiedzi, ale także zmiany leksykalne, morfologiczne i semantyczne przeprowadzone na słowach kluczowych.
+
+Pierwszym ważnym aspektem systemu Question/Answer jest stworzona przez autorów taksonomia odpowiedzi (ANSWER TYP TAXONOMY), która umożliwiła znaleźć spodziewany typ odpowiedzi dla większości zapytań. Każdy węzeł w stworzonej taksonomii połączony jest z jedną lub więcej pod-hierarchii bazy WordNet. 
+
+Aby znaleźć odpowiednią kategorię za pomocą tej taksonomii, należy przeprowadzić operację na zapytaniu, aby określić który wyraz determinuje typ spodziewanej odpowiedzi. W tym celu autorzy zaimplementowali własną wersję parsera Collinsa, która z zapytania tworzy drzewo wyprowadzenia (ang. parse tree). Znaleziony korzeń drzewa zmapowany na odpowiednie pojęcie w stworzonej taksonomii odpowiedzi stanowi spodziewany typ odpowiedzi. 
+
+Otrzymane drzewo służy także autorom do skonstruowania zapytania do wyszukiwarki, ponieważ można z niego odczytać zależności pomiędzy słowami w pytaniu i stworzyć listę uporządkowaną. Uporządkowane w kolejności słowa z listy tworzą zapytanie. 
+
+Kolejną cechą charakterystyczną dla systemu Q/A jest występowanie pętli przy wyszukiwaniu fragmentów z potencjalnymi odpowiedziami. Jeżeli w odpowiedzi na dane zapytanie znaleziono zbyt małą lub zbyt dużą liczbę paragrafów, pętla pozwala na powrót do tworzenia zapytania, w celu zwiększenia lub zmniejszenia liczby słów w zapytaniu. Następnie sprawdzane jest podobieństwo w zależnościach pomiędzy pytaniem a potencjalną odpowiedzią. Jeżeli podobieństwo jest niewystarczające, druga pętla pozwala na zmiany leksykalne, morfologiczne lub znaczeniowe w zapytaniu. 
+
+Innym podejściem do odnalezienia paragrafów z potencjalnymi odpowiedziami opisanym w artykule było wykorzystanie modelu perceptronu. Do jego nauki posłużyły pary ustępów: pierwszy zawierający prawidłową odpowiedź, drugi będący paragrafem otrzymanym przy wykorzystaniu pętli.
+
+Ostatnią opisaną właściwością systemu było szukanie podobieństwa pomiędzy zadanym pytaniem, a pytaniami zadanymi w przeszłości. Jeżeli podobne pytanie występowało w~przeszłości, tworzy się grupę zawierającą oba pytania\cite{hpqa}.
+
+\opracowanyartykul{A survey of Text Question Answering Techniques~\cite{gupta2012survey}}
+Według~\cite{gupta2012survey}, proces automatycznego odpowiadania na pytania można podzielić na trzy oddzielne fazy: klasyfikację pytania, wydobycie informacji z~bazy wiedzy oraz wydobycie/generację odpowiedzi. Te trzy fazy są wyróżnialne w~każdym systemie do odpowiadania na pytania, niezależnie od wykorzystanego mechanizmu. Autorzy wyodrębnili cztery różne podejścia do rozwiązania postawionego problemu, wyróżniając systemy oparte~o:
 \begin{itemize}
-	\item przetworzenie zapytania w języku naturalnym na zapytanie SQL,
-	\item realizacja zapytania,
-	\item konwersja otrzymanego rezultatu na język naturalny.
+	\item przeszukiwanie sieci WWW,
+	\item wyszukiwanie w~bazie dokumentów tekstowych,
+	\item wyszukiwanie w~zamkniętej bazie danych,
+	\item reguły i~dopasowywanie do wzorca.
 \end{itemize}
-Stworzony system składa się z trzech elementów: 
+
+Autorzy podkreślają jak ważne jest automatyczne wydobycie informacji z~przygotowanego dokumentu. W~celu poprawnego wydobycia poszukiwanych informacji z~dokumentu należy w~pierwszej kolejności dokonać filtrowania akapitów. Zazwyczaj dokonuje się tego wykorzystując dopasowywanie do słów kluczowych zapytania. Im więcej razy w~tekście wystąpi słowo kluczowe, tym większa szansa na to że nie zostanie ono odfiltrowane. Następnie, każdemu pozostałemu akapitowi należy przyporządkować liczbę określającą jakość tekstu.
+Dobór funkcji oceniającej jest zależny od typu przetwarzanych dokumentów oraz rodzaju pytania. Ocenione akapity należy posortować a~następnie, rozpoczynając od pierwszego, przeprowadzić proces leksykalnego i~syntaktycznego wydobycia wiedzy z~tekstu~\cite{gupta2012survey}.
+
+Aby odpowiednio ocenić akapity, należy przed przetwarzaniem dokumentów dokonać klasyfikacji pytania. Autorzy~\cite{gupta2012survey} wyodrębnili osiem klas głównych pytań odpowiadających na pytania:
+\begin{itemize}
+	\item co?,
+	\item jak?,
+	\item dlaczego?,
+	\item który/która/które/którzy?,
+	\item gdzie?,
+	\item czyji/kogo?
+	\item kiedy?,
+	\item pytania funkcjonalne.
+\end{itemize}
+
+Wykorzystanie reguł logicznych oraz wyrażeń regularnych w prosty sposób umożliwia rozróżnienie piereszych siedmiu klas. Największą trudność sprawiają pytania funkcjonalne typu \emph{Nazwij piłkarza który strzelił jedyną bramkę w~finale Euro 2016}. Pytania tego typu wymagają szczególnego traktowania i~najczęściej wymagają maszynowego rozumienia tekstu\cite{gupta2012survey}.
+
+\subsection{Systemy odpowiadające na pytania dziedzinowe}\label{subsec:lit:res}
+
+\opracowanyartykul{A Practical QA System in Restricted Domains~\cite{restrictedWeather}}
+Artykuł ~\cite{restrictedWeather} przedstawia opis systemu odpowiadającego na pytania, który został stworzony dla robota pracującego w~warunkach domowych. Autorzy zauważyli, że systemy tego typu znajdują swoje zastosowanie w~ograniczonych dziedzinach takich jak pogoda czy program stacji telewizyjnych oraz, że dla użytkowników takich systemów znacznie ważniejsza jest precyzja uzyskanych odpowiedzni. Artykuł skupił swoją uwagę na opisie systemu umożliwiającemu znalezienie odpowowiedzi na pytania związane z pogodą. 
+
+Proces odpowiadania na pytania jest trójfazowy. Składa się on z: 
+\begin{itemize}
+	\item przetworzenia zapytania w języku naturalnym na zapytanie SQL,
+	\item realizacji zapytania,
+	\item konwersji otrzymanego rezultatu na język naturalny.
+\end{itemize}
+Stworzony system zbudowany jest z trzech modułów: 
 \begin{itemize}
 	\item silnika IE, 
 	\item DBMS, 
 	\item silnika QA.
 \end{itemize}
 
-Dane wykorzystywane do odpowiedzi na pytania pochodzą z~wybranych przez autorów, połowicznie ustrukuryzowanych stron internetowych Korea Meteorological Administration. Moduł silnika IE co godzinę pobiera z~odpowiedniej strony internetowej najnowsze dokumenty, parsuje je w~celu wydobycia zdyskretyzowanych informacji i zapisuje je w bazie danych. 
+Dane wykorzystywane do znalezienia odpowiedzi na pytania pochodzą z~wybranych przez autorów, połowicznie ustrukuryzowanych stron internetowych narodowego instytutu meteorologicznego Korei Południowej. Silnik IE co godzinę pobiera z~odpowiedniej strony internetowej najnowsze dokumenty, parsuje je i wydobywa zdyskretyzowane informacje o aktualnych warunkach meteorologicznych, które to następnie są zapisywane w bazie danych. 
 
 Silnik QA służy do analizowania zapytań oraz konwertowania uzyskanych odpowiedzi na język naturalny. Autorzy \cite{restrictedWeather} wydzielili skończoną liczbę tematów (związanych z pogodą) o~jakie może zapytać użytkownik. Są to między innymi: temperatura powietrza, prędkość wiatru, opady. Analiza pytania polega na ekstrakcji słów kluczowych dotyczących m.in.: tematu pytania, miejsca, czasu. Aby móc zidentyfikować dokładnie intencje człowieka, przy użyciu specjalnego modułu, wyszczególnione z~zapytania słowa kluczowe są konwertowane na konretne terminy stosowane w systemie. Dzięki temu pytanie o konieczność wzięcia parasola jest traktowane tak samo jak pytanie czy pada aktualnie deszcz. W~kolejnym etapie przetwarzania pytania system zamienia wyrażenia czasowe takie jak \textit{dzisiaj} i~\textit{jutro} na wartości bezwzględne.
 
 Autorzy \cite{restrictedWeather} zwrócili uwagę na fakt, że użytkownicy robotów domowych przy zadawaniu pytań często pomijają niektóre informacje związne~z lokalizacją i~czasem. Z~tego powodu system wykorzystuje stworzony profil użytkownika by uzupełnić brakujące informacje.
 
-Tak przetworzone dane są wejściem dla klasyfikatora drzewiastego, którego zadaniem jest znalezienie dokładnie do jakiego typu query należy przyporządkować pytanie. Każdemu liściowi drzewa decyzyjnego przypisany jest konkretny schemat zapytania SQL oraz konkretny schemat odpowiedzi. System odrzuci pytanie, jeśli klasyfikator nie znajdzie odpowiedniego query.
+Tak przetworzone dane są wejściem dla klasyfikatora drzewiastego, którego zadaniem jest przyporządkowanie pytania do konkretnego, zdefioniowanego przez autorów query. Każdemu liściowi drzewa decyzyjnego przypisany jest konkretny schemat zapytania SQL oraz konkretny schemat odpowiedzi. System odrzuci pytanie, jeśli klasyfikator nie przyporządkuje pytaniu żadnego query.
 
 Przedstawiony przez autorów \cite{restrictedWeather} system został przetestowany przez 10 osób i~ zostało zadane łacznie 50 pytań. Uzyskano $\num{90.9}$\% poprawnych odpowiedzi, podczas gdy pokrycie wyniosło $\num{75}$\%. Należy jednak zwrócić uwagę na ograniczenia i~sposób działania systemu. Pobiera on dane tylko ze zdefiniowanych przez autorów stron internetowych oraz generowane odpowiedzi są schematyczne~\cite{restrictedWeather}.
 
-\opracowanyartykul{Named entity recognition in a Polish question answering system}
-Pozycja \cite{polishQAS} opisuje budowę systemu odpowiadania na pytania w~języku polskim hipisek oraz opisuje wykorzystanie modułu rozpoznawania nazw.
+\opracowanyartykul{Aqualog: An ontology-portable question answering system for the semantic web~\cite{lopez2005aqualog}}
+Artykuł \cite{lopez2005aqualog} opisuje ogólną architekturę oraz sposób działania systemu Aqualog. System ten umożliwia wyszukiwanie odpowiedzi na pytania w sieciach semantycznych. Stworzony został dla ontologii związanej z życiem akacemickim, ale autorzy podkreślają, że zaimplementowane metody w prosty sposób można przenieść do innych ontologii.
 
-Hipisek jest płytkim systemem odpowiadania na pytania, bazującym na wiedzy pozyskanej z bazy danych artykułów. Autorzy zaimplementowali proste metody bazujące na formułowaniu zapytań internetowych a~następnie wzbogacili system o narzędzie do rozpoznawania nazw Named Entity Recognition (NER). 
+Proces przetwarzania zapytania przez system Aqualog można przedstawić za pomocą modelu waterfall. Zapytania użytkownika w kolejnych krokach przetwarzane są najpierw do trójek-query a następnie do trójek dostosowanych do ontologii. Na samym początku za pomocą ifrastruktury GATE system wykrywa części mowy poszczególnych słów użytych w zapytaniu. Znalezione adnotacje zawierają mniędzy innymi informacje o częściach zdaniach, tokenach, wykrytych rzeczownikach i~czasownikach. System został rozszerzony o~zbiór adnotacji dotyczących relacji, wzorów, typów pytań. Całość składowana jest za pomocą wykorzystania gramatyki JAPE a~wynikiem tego procesu są trójki-query.
 
-System hipisek wykorzystuje algorytm wyszukiwania informacji oraz bazuje na narzędziach lingwistycznych. System zakłada, że odpowiedź na pytanie użytkownika znajduje się bezpośrednio w~dokumencie, dlatego zwracany jest zbiór zdań z~dokumentu.
-Zadaniem systemu jest przekształcenie pytania użytkownika do zbioru zapytań do slnika wyszukiwań a~następnie dokonania oceny uzyskanych odpowiedzi i~zwrócenia najlepszej.
+Tak przetworzone dane stanowią wejście do serwisu podobieństw relacji (ang. Relation Similarity Service). Jest to serce systemu, które na podstawie znajomości struktury ontologii oraz dodatkowych infromacji stara się znaleźć odpowiednią trójkę dostosowaną do danej ontologii. Za pomocą RSS oraz serwisu podobieństwa klas (ang. Class Similarity Service) identyfikowane oraz mapowane są relacje i~nazwy w~ramach danej ontologii. Serwis wykorzystuje zarówno znajomość danej ontologii jak również mechanizm uczenia, aliasy zwrócone przez WordNet oraz korzysta z heurystyk.
 
-Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url artykułu. Artykuły są indeksowane przy użyciu mechanizmu indeksowania w darmowym silniku zapytań Sphinx \cite{sphinx}. 
+CSS wykorzystywany jest do mapowania terminów lingwistycznych do klas. Używany jest w tym celu algorytm mierzący odległość pomiędzy napisami (ang. string distance metric). Dodatkowo serwis może wykorzystywać synonimy (znalezione za pomocą WordNet) lub mechanizmy uczenia się. 
 
-Pierwszym krokiem przetwarzania zapytania jest jest znalezienie bazowej formy wyrazu. W tym celu system wykorzystuje słownik języka polskiego \textit{Dylemat}. Pytanie jest przekształcane w strukturę QQuery zawierającą pozycje:
-\begin{itemize}
-	\item TOPIC - przedmiot zapytania,
-	\item ACTION - główny czasownik w pytaniu,
-	\item CONSTRAINTS - ograniczenia, pozostałe leksemy z~pytania zawierające wymagane informacje,
-	\item TYPE - pytanie może dotyczyć miejsca, czasu lub osoby.
-\end{itemize}
-Dodatkowo w strukturze umieszczane są znalezione synonimy bazowych form słów.
+Największymi trudnościami z jakimi powinien radzić sobie system są niejednoznaczoności. Autorzy założyli, że ta część systemu jest interaktywna, użytkownik proszony jest o doprecyzowanie znaczenia słów, których system nie potrafi jednoznacznie sklasyfikować. Dodatkowe, wprowdzone przez użytkownika, informacje są zapamiętywane zgodnie z kontekstem w jakim się pojawiły. Dzięki temu system ma zdolność uczenia się. Kontekst składa się między innymi z nazwy relacji, jej argumentów oraz informacji o użytkowniku. Jeśli w kolejnych zapytaniach serwis RSS nie znajdzie odpowiedniej trójki dostosowanej do ontologii, sprawdzane jest, czy w~bazie danych nie znajdują się zapamiętane wcześniej wyrażenie z takim samym kontekstem. Wykorzystywane są dwa podejścia: uczenie się oraz dopasowywanie.
 
-W procesie translacji wykorzystywane są dwie metody: 
-\begin{itemize}
-	\item podejście oparte na zasadach, 
-	\item podejście heurystyczne.
-\end{itemize}
-W celu przekształcenia pytania w formalizm wykorzystane zostało narzędzie Spejd \cite{spejd}. Zasada ta przekształca zdanie w swoistego rodzaju strukturę składającą się ze znanych elementów przy jednoczesnym sprawdzaniu odpowiednich warunków. Jeśli nie udało się przekształcić pytania wykorzystując narzędzie Spejd, system tworzy strukturę bazując na podejściu heurystycznym. Zbudowana struktura QQuery za pomocą metod reformułacji jest przekształcana do formy odpowiedniej do silnika zapytań.
+Znalezione przez RSS trójki bezpośrednio wykorzysywane są do odnalezienia informacji w sieciach semantycznych. Autorzy wskazują na duże podobieństwa systemu Auqalog z systemami przetwarzającymi język naturalny na potrzeby analizy zapytań relacyjnych baz danych\cite{lopez2005aqualog}.
 
-Formowane są trzy rodzaje zapytań:
-\begin{itemize}
-	\item bazowane na frazach,
-	\item bazowane na temacie,
-	\item zbioru słów z zapytania.
-\end{itemize}
+\opracowanyartykul{An English language question answering system for a large relational database~\cite{waltz1978english}}
+Pozycja \cite{waltz1978english} opisuje sposób działania oraz budowę systemu odpowiadania na pytania PLANES. System ten został stworzony w celu zapewnienia wygodnego interfejsu do bazy danych związanej z samolotami dla amerykańskiego wojska w~drugiej połowie lat 70-tych ubiegłego wieku.
 
-Sphinx wykorzystuje schemat Okapi BM25 w celu oceniania jakości dokumentów. System przetwarza dalej tylko najwyżej ocenione dokumenty.
+Artykuł \cite{waltz1978english} opisuje budowę całego systemu (wliczając w~to budowę stworzonej relacyjnej bazy danych), ale z perspektywy tworzenia nowego systemu QA istotne są tylko kwestie związane z konstrukcją parsera. Przetwarzanie zapytania składa się z czterech etapów: parsowania pytania, konstrukcji odpowiedniego query, dokonania jego oceny oraz wykonania zapytania i zwrócenia odpowiedzi. Założenia z jakich wyszli autorzy systemu to: wykorzystywanie specyficznego słownictwa przez użytkowników, a co za tym idzie brak dwuznaczności oraz fakt, że użytkownicy systemu nie tworzą długich zapytań.
 
-Każdy dokuemnt otrzymuje dwie oceny: akceptacyjną oraz jakościową. Na oceny wpłwa między innymi: metoda uzyskania dokuemntu, obecność tematu oraz akcji, liczba ograniczeń pytania spełniona przez potencjalną odpowiedź, data publikacji.
+System podzielił parsowanie pytania na kilka etapów. W~pierwszym dokonywana była poprawa literówek oraz konwersja słów do ich kanonicznych postaci. W drugim etapie wykorzystywane były podsieci ATN, których zadaniem było połączenie frazy ze zdefiniowanym w systemie znaczeniem. Dla każdego rodzaju obiektu (na przykład czas, rodzaj samolotów, rodzaj usterek) zaimplementowana została osobna podsieć rozpoznająca znaczenie słowa. 
 
-Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych ze zbiorami nazw. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
+Zaletą systemu było szybkie odrzucanie słów nie niosących żadnej informacji, które przez autorów \cite{waltz1978english} zostały nazwane szumami. Identyfikowane one były za pomocą osobnej podsieci. 
 
-Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym w konkursie TREC \cite{polishQAS}.
+System, jeśli udało mu się znaleźć znaczenie jednego słowa używając danej podsieci, starał się wykorzystać ją ponownie w procesie identyfikacji następnego słowa.
 
-\opracowanyartykul{Data-Intensive Question Answering}
-Pozycja \cite{brill2001data} opisuje wykorzystanie systemu AskMSR oraz AskMSR2 na konferencji TREC-9 w 2001 roku. Jako że analiza systemów została przedstawiona w punkcie \ref{askmr} tego rozdziału (\cite{brill2002analysis}), w opisie artykułu pominięte zostaną kwestie poruszone powyżej.
+Po przeanalizowaniu wszystkich słów oraz odrzuceniu szumów system aktualizował rejestr kontekstu, który został zaimplementowany w postaci stosu. W rejestrze tym znajdują się ostatie zapytania wraz z ostatnio wykrytymi frazami, ostatnio użytymi query oraz znalezionymi odpowiedziami. Do rejestru zostały wrzucane w tej fazie parsowania kanoniczne formy słów wraz z ich znaczeniem. Rejestr ten gra istotną rolę w procesie ustalania niesprecyzowanych zmiennych. Służy między innymi do znajdowania właściwych znaczeń zaimków.
 
-Główną modyfikacją systemów AskMSR oraz AskMSR na potrzeby konferencji TREC było dodanie fazy sprawdzającej wystąpnie potencjalnej odpowiedzi w zbiorze dokumentów TREC. System po znalezieniu n najlepszych odpowierdzi z zasobów internetowych, wyszukiwał ich w bazie danych TREC-9. W tym celu wykorzystany został system Okapi IR. Zapytanie polegało na stworzeniu query skłądającego się ze słów użytych w potencjalnej odpowiedzi. Następnie znalezione dokuemnty zostały ocenione.
+Jeśli system nie jest w stanie jednoznaczie odtworzyć znaczenia danego słowa, to tworzone są struktury zwane ramkami pojęć (ang. concept case frames). Struktura składa się z~czasownika oraz części rzeczownikowych, do każdej przypisany jest wzór query. System testuje struktury oraz sprawdza, czy ich wykorzystanie może mieć sens. Jeśli wynik testowania jest pozytywny dla większej niż jednej struktury, użytkownik proszony jest o wybranie pożądanego znaczenia ze stworzonych przez system ramek.
 
-Autorzy \cite{brill2001data} na tym etapie generacji odpowiedzi nie wykorzystywali specjalnych zabiegów lingwistycznych w celu zwiększenia precyzji ani pokrycia. Do dalszego przetwarzania wybierane były najwyżej ocenione dokumenty dla każdej potencjalnej odpowiedzi.
+Tak stworzone struktury przekzywane są następnie do modułu tworzącego zapytania. Proces tworzenia zapytania rozpoczyna się od próby identyfikacji tablic potrzebnych do znalezienia danych. Następnie moduł sprawdza jakiej odpowiedzi oczekuje użytkownik, czyli jakiej domeny powinien być zwrócony wynik. Jako że system był tworzony w latach 70-tych, dużym wyzwaniem było przetważanie złożonych zapytań.
 
-Ostateczne odpowiedzi systemu były w większości przypadków generowane na podstawie najwyżej ocenianych dokumentów wspierających potencjalne odpowiedzi. Wyjątkiem od reguły była sytuacji, gdzie jeden dokuemnt powtarzał się w kilku potencjalnych odpowiedziach.
+Przed rozpoczęciem realizacji zapytania, PLANES przekazywał użytkownikowi stworzone query oraz umożliwił wprowadzanie korekt. Dane zwrócone z bazy danych były przekazywane do generatora odpowiedzi, który na podstawie rodzaju zwróconych danych oraz polecenia użytkownika konwertował je do postaci grafu lub tabeli\cite{waltz1978english}.
 
-Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w innych przypadkach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w internecie w niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
+\subsection{Systemy odpowiadające na pytania w języku polskim}\label{subsec:lit:pl}
 
-Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle wykorzystywanym na konferencjach TREC \cite{brill2001data}.
 
-\opracowanyartykul{issues of polish QA~\cite{przybyla2012issues}}
+\opracowanyartykul{Issues of polish question answering~\cite{przybyla2012issues}}
 W~pracy~\cite{przybyla2012issues}, autor opisuje budowę typowego systemu do odpowiadania na pytania otwarte, porównując które elementy takiego rozwiązania są zależne od języka. Oprócz tego, podkreślone zostały cechy języka polskiego, jako języka słowiańskiego, które utrudniają automatyczne przetwarzanie oraz generację tekstu.
 
 Główną cechą czyniącą przetwarzanie tekstów w~języku polskim trudnym, jest mnogość form językowych. Fleksyjność języków słowiańskich pozwala na określanie roli wyrazu w~zdaniu na podstawie końcówki, a~nie jak w~języku angielskim na podstawie pozycji w~zdaniu. Przykładowo zdanie \emph{Jan zjadł rybę} oraz \emph{Rybę zjadł Jan}, znaczą to samo, mimo inaczej położonego akcentu, natomiast zdania \emph{John ate a~fish} i~\emph{A~fish ate John} znaczą zupełnie co innego. Co więcej, złożona odmiana rzeczowników sprawia że rozpoznawanie nazw własnych jest jeszcze trudniejsze~\cite{przybyla2012issues}.
@@ -148,65 +222,9 @@ Jako komponenty zależne od języka, autor wydzielił:
 
 W~przypadku przetwarzania bazy wiedzy, autor podkreśla że klasyczny \emph{stemming} nie zdaje egzaminu oraz że o~wiele lepsze wyniki uzyskuje się przy użyciu pełnych analizatorów morfologicznych, które przetwarzają tekst wolniej jednak gwarantują znalezienie każdej formy językowej dla przetwarzanego segmentu.
 
-Mimo wielu różnic, autor podkreśla że kilka operacji, skutecznie używanych w~systemach do odpowiadania w~języku angielskim, może sprawdzić się w~systemach obsługujących język polski. Taką operacją jest między innymi indeksowanie bazy wiedzy, w~celu przyspieszenia wyszukiwania tekstu oraz wyszukiwanie relacji pomiędzy wyrazami, wykorzystując narzędzia typu \emph{WordNet}.
+Mimo wielu różnic, autor podkreśla że kilka operacji, skutecznie używanych w~systemach do odpowiadania w~języku angielskim, może sprawdzić się w~systemach obsługujących język polski. Taką operacją jest między innymi indeksowanie bazy wiedzy, w~celu przyspieszenia wyszukiwania tekstu oraz wyszukiwanie relacji pomiędzy wyrazami, wykorzystując narzędzia typu \emph{WordNet}\cite{przybyla2012issues}.
 
-\opracowanyartykul{A survey of Text Question Answering Techniques~\cite{gupta2012survey}}
-Według~\cite{gupta2012survey}, proces automatycznego odpowiadania na pytania można podzielić na trzy oddzielne fazy: klasyfikację pytania, wydobycie informacji z~bazy wiedzy oraz wydobycie/generacja odpowiedzi. Te trzy fazy są wyróżnialne w~każdym systemie do odpowiadania na pytania, niezależnie od wykorzystanego mechanizmu. Autorzy wyodrębnili cztery różne podejścia do rozwiązania postawionego problemu, wyróżniając systemy oparte~o:
-\begin{itemize}
-	\item przeszukiwanie sieci WWW,
-	\item wyszukiwanie w~bazie dokumentów tekstowych,
-	\item wyszukiwanie w~zamkniętej bazie danych,
-	\item reguły i~dopasowywanie do wzorca.
-\end{itemize}
-
-Autorzy podkreślają jak ważne jest automatyczne wydobycie informacji z~przygotowanego dokumentu. W~celu poprawnego wydobycia poszukiwanych informacji z~dokumentu należy w~pierwszej kolejności dokonać filtrowania akapitów. Zazwyczaj dokonuje się tego wykorzystując dopasowywanie do słów kluczowych zapytania. Im więcej razy w~tekście wystąpi słowo kluczowe, tym większa szansa na to że nie zostanie ono odfiltrowane. Następnie, każdemu pozostałemu akapitowi należy przyporządkować liczbę, ocenę jakości tekstu.
-Dobór funkcji oceniającej jest zależny od typu przetwarzanych dokumentów oraz typu pytania. Ocenione akapity należy posortować a~następnie, rozpoczynając od pierwszego, przeprowadzić proces leksykalnego i~syntaktycznego wydobycia wiedzy z~tekstu~\cite{gupta2012survey}.
-
-Aby odpowiednio ocenić akapity, należy przed przetwarzaniem dokumentów dokonać klasyfikacji pytania. Autorzy~\cite{gupta2012survey} wyodrębnili osiem klas głównych pytań odpowiadających na pytania:
-\begin{itemize}
-	\item co?,
-	\item jak?,
-	\item dlaczego?,
-	\item który/która/które/którzy?,
-	\item gdzie?,
-	\item czyji/kogo?
-	\item kiedy?,
-	\item pytania funkcjonalne.
-\end{itemize}
-
-Pierwsze siedem klas pytań jest łatwo rozróżnialnych, za pomocą stosownych reguł logicznych i~wyrażeń regularnych. Największą trudność sprawiają pytania funkcjonalne typu \emph{Nazwij piłkarza który strzelił jedyną bramkę w~finale Euro 2016}. Pytania tego typu wymagają szczególnego traktowania i~najczęściej wymagają maszynowego rozumienia tekstu.
-
-\opracowanyartykul{Data-Intensive Question Answering}
-Pozycja \cite{brill2001data} opisuje wykorzystanie systemu AskMSR oraz AskMSR2 na konferencji TREC-9 w~2001 roku. Jako że analiza systemów została przedstawiona w~punkcie \ref{askmr} tego rozdziału (\cite{brill2002analysis}), w~opisie artykułu pominięte zostaną kwestie poruszone powyżej.
-
-Główną modyfikacją systemów AskMSR oraz AskMSR na potrzeby konferencji TREC było dodanie fazy sprawdzającej wystąpnie potencjalnej odpowiedzi w zbiorze dokumentów TREC. System po znalezieniu n~najlepszych odpowierdzi z~zasobów internetowych, wyszukiwał ich w~bazie danych TREC-9. W~tym celu wykorzystany został system Okapi IR. Zapytanie polegało na stworzeniu query skłądającego się ze słów użytych w~potencjalnej odpowiedzi. Następnie znalezione dokuemnty zostały ocenione.
-
-Autorzy \cite{brill2001data} na tym etapie generacji odpowiedzi nie wykorzystywali specjalnych zabiegów lingwistycznych w~celu zwiększenia precyzji ani pokrycia. Do dalszego przetwarzania wybierane były najwyżej ocenione dokumenty dla każdej potencjalnej odpowiedzi.
-
-Ostateczne odpowiedzi systemu były w większości przypadków generowane na podstawie najwyżej ocenianych dokumentów wspierających potencjalne odpowiedzi. Wyjątkiem od reguły była sytuacji, gdzie jeden dokuemnt powtarzał się w~kilku potencjalnych odpowiedziach.
-
-Autorzy \cite{brill2001data} zwracają uwagę, że mechanizm ten może być wykorzystywany także w~innych przypadkach. Wskazują, że można go wykorzystać do weryfikacji potencjalnej odpowiedzi znalezionej w~internecie w~niewielkich, ale wiarygodnych zbiorach takich jak słowniki lub bazy arykułów \cite{brill2001data}.
-
-\opracowanyartykul{An English language question answering system for a large relational database}
-Pozycja \cite{waltz1978english} opisuje sposób działania oraz budowę systemu odpowiadania na pytania PLANES. System ten został stworzony w celu zapewnienia wygodnego interfejsu do bazy danych związanej z samolotami dla amerykańskiego wojska w drugiej połowie lat 70-tych ubiegłego wieku.
-
-Artykuł \cite{waltz1978english} opisuje budowę całego systemu, ale z perspektywy tworzenia nowego systemu istotne są tylko kwestie związane z konstrukcją parsera. Przetwarzanie zapytania składa się z czterech etapów: parsowania pytania, konstrukcji odpowiedniego query, dokonania jego oceny oraz wykonania zapytania i zwrócenia odpowiedzi. Założenia z jakich wyszli autorzy systemu to: wykorzystywanie specyficznego słownictwa przez użytkowników a co za tym idzie brak dwuznaczności oraz fakt, że użytkownicy systemu nie wpisują długich zapytań.
-
-System podzielił parsowanie pytania na kilka etapów. W pierwszym dokonywana była poprawa literówek oraz konwersja słów do ich kanoniczneg postaci. W drugim etapie wykorzystywane były podsieci ATN, których zadaniem było połączenie frazy ze zdefiniowanym w systemie znaczeniem. Dla każdego rodzaju obiektu (na przykład czas, rodzaje samolotów, rodzaje usterek) zaimplementowana została osobna podsieć identyfikująca znaczenie. 
-
-Zaletą systemu było szybkie odrzucanie słów nie niosących żadnej informacji, które przez autorów \cite{waltz1978english} zostały nazwane szumami. Identyfikowane one były za pomocą osobnej podsieci. 
-
-System, jeśli udało mu się znaleźć znaczenie jednego słowa używając danej podsieci, starał się wykorzystać ją ponownie w procesie identyfikacji kolejnego słowa.
-
-Po przeanalizowaniu wszystkich słów oraz odrzuceniu szumów system aktualizował rejestr kontekstu, który został zaimplementowany w postaci stosu. W rejestrze tym znajdują się ostatie zapytania wraz z ostatnio wykrytymi frazami, ostatnio użytymi query oraz znalezionymi odpowiedziami. Do rejestru zostały wrzucane w tej fazie parsowania kanoniczne formy słów wraz z ich znaczeniem. Rejestr ten gra istotną rolę w procesie ustalania niesprecyzowanych zmiennych. Służy między innymi do znajdowania właściwych znaczeń zaimków.
-
-Jeśli system nie jest w stanie jednoznaczie odtworzyć znaczenia danego słowa, to tworzone są struktury zwane ramkami pojęć (ang. concept case frames). Struktura składa się z czasownika oraz części rzeczownikowych, do każdej przypisany jest wzór query. System testuje struktury oraz sprawdza, czy ich wykorzystanie może mieć sens. Jeśli wynik testowania jest pozytywny dla większej niż jednej struktury, system prosi użytkownika o wybranie znaczenia oraz zwraca znalezione ramki.
-
-Tak stworzone struktury przekzywane są następnie do modułu tworzącego zapytania. Proces tworzenia zapytania rozpoczyna się od próby identyfikacji tablic potrzebnych do znalezienia danych. Następnie moduł sprawca jakiej odpowiedzi oczekuje użytkownik, czyli jakiej domeny powinien być zwrócony wynik. Jako że system był tworzony w latach 70-tych, dużym wyzwaniem było przetważanie złożonych zapytań.
-
-Przed rozpoczęciem realizacji zapytania, PLANES przekazywał użytkownikowi stworzone query oraz umożliwił wprowadzanie korekt. Dane zwrócone z bazy danych były przekazywane do generatora odpowiedzi, który na podstawie rodzaju zwróconych danych oraz polecenia użytkownika konwertował je do postaci grafu lub tabeli\cite{waltz1978english}.
-
-\opracowanyartykul{Question Analysis for Polish Question Answering}
+\opracowanyartykul{Question Analysis for Polish Question Answering~\cite{przybyla-2013-question}}
 Artykuł \cite{przybyla-2013-question} poświęcony jest przedstawieniu różnych sposobów analizy pytań dla systemów QA oraz ich skuteczności w systemach przetwarzających pytania w języku polskim. Analiza pytania polega na przetworzeniu zadanego pytania na formę umożliwiającą wyszukanie odpowiedzi w systemie tzw. model pytania. Model ten zawiera zapytanie do wyszukiwarki oraz typ pytania składający się z ogólnego typu pytania oraz typ bytu nazwanego. Typ bytu nazwanego wskazuje typ oczekiwanej odpowiedzi. Przykładowo dla pytania "Jakiego pseudonimu używał X?" bytem nazwanym jest pseudonim. Autor zwraca uwagę, że problem analizy pytań może być pominięty, o ile system QA będzie otrzymywał informację o typie pytania lub spodziewał się konkretnego typu pytań.
 
 Jednym ze sposobów rozpoznawania typu pytania, opisanym w artykule \cite{przybyla-2013-question}, jest metoda dopasowywania wzorców. Metoda ta polega na stworzeniu wyrażenia regularnego, do którego porównywane jest pytanie. To podejście autor stosuje do jednoznacznych pytań (czy?, kiedy?), dla których można określić typ spodziewanej odpowiedzi. 
@@ -219,69 +237,69 @@ Podstawowym sposobem na tworzenie zapytania do wyszukiwania, przedstawionym w ar
 
 Dodatkowo należy wziąć pod uwagę dużą rolę odmiany wyrazów w języku polskim i zastosować stemming bądź fuzzy queries (możliwość różnicy pomiędzy zapytaniem a~wyszukiwanym tekstem).
 
-W rezultacie najlepsza okazała się metoda łącząca dopasowywanie wzorców z ujednolicaniem za pomocą WordNetu. W przypadku zapytań, najlepsze wyniki uzyskano dla łączenia wszystkich wyrazów z pytania za pomocą alternatywy. 
+W rezultacie najlepsza okazała się metoda łącząca dopasowywanie wzorców z ujednolicaniem za pomocą WordNetu. W przypadku zapytań, najlepsze wyniki uzyskano dla łączenia wszystkich wyrazów z pytania za pomocą alternatywy\cite{przybyla-2013-question}. 
 
-\opracowanyartykul{Learning Surface Text Patterns for a Question Answering System}
-Artykuł \cite{ravichandran-hovy-2002-learning} poświęcony jest tematyce wykorzystania wzorców tekstowych w systemach QA. Autorzy zauważają, że odpowiedzi na większość pytań można zlokalizować w tekście poprzez znalezienie charakterystycznych wzorców. Przykładowo, aby odszukać rok urodzenia danej osoby, należy odnaleźć tekst pasujący do wzorca: “<NAME> was born in <BIRTHDATE>”.
+\opracowanyartykul{Named entity recognition in a Polish question answering system~\cite{polishQAS}}
+Pozycja \cite{polishQAS} opisuje budowę systemu odpowiadania na pytania w~języku polskim hipisek oraz opisuje wykorzystanie modułu rozpoznawania nazw.
 
-Artykuł skupia się na temacie automatycznej generacji wzorców oraz ocenie ich precyzji. Autorzy prezentują algorytm, który samodzielnie tworzy wzorce na podstawie pary: wyraz-pytanie (question term)i wyraz-odpowiedź (answer term). 
+Hipisek jest płytkim systemem odpowiadania na pytania, bazującym na wiedzy pozyskanej z bazy danych zawierającej artykuły. Autorzy zaimplementowali proste metody bazujące na formułowaniu zapytań internetowych a~następnie wzbogacili system o narzędzie do rozpoznawania nazw Named Entity Recognition (NER). 
 
-Aby stworzyć wzorzec należy dla danego typu pytania (np. BIRTHYEAR), wyszukać w zbiorze tekstów zdania zawierające wyraz-pytanie i wyraz-odpowiedź  – przykładowo „Mozart 1756”. Ze znalezionych zdań buduje się drzewa sufiksowe, aby znaleźć wszystkie podciągi zdania o różnych długościach. Te podciągi, które zawierają zarówno wyraz-pytanie i wyraz-odpowiedź, tworzą wzorzec (<NAME> was born on <ANSWER>). Algorytm można usprawnić wprowadzając rozszerzenie, które pozwala na określenie spodziewanej długości odpowiedzi dla niektórych typów pytań. 
+System hipisek wykorzystuje algorytm wyszukiwania informacji oraz bazuje na narzędziach lingwistycznych. Zakłada, że odpowiedź na pytanie użytkownika znajduje się bezpośrednio w~dokumencie, dlatego zwracany jest zbiór zdań z~dokumentu.
 
-Autorzy przetestowali tworzenie wzorców przy wykorzystaniu korpusu TREC oraz wyszukiwarki internetowej. Z uwagi na redundancję danych, większą precyzję osiągnęły wzorce stworzone na podstawie tekstów z internetu. 
+Zadaniem systemu jest przekształcenie pytania użytkownika do zbioru zapytań wysyłanego do slnika wyszukiwań a~następnie dokonania oceny uzyskanych odpowiedzi i~zwrócenia najlepszej.
 
-Wśród wad wykorzystania wzorców tekstowych, autorzy wymieniają ignorowanie informacji na temat typu spodziewanej odpowiedzi. Do wzorca może zostać dopasowany każdy pasujący zwrot bez względu na typ części mowy. Kolejną wadą jest zagrożenie powstania zbyt ogólnikowych wzorców w przypadku niektórych pytań. Problem ten występuje między innymi w przypadku pytań o definicję. Autorzy podkreślają także istotną wagę odpowiedniego doboru przykładów (wyraz-pytanie i wyraz-odpowiedź), na podstawie których tworzone są wzorce oraz potrzebę korzystania z dużej bazy tekstów. Podejście z dopasowywaniem wzorców, nie sprawdza się najlepiej przy tekstach, w których pytanie i odpowiedź znajdują się w dalekiej odległości od siebie (“<QUESTION>, (<dużo wyrazów>)*, lies on <ANSWER>”). Poważnym ograniczeniem metody jest także to, że może być stosowana tylko do pytań o jednym wyrazie-pytania. Przykładowo w pytaniu “Which county does the city of Long Beach lie?” są dwa wyrazy-pytania: „county” i „Long Beach”, dlatego algorytm zaproponowany przez autorów nie sprawdzi się. Problemem jest także występowanie różnych form danego zwrotu (Gandhi może zostać zapisany także jako “Mahatma Gandhi”, “Mohandas Karamchand Gandhi) czy różnych form zapisu. 
+Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url dokuemntu. Artykuły są indeksowane przy użyciu mechanizmu indeksowania w darmowym silniku zapytań Sphinx \cite{sphinx}. 
 
-Zaletą tej metody jest natomiast to, że można ją wykorzystywać dla wielu języków, ponieważ nie bierze pod uwagę cech specyficznych dla danego języka.
+Pierwszym krokiem przetwarzania zapytania jest jest znalezienie bazowej formy wyrazu. W tym celu system wykorzystuje słownik języka polskiego \textit{Dylemat}. Pytanie jest przekształcane w strukturę QQuery zawierającą:
+\begin{itemize}
+	\item TOPIC - przedmiot zapytania,
+	\item ACTION - główny czasownik w pytaniu,
+	\item CONSTRAINTS - ograniczenia, pozostałe leksemy z~pytania zawierające wymagane informacje,
+	\item TYPE - typ pytania, autorzy założyli, żepytanie może dotyczyć miejsca, czasu lub osoby.
+\end{itemize}
+Dodatkowo w strukturze umieszczane są znalezione synonimy bazowych form słów.
 
-\opracowanyartykul{IBM's Statistical Question Answer System}
-W artykule \cite{Ittycheriah00ibm'sstatistical} zaprezentowana została ogólna budowa systemu IBM, który wykorzystuje klasyfikator maksymalnej entropii do określania rodzaju pytania oraz typu spodziewanej odpowiedzi, a także do oznaczania klasy bytów występujących w tekście. 
+W procesie translacji wykorzystywane są dwie metody: 
+\begin{itemize}
+	\item podejście oparte na zasadach, 
+	\item podejście heurystyczne.
+\end{itemize}
+W celu przekształcenia pytania w formalizm, wykorzystane zostało narzędzie Spejd \cite{spejd}. Proces ten przekształca zdanie w swoistego rodzaju strukturę składającą się ze znanych elementów przy jednoczesnym sprawdzaniu odpowiednich warunków. Jeśli nie udało się przekształcić pytania wykorzystując narzędzie Spejd, system tworzy strukturę bazując na podejściu heurystycznym. Zbudowana struktura QQuery, za pomocą metod reformułacji, jest przekształcana do formy odpowiedniej do silnika zapytań.
 
-System składa się z czterech głównych modułów: klasyfikacji rodzaju pytania i odpowiedzi, rozszerzenia zapytania/wyszukiwania informacji, oznaczania klasy bytów występujących w wyszukanym tekście (named entity marking), wyboru odpowiedzi. 
+Formowane są trzy rodzaje zapytań:
+\begin{itemize}
+	\item bazowane na frazach,
+	\item bazowane na temacie,
+	\item zbioru słów z zapytania.
+\end{itemize}
 
-W systemie, określenie typu odpowiedzi polega na przyporządkowaniu do pytania etykiety określającej szukany byt. Do określenia typu bytu, autorzy korzystają z kategorii MUC, opisanej w artykule \cite{chinchor-robinson-1998-appendix}, lub przyporządkują typ PHRASE, gdy typu nie da się określić. Za przyporządkowanie tych etykiet odpowiada model maksymalnej entropii. 
+Sphinx wykorzystuje schemat Okapi BM25 w celu oceniania jakości dokumentów. System przetwarza dalej tylko najwyżej ocenione dokumenty.
 
-Drugim opisanym aspektem systemu był moduł wyszukiwania informacji. Autorzy proponują podejście dwuetapowe. Pierwszy etap polega na przeszukaniu bazy danych encyklopedii. Wyszukane fragmenty są oceniane za pomocą schematu Okapi opisanej w artykule \cite{RobertsonOkapi}. Ustępy o najwyższym wyniku są następnie użyte do rozszerzenia zapytania za pomocą techniki LCA. Drugi etap polega na wyszukaniu w korpusie TREC-9 rozszerzonego zapytania.
+Każdy dokuemnt otrzymuje dwie oceny: akceptacyjną oraz jakościową. Na oceny wpłwa między innymi: metoda uzyskania dokuemntu, obecność tematu oraz akcji, liczba ograniczeń pytania spełniona przez potencjalną odpowiedź, data publikacji.
 
-Przedostatnim modułem jest oznaczenie klasy bytów występujących w wybranych ustępach. Klasyfikator maksymalnej entropii przyporządkuje każdemu słowu kategorię MUC \cite{chinchor-robinson-1998-appendix}. Tak zmodyfikowany ustęp wraz z spodziewanym typem odpowiedzi stanowi wejście do ostatniego modułu.
+Autorzy publikacji \cite{polishQAS} badali jaki wpływ na jakość odpowiedzi będzie miało dodanie do systemu modułu NER. Moduł ten służy do wyszczególniania nazw w tekście i ich klasyfikacji. Bazuje on na darmowych źródłach internetowych ze zbiorami nazw. Znalezione nazwy są klasyfikowane do jednej z trzech kategorii: osoba, miejsce lub czas.
 
-Każdy ustęp przekazany do ostatniego modułu dzielony jest na zdania. Wokół każdego zdania formowane jest okno. Każde okno jest oceniane na podstawie pięciu parametrów. Dodatkowo brana pod uwagę jest obecność lub brak spodziewanego typu odpowiedzi. Na koniec wybieranych jest 50 lub 250 bajtów najbardziej dopasowanych okien. 
+Stworzony moduł NER pozwolił na poprawę jakości systemu hipisek o około $40$\%. Autorzy porównywali uzyskane wyniki z system Ktoco.pl oraz z systemem Hipisek (bez modułu NER). Wykorzystano w tym celu test regresyjny bazujący na pomyśle używanym podczas konferencji TREC \cite{polishQAS}.
 
-\opracowanyartykul{High Performance Question/Answering}
-W artykule \cite{hpqa} opisano charakterystyczne aspekty systemu Question/Answer, dzięki którym system cechuje się wysoką dokładnością przy odpowiadaniu na pytania. Autorzy przekonują, że na skuteczność systemu QA wpływa nie tylko rozpoznawanie typu spodziewanej odpowiedzi, ale także zmiany leksykalne, morfologiczne i semantyczne przeprowadzone na słowach kluczowych.
 
-Pierwszym ważnym aspektem systemu Question/Answer jest stworzona przez autorów taksonomia odpowiedzi (ANSWER TYP TAXONOMY), która umożliwiła znaleźć spodziewany typ odpowiedzi dla większości zapytań. Każdy węzeł w stworzonej taksonomii połączony jest z jedną lub więcej pod-hierarchii bazy WordNet. 
 
-Aby znaleźć odpowiednią kategorię za pomocą tej taksonomii, należy przeprowadzić operację na zapytaniu, aby określić który wyraz determinuje typ spodziewanej odpowiedzi. W tym celu autorzy zaimplementowali własną wersję parsera Collinsa, która z zapytania tworzy drzewo wyprowadzenia (ang. parse tree). Znaleziony korzeń drzewa zmapowany na odpowiednie pojęcie w stworzonej taksonomii odpowiedzi stanowi spodziewany typ odpowiedzi. 
 
-Otrzymane drzewo służy także autorom do skonstruowania zapytania do wyszukiwarki, ponieważ można z niego odczytać zależności pomiędzy słowami w pytaniu i stworzyć listę uporządkowaną. Uporządkowane w kolejności słowa z listy tworzą zapytanie. 
 
-Kolejną cechą charakterystyczną dla systemu Q/A jest występowanie pętli przy wyszukiwaniu fragmentów z potencjalnymi odpowiedziami. Jeżeli w odpowiedzi na dane zapytanie znaleziono zbyt małą lub zbyt dużą liczbę paragrafów, pętla pozwala na powrót do tworzenia zapytania, w celu zwiększenia lub zmniejszenia liczby słów w zapytaniu. Następnie sprawdzane jest podobieństwo w zależnościach pomiędzy pytaniem a potencjalną odpowiedzią. Jeżeli podobieństwo jest niewystarczające, druga pętla pozwala na zmiany leksykalne, morfologiczne lub znaczeniowe w zapytaniu. 
 
-Innym podejściem do odnalezienia paragrafów z potencjalnymi odpowiedziami opisanym w artykule było wykorzystanie modelu perceptronu. Do jego nauki posłużyły pary ustępów: pierwszy zawierający prawidłową odpowiedź, drugi będący paragrafem otrzymanym przy wykorzystaniu pętli.
 
-Ostatnią opisaną właściwością systemu było szukanie podobieństwa pomiędzy zadanym pytaniem, a pytaniami zadanymi w przeszłości. Jeżeli podobne pytanie występowało w przeszłości, tworzy się grupę zawierającą oba pytania.
 
-\opracowanyartykul{The structure and performance of Open-Domain QA System}
-W artykule \cite{moldovan-etal-2000-structure} przedstawiona została budowa i opisane najważniejsze aspekty systemu QA o nazwie LASSO. Składa się on z trzech etapów: przetwarzania pytania, indeksowania ustępów i przetwarzania odpowiedzi. 
 
-Pierwszy etap ma za zadanie określić typ pytania, spodziewany typ odpowiedzi, określić tzw. answer focus oraz zbudować zapytanie na podstawie pytania. W kolejnym etapie, za pomocą stworzonego zapytania,  należy odnaleźć paragrafy zawierające odpowiedź na zadane pytanie. W ostatnim etapie należy wyodrębnić odpowiedź na pytanie w wybranym paragrafie.
 
-Ważnym aspektem pierwszego etapu jest stworzenie zapytania do wyszukiwarki. W opisywanym systemie do tego celu można zastosować 8 heurystyk. Do zapytania dodają wyrazy z pytania, które spełniają następujące wymagania: słowa tworzące cytaty (oprócz stop-słów), nazwy własne, wyrazy tworzące grupę nominalną, wszystkie rzeczowniki i ich określenia przymiotnikowe, wszystkie czasowniki, wyraz stanowiący centrum pytania (tzw. question focus). Do stworzenia początkowego zapytania wykorzystywane są tylko początkowe warunki. Jeżeli wyszukiwarka zwróci zbyt małą lub dużą liczbę paragrafów, wykorzystuje się pozostałe heurystyki, aby dodać więcej słów do zapytania lub usuwa wyrazy z zapytania. 
 
-Do wyszukania stosuje się silnik, bazujący na logice boolowskiej.  Powstał on na bazie silnika Zprise IR, który porównuje paragrafy bazując na podobieństwie kosinusowym. Po odnalezieniu fragmentów z potencjalnymi odpowiedziami, są one oceniane i sortowane ze względu na: taką samą sekwencję słów we fragmencie i zapytaniu, największej odległości pomiędzy słowami kluczowymi w paragrafie i liczby brakujących słów kluczy w paragrafie. 
 
-Ostatni etap przetwarza znalezione fragmenty w celu stworzenia odpowiedzi na zapytanie. Do tego celu wykorzystywany jest zmodyfikowany Brill tagger. Parser umożliwia wyodrębnienie z paragrafów fragmentów będących potencjalnymi odpowiedziami na pytanie. Fragmenty te, tworzące okna odpowiedzi, są następnie oceniane pod względem:  odległości potencjalnej odpowiedzi od pozostałych słów kluczy w oknie, pasujących słów kluczy w oknie, liczby słów kluczy będących w tym samym zdaniu co kandydat na odpowiedź, liczby słów kluczy będących w tym samym poddrzewie wyprowadzenia co potencjalna odpowiedź, i najlepszy z nich stanowi odpowiedź na pytanie.
 
-\opracowanyartykul{Aqualog: An ontology-portable question answering system for the semantic web}
-Artykuł \cite{lopez2005aqualog} opisuje ogólną architekturę oraz sposób działania systemu Aqualog. System ten umożliwia wyszukiwanie odpowiedzi na pytania w sieciach semantycznych. Stworzony został dla ontologii związanej z życiem akacemickim, ale autorzy podkreślają, że zaimplementowane metody w prosty sposób można przenieść do innych ontologii.
 
-Proces przetwarzania zapytania przez system Aqualog można przedstawić za pomocą modelu waterfall. Zapytania użytkownika w kolejnych krokach przetwarzane są najpierw do trójek-query a następnie do trójek dostosowanych do ontologii. Na samym początku za pomocą ifrastruktury GATE system wykrywa części mowy poszczególnych słów użytych w zapytaniu. Znalezione adnotacje zawierają mniędzy innymi informacje o częściach zdaniach, tokenach, wykrytych rzeczownikach i~czasownikach. System został dodatkowo rozszerzony o zbiór adnotacji dotyczących relacji, wzorów, typów pytań. Całość składowana jest za pomocą wykorzystania gramatyki JAPE a~wynikiem tego procesu są trójki-query.
 
-Tak przetworzone dane stanowią wejście do serwisu podobieństw relacji (ang. Relation Similarity Service). Jest to serce systemu, które na podstawie znajomości struktury ontologii oraz dodatkowych infromacji stara się znaleźć odpowiednią trójkę dostosowaną do danej ontologii. Za pomocą RSS oraz serwisu podobieństwa klas (ang. Class Similarity Service) identyfikowane oraz mapowane są relacje i~nazwy w~ramach danej ontologii. Serwis wykorzystuje zarówno znajomość danej ontologii jak również mechanizm uczenia, aliasy zwrócone przez WordNet oraz korzysta z heurystyk.
 
-CSS wykorzystywany jest do mapowania terminów lingwistycznych do klas. Używany jest w tym celu algorytm mierzący odległość pomiędzy napisami (ang. string distance metric). Dodatkowo serwis może wykorzystywać synonimy (znalezione za pomocą WordNet) lub mechanizmy uczenia się. 
 
-Największymi trudnościami z jakimi powinien radzić sobie system są niejednoznaczoności. Autorzy założyli, że ta część systemu jest interaktywna, użytkownik proszony jest o doprecyzowanie znaczenia słów, których system nie potrafi jednoznacznie sklasyfikować. Dodatkowe, wprowdzone przez użytkownika, informacje są zapamiętywane zgodnie z kontekstem w jakim się pojawiły. Dzięki temu system ma zdolność uczenia się. Kontekst składa się między innymi z nazwy relacji, jej argumentów oraz informacji o użytkowniku. Jeśli w kolejnych zapytaniach serwis RSS nie znajdzie odpowiedniej trójki dostosowanej do ontologii, sprawdzane jest, czy w~bazie danych nie znajdują się zapamiętane wcześniej wyrażenie z takim samym kontekstem. Wykorzystywane są dwa podejścia: uczenie się oraz dopasowywanie.
 
-Znalezione przez RSS trójki bezpośrednio wykorzysywane są do odnalezienia informacji w sieciach semantycznych. Autorzy wskazują na duże podobieństwa systemu Auqalog z systemami przetwarzającymi język naturalny na potrzeby analizy zapytań relacyjnych baz danych\cite{lopez2005aqualog}.
+
+
+
+
+
