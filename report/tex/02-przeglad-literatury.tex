@@ -30,7 +30,7 @@ Analiza odpowiedzi sprowadza się do oceny otrzymanego zdania na podstawie treś
 q \geq  \sqrt{Q - 1}  + 1
 \end{equation}
 
-Oprócz zliczania słów, system wykrywa powiązania pomiędzy rzeczownikami a~zaimkami i~w~momencie wykrycia zaimka dokonywane jest zastąpienie zamika odpowiadającym mu rzeczownikiem. Na ocenę wpływają również obecność synonimów słów kluczowych oraz pozycja wyniku w~wyszukiwarce~\cite{zheng2002answerbus}.
+Oprócz zliczania słów, system wykrywa powiązania pomiędzy rzeczownikami a~zaimkami i~w~momencie wykrycia zaimka dokonywane jest zastąpienie zaimka odpowiadającym mu rzeczownikiem. Na ocenę wpływają również obecność synonimów słów kluczowych oraz pozycja wyniku w~wyszukiwarce~\cite{zheng2002answerbus}.
 
 \opracowanyartykul{An analysis of the askmr question-answering system~\cite{brill2002analysis}}\label{askmr}
 System AskMSR~\cite{brill2002analysis} jest systemem zajmującym się odpowiadaniem na pytania ogólne. W~tym celu przeszukuje on sieć WWW, wykorzystując różne internetowe wyszukiwarki. Celem autorów, było stworzenie systemu odpowiadającego na pytania, bez przeprowadzania zaawansowanej analizy lingwistycznej zarówno pytania,jak i~potencjalnych odpowiedzi. Głównym założeniem był fakt olbrzymiej redundancji odpowiedzi w~sieci WWW.
@@ -250,7 +250,7 @@ System hipisek wykorzystuje algorytm wyszukiwania informacji oraz bazuje na narz
 
 Zadaniem systemu jest przekształcenie pytania użytkownika do zbioru zapytań wysyłanego do silnika wyszukiwań a~następnie dokonania oceny uzyskanych odpowiedzi i~zwrócenia najlepszej.
 
-Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url dokuemntu. Artykuły są indeksowane przy użyciu mechanizmu indeksowania w darmowym silniku zapytań Sphinx \cite{sphinx}. 
+Baza danych wykorzystywana przez silnik to zbiór automatycznie generowanych dokumentów tekstowych pochodzących z artykułów z polskich stron internetowych z wiadomościami. Każdy wpis w bazie danych zawiera dodatkowo informacje o tytule, dacie opublikowania, ewentualnych słowach kluczowych oraz adresie url dokumentu. Artykuły są indeksowane przy użyciu mechanizmu indeksowania w darmowym silniku zapytań Sphinx \cite{sphinx}. 
 
 Pierwszym krokiem przetwarzania zapytania jest jest znalezienie bazowej formy wyrazu. W tym celu system wykorzystuje słownik języka polskiego \textit{Dylemat}. Pytanie jest przekształcane w strukturę QQuery zawierającą:
 \begin{itemize}
