@@ -1,4 +1,3 @@
-\todo{Przygotować projekt rozwiązania}
 Korzystając z~wiedzy i~doświadczeń wyniesionych z~sekcji~\ref{sec:przeglad} niniejszego sprawozdania, zdecydowaliśmy się na stworzenie systemu odpowiadającego na pytania ogólne, z~wyszczególnieniem pytań o~fakty dotyczące:
 \begin{itemize}
     \item osób,
@@ -13,8 +12,6 @@ Bazą więdzy systemu będzie sieć WWW. Do wyszukiwania dokumentów w~sieci~WWW
 Odpowiedzią na przedstawione pytanie, będzie prosta odpowiedź typu \emph{Named-Enitity}. Nie przewidujemy odpowiadania na pytania w~języku naturalnym.
 
 \subsection{Zarys algorytmu}
-\todo{przedstawić zarys algorytmu, bez szczegółów implementacyjnych, odnieść się do odpowiednich źródeł i sekcji o literaturze}
-
 Na rysunku~\ref{fig:algorithm-overview}, przedstawiony został ogólny schemat algorytmu odpowiadania na pytania.
 
 \begin{figure}[h]
@@ -28,7 +25,7 @@ Pierwszym krokiem algorytmu jest akwizycja pytania od użytkownika systemu. Każ
 
 W~kolejnym kroku, strumień sterowania rozdwaja się i~jest przekazywany do dwóch modułów, które przetwarzają zapytanie równolegle. Moduł akwizycji wiedzy, na podstawie przekazanego pytania, stara się uzyskać jak największą ilość \emph{snippetów}, generując specjalistyczne zapytania do każdej z~czterech wyszukiwarek, tak jak to zostało przedstawione w~\cite{zheng2002answerbus}. Oprócz tego, aby wykorzystać redundantość sieci~WWW, do wyszukiwarek wysłane zostaną również okrojone zapytania, pozbawione części słów, tak aby zwiększyć zakres poszukiwań, podobnie jak w~\cite{brill2002analysis}. Aby zwiększyć rozmiar zbioru wyszukanych \emph{snippetów}, słowa kluczowe w~zapytaniu, będą wymieniane na ich synonimy~\cite{przybyla-2013-question}.
 
-W~trakcie wyszukiwania \emph{snippetów}, w~drugiej gałęzi algorytmu, następuję klasyfikacja typu pytania i~oczekiwanej odpowiedzi. Klasy pytań są definiowane przez zaimki pytające. Wyróżniamy pytania typu: \emph{Kto?}, \emph{Jaki/Jaka/Jakie?}, \emph{Jak?}, \emph{Gdzie?}, \emph{Kiedy?}, \emph{Co?} oraz \emph{Który/Która/Które?}. Wykrywanie typu pytania odbywać się będzie w~prosty sposób, stosując reguły podstawieniowe oraz rozkład zdania. Określanie typu oczekiwanej odpowiedzi będzie wynikało głównie z~typu pytania, wspartej możliwością odpytania usługi \emph{plWordNet}~\cite{MazPiaRudSzpaKedz:16} oraz dodatkowym sprawdzeniem wyrażeń regularnych.
+W~trakcie wyszukiwania \emph{snippetów}, w~drugiej gałęzi algorytmu, następuję klasyfikacja typu pytania i~oczekiwanej odpowiedzi. Klasy pytań są definiowane przez zaimki pytające, podobnie jak w~\cite{gupta2012survey}. Wyróżniamy pytania typu: \emph{Kto?}, \emph{Jaki/Jaka/Jakie?}, \emph{Jak?}, \emph{Gdzie?}, \emph{Kiedy?}, \emph{Co?} oraz \emph{Który/Która/Które?}. Wykrywanie typu pytania odbywać się będzie w~prosty sposób, stosując reguły podstawieniowe oraz rozkład zdania. Określanie typu oczekiwanej odpowiedzi będzie wynikało głównie z~typu pytania, wspartej możliwością odpytania usługi \emph{plWordNet}~\cite{MazPiaRudSzpaKedz:16} oraz dodatkowym sprawdzeniem wyrażeń regularnych.
 
 Każdy wyszukany \emph{snippet} zostanie poddany analizie morfologicznej, po której przyporządkowana zostanie mu odpowiednia ocena. W~każdym zdaniu, za pomocą taggera oraz \emph{plWordNetu} wyszukiwane będą \emph{Named-Entities}, które mogą stanowić potencjalną odpowiedź na pytanie. Ostatnim krokiem procesu będzie zwrócenie najlepszej odpowiedzi lub zbioru najlepszych odpowiedzi. Do odpowiedzi dołączony może zostać link ze źródłem, w~celu umożliwienia użytkownikowi systemu osobistej weryfikacji odpowiedzi.
 
@@ -56,4 +53,4 @@ Wydzielenie dwóch głównych komponentów, komunikujących się z~komponentami 
     \label{fig:system-deployment}
 \end{figure}
 
-Na maszynie PC z~systemem operacyjnym Linux uruchomione zostaną dwa procesy. Pierwszy z~nich będzie przyjmował pytania za pomocą wystawionego interfejsu REST API. Dzięki temu, aplikacja będzie mogła być odpytywana za pomocą wiersza poleceń, programów typu Postman lub dedykowanego interfejsu graficznego. Drugi proces odpowiedzialny będzie za przeszukiwanie sieci WWW, generację odpowiednich zapytań oraz odpytywanie wyszukiwarek i~agregację podsumowań. Obie aplikacje będą komunikowały się z~aplikacjami w~sieci WWW, dlatego też maszyna będzie musiała być cały czas podłączona do internetu.  
+Na maszynie PC z~systemem operacyjnym Linux uruchomione zostaną dwa procesy, które przygotwane zostaną przy użyciu języka wysokiego poziomu Python w~wersji~3. Pierwszy z~nich będzie przyjmował pytania za pomocą wystawionego interfejsu REST API. Dzięki temu, aplikacja będzie mogła być odpytywana za pomocą wiersza poleceń, programów typu Postman lub dedykowanego interfejsu graficznego. Drugi proces odpowiedzialny będzie za przeszukiwanie sieci WWW, generację odpowiednich zapytań oraz odpytywanie wyszukiwarek i~agregację podsumowań. Obie aplikacje będą komunikowały się z~aplikacjami w~sieci WWW, dlatego też maszyna będzie musiała być cały czas podłączona do internetu. Zastosowanie komunikacji z~użyciem protokołu HTTP pozwoli na potencjalne uruchomienie systemu w~chmurze, tak jak system Watson, omawiany w~\cite{lapshin2012question}.
