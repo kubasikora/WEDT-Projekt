@@ -73,7 +73,7 @@ class NERService(ClarinService):
 
     def __init__(self, model="top9"):
         """ Initialize service with proper lpmn command. Uses liner2 tool.
-            By default, uses top9 model
+            By default, uses top9 model.
 
             Keyword arguments:
             model -- select which language model should be used by the tool.
@@ -96,4 +96,20 @@ class NERService(ClarinService):
         settings = {"model":  model}
         self.add_lpmn_command("wcrft2")
         self.add_lpmn_command("liner2({})".format(json.dumps(settings)))
+
+class SyntaxParserService(ClarinService):
+    """ Service that is specialized in calling syntax parser 
+        tool -- spejd.
+        URL: https://ws.clarin-pl.eu/spejd.shtml
+    """
+
+    def __init__(self):
+        """ Initialize service with proper lpmn command. Uses spejd tool. """
+
+        ClarinService.__init__(self)
+
+        self.add_lpmn_command('wcrft2({"morfeusz2":false})')
+        self.add_lpmn_command("iobber")
+        self.add_lpmn_command('liner2({"model":"n82","output":"tei:gz"})')
+        self.add_lpmn_command("spejd")
             
