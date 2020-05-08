@@ -2,7 +2,7 @@ from services.ClarinService import ClarinService
 import json
 
 class MorphologicService(ClarinService):
-    """ Service that is specialized for calling morphological 
+    """ Service that is specialized in calling morphological 
         analyzer from clarin. Is able to work with morfeusz in 
         versions 1 and 2.
         URL: http://ws.clarin-pl.eu/morpho.shtml
@@ -19,14 +19,12 @@ class MorphologicService(ClarinService):
         
         ClarinService.__init__(self)
 
-        settings = {
-            "morfeusz2": use_morfeusz2
-        }
+        settings = { "morfeusz2": use_morfeusz2 }
         self.add_lpmn_command("maca({})".format(json.dumps(settings)))
     
 
 class TaggerService(ClarinService):
-    """ Service that is specialized for calling morpho-syntactic
+    """ Service that is specialized in calling morpho-syntactic
         tagger from clarin. Is able to work with wcrft2 tagger 
         and with morfoDita tagger.
         URL: http://ws.clarin-pl.eu/tager.shtml
@@ -67,3 +65,35 @@ class TaggerService(ClarinService):
         else:
             raise RuntimeError("Tagger service created without selected tagger")
     
+class NERService(ClarinService):
+    """ Service that is specialized in calling named-entity recognition 
+        tool -- liner2. Can use up to 8 different models.
+        URL: https://ws.clarin-pl.eu/ner.shtml
+    """
+
+    def __init__(self, model="top9"):
+        """ Initialize service with proper lpmn command. Uses liner2 tool.
+            By default, uses top9 model
+
+            Keyword arguments:
+            model -- select which language model should be used by the tool.
+                     Tool can use one of eight different models: 
+                     - top9 - 9 kategorii
+                     - n82 - 82 kategorie
+                     - 5nam - 5 kategorii
+                     - timex1
+                     - timex4
+                     - names - granice nazw
+                     - events - atrybuty i relacje zdarzeń
+                     - all - grupa modeli
+        """
+
+        ClarinService.__init__(self)
+
+        ner_models = ["top9", "n82", "5nam", "timex1", "timex4", "names", "events", "all"]
+        if model not in ner_models:
+            raise RuntimeError("NER service created with incorrect model")
+        settings = {"model":  model}
+        self.add_lpmn_command("wcrft2")
+        self.add_lpmn_command("liner2({})".format(json.dumps(settings)))
+            
