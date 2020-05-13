@@ -8,6 +8,7 @@
 
 from flask import Flask, jsonify, request, abort
 from services.SeleniumServices import DuckDuckGoService
+from services.QueryGeneration import QueryGenerator, SingleQueryStrategy
 
 app = Flask(__name__)
 
@@ -15,7 +16,14 @@ app = Flask(__name__)
 def search(engine, query):
     if engine == "duckduckgo":
         d = DuckDuckGoService()
-        results = d.process_query(query)
+
+        qg = QueryGenerator(SingleQueryStrategy())
+        queries = qg.generate_queries(query)
+
+        results = list()
+        for query in queries:
+            results += d.process_query(query)
+            
         return jsonify(results)
     else:
         abort(404, description="Search engine not found")
