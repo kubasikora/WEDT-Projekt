@@ -6,32 +6,24 @@
     - PORT - port, można wybrać dowolny, polecam 5000
 """
 
-from flask import Flask, jsonify
-from urllib.parse import urlencode
-from selenium.webdriver import Firefox
-from selenium.webdriver.firefox.options import Options
-
-opts = Options()
-opts.set_headless()
-
+from flask import Flask, jsonify, request, abort
+from services.SeleniumServices import DuckDuckGoService
 
 app = Flask(__name__)
 
-DUCKDUCKGO_URL = "http://duckduckgo.com/html?"
-params = {"q": "Łukasz Szumowski"}
-browser_url = "{}{}".format(DUCKDUCKGO_URL, urlencode(params))
+@app.route("/search/<engine>/<query>", methods=["GET"])
+def search(engine, query):
+    if engine == "duckduckgo":
+        d = DuckDuckGoService()
+        results = d.process_query(query)
+        return jsonify(results)
+    else:
+        abort(404, description="Search engine not found")
 
-
-@app.route("/")
-def hello():
-    browser = Firefox(options=opts)
-    browser.get(browser_url)
-    titles = browser.find_elements_by_class_name("result__title")
-    snippets = browser.find_elements_by_class_name("result__snippet")
-
-    results = list(zip(titles, snippets))
-    results = list(map(lambda x: {"title": x[0].text, "snippet": x[1].text}, results))
-    return jsonify(results)
+@app.route("/engines")
+def engines():
+    engines = ["duckduckgo", "google"]
+    return jsonify(engines)
 
 if __name__ == "__main__":
     app.run()
