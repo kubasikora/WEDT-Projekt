@@ -56,5 +56,5 @@ class DuckDuckGoService(SeleniumService):
         snippets = self.get_page_elements_by_class("result__snippet")
 
         combined_divs = list(zip(titles, snippets))
-        results = list(map(lambda x: {"query": query, "title": x[0].text, "snippet": x[1].text}, combined_divs))
+        results = list(map(lambda x: {"query": query, "engine": "duckduckgo", "title": x[0].text, "snippet": x[1].text}, combined_divs))
         return results

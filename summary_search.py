@@ -30,7 +30,7 @@ def search(engine, query):
 
 @app.route("/engines")
 def engines():
-    engines = ["duckduckgo", "google"]
+    engines = ["duckduckgo"]
     return jsonify(engines)
 
 if __name__ == "__main__":
