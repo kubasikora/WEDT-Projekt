@@ -9,3 +9,6 @@ Zadania:
 2. Wybor rozwiazania.
 3. Zgromadzenie i przygotowanie danych do uczenia.
 4. Wytrenowanie modelu.
+
+### Program `summary_search.py` 
+Program zajmuje się odpytywaniem popularnych wyszukiwarek internetowych, celem zdobycia podsumowań (snippetów), z których wyciągane będą odpowiedzi na zadane pytania. Wykorzystuje on przeglądarkę headless, bez renderowania okna. Do jej uruchomienia, oprócz należy zainstalować odpowiedni driver do Firefoxa. Aby to zrobić, po zainstalowaniu środowiska i otworzeniu shella, należy wykonać polecenie `webdrivermanager firexox`. Pobierze to odpowiedni sterownik, zainstaluje w wirtualnym środowisku i pozwoli na uruchamianie przeglądarki w trybie headless.
