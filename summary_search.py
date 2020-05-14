@@ -35,11 +35,6 @@ def search(engine, strategy, query):
            
     return jsonify(results)
 
-@app.route("/engines", methods=["GET"])
-def engines():
-    engines = ["duckduckgo", "bing"]
-    return jsonify(engines)
-
 @app.route("/combined/<strategy>/<query>", methods=["GET"])
 def combined_results(strategy, query):
     if strategy == "singlequery":
@@ -59,6 +54,16 @@ def combined_results(strategy, query):
         results += bs.process_query(query)
 
     return jsonify(results)
+
+@app.route("/engines", methods=["GET"])
+def engines():
+    engines = ["duckduckgo", "bing"]
+    return jsonify(engines)
+
+@app.route("/strategies", methods=["GET"])
+def strategies():
+    strategies = ["singlequery"]
+    return jsonify(strategies)
 
 if __name__ == "__main__":
     app.run()
