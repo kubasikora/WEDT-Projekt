@@ -34,6 +34,16 @@ class SeleniumService:
         return elements
 
     def combine_processed_tags(self, query, titles, urls, snippets):
+        """ Combine all scraped tags into one container. Resulting object 
+            is a list of dicts.
+
+            Arguments:
+            query -- query that generated results
+            titles -- tags with titles
+            urls -- tags with urls
+            snippets -- tags with actual answers
+        """
+        
         combined_divs = list(zip(titles, urls, snippets))
         results = list(map(lambda x: {
             "query": query, 
