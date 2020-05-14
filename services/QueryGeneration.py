@@ -3,6 +3,10 @@ class SingleQueryStrategy:
         only one element - the original query
     """
 
+    def __init__(self):
+        """ Init strategy with proper serialization name """
+        self.strategy_name = "singlequery"
+
     def generate_queries(self, original_query):
         """ Create list with only one query - the original one 
         

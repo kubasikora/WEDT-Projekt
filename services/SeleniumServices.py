@@ -12,6 +12,7 @@ class SeleniumService:
         self.opts.set_headless()
         self.opts.add_argument("lang=pl")
         self.browser = Firefox(options=self.opts)
+        self.engine = ""
 
     def load_page(self, url):
         """ load new page from given url
@@ -32,6 +33,18 @@ class SeleniumService:
         elements =  self.browser.find_elements_by_class_name(classname)
         return elements
 
+    def combine_processed_tags(self, query, titles, urls, snippets):
+        combined_divs = list(zip(titles, urls, snippets))
+        results = list(map(lambda x: {
+            "query": query, 
+            "engine": self.engine, 
+            "title": x[0].text, 
+            "url": x[1].text, 
+            "snippet": x[2].text
+        }, combined_divs))
+
+        return results
+
 class DuckDuckGoService(SeleniumService):
     """ Specialized service for scraping duckduckgo.com search engine """
 
@@ -39,6 +52,7 @@ class DuckDuckGoService(SeleniumService):
         """ Initialize virtual browser and set correct url base """
 
         SeleniumService.__init__(self)
+        self.engine = "duckduckgo"
         self.URLBASE = "http://duckduckgo.com/html?"
 
     def process_query(self, query):
@@ -48,7 +62,7 @@ class DuckDuckGoService(SeleniumService):
             query -- query that we want to answer
         """
 
-        params = {"q": query, "kl": "pl-pl"}
+        params = { "q": query, "kl": "pl-pl" }
         browser_url = "{}{}".format(self.URLBASE, urlencode(params))
         self.load_page(browser_url)
         
@@ -56,13 +70,46 @@ class DuckDuckGoService(SeleniumService):
         urls = self.get_page_elements_by_class("result__url")
         snippets = self.get_page_elements_by_class("result__snippet")
 
-        combined_divs = list(zip(titles, urls, snippets))
-        results = list(map(lambda x: {
-            "query": query, 
-            "engine": "duckduckgo", 
-            "title": x[0].text, 
-            "url": x[1].text, 
-            "snippet": x[2].text
-        }, combined_divs))
+        return self.combine_processed_tags(query, titles, urls, snippets)
 
-        return results
+class BingService(SeleniumService):
+    """ Specialized service for scraping bing.com search engine """
+
+    def __init__(self):
+        """ Initialize virtual browser and set correct url base """
+
+        SeleniumService.__init__(self)
+        self.engine = "bing"
+        self.URLBASE = "http://bing.com/search?"
+
+    def process_query(self, query):
+        """ Process query and return all titles and snippets in one list 
+        
+            Arguments:
+            query -- query that we want to answer
+        """
+
+        params = { "q": query }
+        browser_url = "{}{}".format(self.URLBASE, urlencode(params))
+        self.load_page(browser_url)
+
+        titles = list()
+        urls = list()
+        snippets = list()
+
+        result_divs = self.browser.find_elements_by_class_name("b_algo")
+        for div in result_divs:
+            title = div.find_elements_by_tag_name("h2")
+            url = div.find_elements_by_class_name("b_attribution")
+            snippet = div.find_elements_by_tag_name("p")
+
+            if len(title) == 1 and len(url) == 1 and len(snippet) == 1:
+                titles.append(title[0])
+                urls.append(url[0])
+                snippets.append(snippet[0])
+            
+        return self.combine_processed_tags(query, titles, urls, snippets)
+
+
+
+        
