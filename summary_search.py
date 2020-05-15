@@ -7,7 +7,7 @@
 """
 
 from flask import Flask, jsonify, request, abort
-from services.SeleniumServices import DuckDuckGoService, BingService, GoogleService
+from services.SeleniumServices import DuckDuckGoService, BingService, GoogleService, YahooService
 from services.QueryGeneration import QueryGenerator, SingleQueryStrategy
 
 app = Flask(__name__)
@@ -20,6 +20,8 @@ def search(engine, strategy, query):
         snippet_service = BingService()
     elif engine == "google":
         snippet_service = GoogleService()
+    elif engine == "yahoo":
+        snippet_service = YahooService()
     else:
         abort(404, description="Search engine not found")
 
@@ -51,6 +53,7 @@ def combined_results(strategy, query):
     processors.append(DuckDuckGoService())
     processors.append(BingService())
     processors.append(GoogleService())
+    processors.append(YahooService())
 
     results = list()
     for query in queries:
@@ -61,7 +64,7 @@ def combined_results(strategy, query):
 
 @app.route("/engines", methods=["GET"])
 def engines():
-    engines = ["duckduckgo", "bing", "google"]
+    engines = ["duckduckgo", "bing", "google", "yahoo"]
     return jsonify(engines)
 
 @app.route("/strategies", methods=["GET"])

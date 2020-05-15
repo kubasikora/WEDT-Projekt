@@ -189,3 +189,81 @@ class GoogleService(SeleniumService):
             snippets.append(snippet)
         
         return self.combine_processed_tags(query, titles, urls, snippets)
+
+class YahooService(SeleniumService):
+    """ Specialized service for scraping bing.com search engine """
+
+    def __init__(self):
+        """ Initialize virtual browser and set correct url base """
+
+        SeleniumService.__init__(self)
+        self.engine = "yahoo"
+        self.URLBASE = "https://pl.search.yahoo.com/search;_ylt=AwrJS5Vqb75eOXEALg0yhgx.?"
+
+    def combine_processed_tags(self, query, titles, urls, snippets):
+        """ Combine all scraped tags into one container. Resulting object 
+            is a list of dicts.
+
+            Arguments:
+            query -- query that generated results
+            titles -- tags with titles
+            urls -- actual url in plain text, thats how yahoo shows urls
+            snippets -- tags with actual answers
+        """
+        
+        combined_divs = list(zip(titles, urls, snippets))
+        results = list(map(lambda x: {
+            "query": query, 
+            "engine": self.engine, 
+            "title": x[0].text, 
+            "url": x[1], 
+            "snippet": x[2].text
+        }, combined_divs))
+
+        return results
+
+    def accept_cookies_prompt(self):
+            button = self.browser.find_elements_by_class_name("primary")[0]
+            button.click()
+
+    def process_query(self, query):
+        """ Process query and return all titles and snippets in one list 
+        
+            Arguments:
+            query -- query that we want to answer
+        """
+
+        params = { "q": query }
+        browser_url = "{}{}".format(self.URLBASE, urlencode(params))
+        self.load_page(browser_url)
+        
+        result_divs = self.browser.find_elements_by_class_name("algo-sr")
+        if len(result_divs) == 0: 
+            self.accept_cookies_prompt()
+            result_divs = self.browser.find_elements_by_class_name("algo-sr")
+        
+        titles = list()
+        urls = list()
+        snippets = list()
+
+        for div in result_divs:
+            h3_tags = div.find_elements_by_tag_name("h3")
+            if len(h3_tags) == 0:
+                continue
+            title = h3_tags[0]
+
+            a_tags = title.find_elements_by_tag_name("a")
+            if len(a_tags) == 0:
+                continue
+            url = a_tags[0].get_attribute("href")
+
+            paragraphs = div.find_elements_by_tag_name("p")
+            if len(paragraphs) == 0:
+                continue
+            snippet = paragraphs[0]
+
+            titles.append(title)
+            urls.append(url)
+            snippets.append(snippet)
+        
+        return self.combine_processed_tags(query, titles, urls, snippets)
