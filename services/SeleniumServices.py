@@ -120,6 +120,72 @@ class BingService(SeleniumService):
             
         return self.combine_processed_tags(query, titles, urls, snippets)
 
+class GoogleService(SeleniumService):
+    """ Specialized service for scraping bing.com search engine """
 
+    def __init__(self):
+        """ Initialize virtual browser and set correct url base """
 
+        SeleniumService.__init__(self)
+        self.engine = "google"
+        self.URLBASE = "http://google.com/search?"
+
+    def combine_processed_tags(self, query, titles, urls, snippets):
+        """ Combine all scraped tags into one container. Resulting object 
+            is a list of dicts.
+
+            Arguments:
+            query -- query that generated results
+            titles -- tags with titles
+            urls -- actual url in plain text, thats how google shows urls
+            snippets -- tags with actual answers
+        """
         
+        combined_divs = list(zip(titles, urls, snippets))
+        results = list(map(lambda x: {
+            "query": query, 
+            "engine": self.engine, 
+            "title": x[0].text, 
+            "url": x[1], 
+            "snippet": x[2].text
+        }, combined_divs))
+
+        return results
+
+    def process_query(self, query):
+        """ Process query and return all titles and snippets in one list 
+        
+            Arguments:
+            query -- query that we want to answer
+        """
+
+        params = { "q": query }
+        browser_url = "{}{}".format(self.URLBASE, urlencode(params))
+        self.load_page(browser_url)
+
+        titles = list()
+        urls = list()
+        snippets = list()
+
+        result_divs = self.browser.find_elements_by_class_name("rc")
+        for div in result_divs:
+            a_tags = div.find_elements_by_tag_name("a")
+            if len(a_tags) == 0:
+                continue
+            url = a_tags[0].get_attribute("href")
+
+            h3_tags = div.find_elements_by_tag_name("h3")
+            if len(h3_tags) == 0:
+                continue
+            title = h3_tags[0]
+
+            spans = div.find_elements_by_class_name("st")
+            if len(spans) == 0:
+                continue
+            snippet = spans[0]
+
+            titles.append(title)
+            urls.append(url)
+            snippets.append(snippet)
+        
+        return self.combine_processed_tags(query, titles, urls, snippets)
