@@ -11,10 +11,10 @@ from services.SeleniumServices import DuckDuckGoService, BingService, GoogleServ
 from services.QueryGeneration import QueryGenerator, SingleQueryStrategy, StopwordsStrategy
 
 app = Flask(__name__)
+app_name = "Zapytajka - Silnik wyszukiwania podsumowań"
 
 engines = ["duckduckgo", "bing", "google", "yahoo"]
 strategies = ["singlequery", "stopwords"]
-app_name = "Silnik wyszukiwania podsumowań"
 
 def create_snippet_service(engine):
     if engine == "duckduckgo":
