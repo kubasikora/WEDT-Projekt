@@ -6,14 +6,17 @@
     - PORT - port, można wybrać dowolny, polecam 5000
 """
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, render_template, url_for
 from services.SeleniumServices import DuckDuckGoService, BingService, GoogleService, YahooService
-from services.QueryGeneration import QueryGenerator, SingleQueryStrategy
+from services.QueryGeneration import QueryGenerator, SingleQueryStrategy, StopwordsStrategy
 
 app = Flask(__name__)
 
-@app.route("/search/<engine>/<strategy>/<query>", methods=["GET"])
-def search(engine, strategy, query):
+engines = ["duckduckgo", "bing", "google", "yahoo"]
+strategies = ["singlequery", "stopwords"]
+app_name = "Silnik wyszukiwania podsumowań"
+
+def create_snippet_service(engine):
     if engine == "duckduckgo":
         snippet_service = DuckDuckGoService()
     elif engine == "bing":
@@ -25,10 +28,48 @@ def search(engine, strategy, query):
     else:
         abort(404, description="Search engine not found")
 
+    return snippet_service
+
+def create_query_strategy(strategy):
     if strategy == "singlequery":
         strategy_algorithm = SingleQueryStrategy()
+    elif strategy == "stopwords":
+        strategy_algorithm = StopwordsStrategy()
     else:
         abort(404, description="Query generation strategy not found")
+
+    return strategy_algorithm
+
+@app.route("/")
+def index():
+    data = {
+        "engines": engines,
+        "strategies": strategies
+    }
+    return render_template('summary/index.html', app_name=app_name, data=data)
+
+@app.route("/fe/search", methods=["GET"])
+def show_results():
+    engine = request.args.get("engine")
+    strategy = request.args.get("strategy")
+    query = request.args.get("query")
+
+    snippet_service = create_snippet_service(engine)
+    strategy_algorithm = create_query_strategy(strategy)
+
+    query_generator = QueryGenerator(strategy_algorithm)
+    queries = query_generator.generate_queries(query)
+
+    results = list()
+    for query in queries:
+        results += snippet_service.process_query(query)
+    
+    return render_template('summary/result.html', app_name=app_name, engine=engine, strategy=strategy, data=results)
+
+@app.route("/search/<engine>/<strategy>/<query>", methods=["GET"])
+def search(engine, strategy, query):
+    snippet_service = create_snippet_service(engine)
+    strategy_algorithm = create_query_strategy(strategy)
 
     query_generator = QueryGenerator(strategy_algorithm)
     queries = query_generator.generate_queries(query)
@@ -43,6 +84,8 @@ def search(engine, strategy, query):
 def combined_results(strategy, query):
     if strategy == "singlequery":
         strategy_algorithm = SingleQueryStrategy()
+    elif strategy == "stopwords":
+        strategy_algorithm = StopwordsStrategy()
     else:
         abort(404, description="Query generation strategy not found")
 
@@ -63,13 +106,11 @@ def combined_results(strategy, query):
     return jsonify(results)
 
 @app.route("/engines", methods=["GET"])
-def engines():
-    engines = ["duckduckgo", "bing", "google", "yahoo"]
+def engines_list():
     return jsonify(engines)
 
 @app.route("/strategies", methods=["GET"])
-def strategies():
-    strategies = ["singlequery"]
+def strategies_list():
     return jsonify(strategies)
 
 if __name__ == "__main__":

@@ -1,0 +1,20 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3>Wyniki dla silnika {{engine}} i strategii {{strategy}}</h3>
+            <p style="text-align: right;"><a href="/">Powrót</a></p>
+            <br/>
+            {% for record in data %}
+                <h3><a href="{{ ''.join(['https://', record.url]) }}">{{ record.title }}</a></h3>
+                <p class="text-muted" style="text-align: left; margin-bottom: 0px;">{{ record.url }}</p>
+                <p style="text-align: left; color: green">Zapytanie: {{ record.query }}</p>
+                <p>{{ record.snippet }} </p>
+                <br/>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
