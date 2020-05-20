@@ -233,3 +233,15 @@ class SyntaxParserService(AsynchronousClarinService):
         self.add_lpmn_command('liner2({"model":"n82","output":"tei:gz"})')
         self.add_lpmn_command("spejd")
             
+class ChunkerService(SynchronousClarinService):
+    """ Service that is specialized in calling chunker service
+        called iobber
+        URL: https://ws.clarin-pl.eu/chunker.shtml
+    """
+
+    def __init__(self):
+        """ Initialize service. Iobber tool takes no arguments """
+
+        SynchronousClarinService.__init__(self)
+        self.add_lpmn_command("wcrft2")
+        self.add_lpmn_command("iobber")
