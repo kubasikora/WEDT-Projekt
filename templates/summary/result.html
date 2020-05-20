@@ -4,13 +4,17 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h3>Wyniki dla silnika {{engine}} i strategii {{strategy}}</h3>
-            <p style="text-align: right;"><a href="/">Powrót</a></p>
+            <p style="text-align: right; margin-bottom: 0px;"><a href="/">Powrót</a></p>
+            <h3>Wyniki dla pytania: {{ query }}</h3>
             <br/>
+            <p style="text-align: left; margin-bottom: 0px;">Wykorzystany generator zapytań: {{ strategy }}</p>
+            <p style="text-align: left; margin-bottom: 0px;">Liczba znalezionych podsumowań: {{ records }}</p>
+            <hr/>
             {% for record in data %}
                 <h3><a href="{{ ''.join(['https://', record.url]) }}">{{ record.title }}</a></h3>
                 <p class="text-muted" style="text-align: left; margin-bottom: 0px;">{{ record.url }}</p>
-                <p style="text-align: left; color: green">Zapytanie: {{ record.query }}</p>
+                <p style="text-align: left; color: green; margin-bottom: 0px;">Zapytanie: {{ record.query }}</p>
+                <p style="text-align: left; color: gray; margin-bottom: 0px;">Silnik: {{ record.engine }}</p>
                 <p>{{ record.snippet }} </p>
                 <br/>
             {% endfor %}

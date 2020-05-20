@@ -1,0 +1,31 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<style>
+.less-margin {
+    margin-bottom: 5px;
+}
+.answer {
+    font-size: 20px;
+}
+.prefix {
+    font-weight: 600;
+}
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p style="text-align: right;"><a href="/">Powrót</a></p>
+            <h3>Wynik</h3>
+            <br/>
+            <h3><span class="prefix">Pytanie:</span> {{ data.query }}</h3>
+            <p class="answer"><span class="prefix">Odpowiedź:</span> {{ data.answer }}</p>
+            <h6><span class="prefix">Dowiedz się więcej:</span> <a href="{{ ''.join(['https://', data.url]) }}">{{ data.url }}</a></h6>
+            <hr/>
+            <p class="less-margin">Generator zapytań: {{ data.strategy }}</p>
+            <p class="less-margin">Wyszukiwarka: {{ data.engine }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

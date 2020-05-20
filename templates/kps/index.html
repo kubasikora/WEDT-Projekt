@@ -1,5 +1,35 @@
 {% extends "./base.html" %}
 
 {% block content %}
-<h1>Work in progress ;)</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <form method="GET" action="/fe/ask">
+                    <label for="enigneselect">Silnik</label>
+                    <select name="engine" class="form-control" id="engineselect">
+                        {% for engine in data.engines %}
+                        <option>{{ engine }}</option>
+                        {% endfor %}
+                    </select>
+                    <br />
+                    <label for="strategyselect">Strategia generowania zapytań</label>
+                    <select name="strategy" class="form-control" id="strategyselect">
+                        {% for strategy in data.strategies %}
+                        <option>{{ strategy }}</option>
+                        {% endfor %}
+                    </select>
+                    <br />
+                    <label for="questionform">Zadaj pytanie</label>
+                    <div class="input-group flex-nowrap">
+                        <input id="questionform" name="query" type="text" class="form-control" placeholder="Pytanie"
+                            aria-label="Pytanie" aria-describedby="addon-wrapping">
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-primary float-right">Zadaj</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
