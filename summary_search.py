@@ -8,13 +8,13 @@
 
 from flask import Flask, jsonify, request, abort, render_template, url_for
 from services.SeleniumServices import DuckDuckGoService, BingService, GoogleService, YahooService
-from services.QueryGeneration import QueryGenerator, SingleQueryStrategy, StopwordsStrategy
+from services.QueryGeneration import QueryGenerator, SingleQueryStrategy, StopwordsStrategy, ChunksStrategy
 
 app = Flask(__name__)
 app_name = "Zapytajka - Silnik wyszukiwania podsumowań"
 
 engines = ["combined", "duckduckgo", "bing", "google", "yahoo"]
-strategies = ["singlequery", "stopwords"]
+strategies = ["singlequery", "stopwords", "chunks"]
 
 def create_snippet_service(engine):
     if engine == "duckduckgo":
@@ -35,6 +35,8 @@ def create_query_strategy(strategy):
         strategy_algorithm = SingleQueryStrategy()
     elif strategy == "stopwords":
         strategy_algorithm = StopwordsStrategy()
+    elif strategy == "chunks":
+        strategy_algorithm = ChunksStrategy()
     else:
         abort(404, description="Query generation strategy not found")
 

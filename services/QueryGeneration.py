@@ -1,5 +1,7 @@
 import json
 import re
+from services.ClarinServices import ChunkerService
+from itertools import combinations
 
 class BasicStrategy:
     """ Basic strategy class that provides common utilites for 
@@ -50,7 +52,8 @@ class StopwordsStrategy(BasicStrategy):
             and load all stopwords from config file
 
             Arguments
-            use_original -- should original query be also included
+            use_original -- should original query be also included,
+            pathname -- path to file with stopwords
         """
 
         BasicStrategy.__init__(self, "stopwords")
@@ -67,6 +70,12 @@ class StopwordsStrategy(BasicStrategy):
         return word in self.stopwords
 
     def generate_queries(self, original_query):
+        """ Create list with queries 
+        
+            Arguments:
+            original_query -- original query
+        """
+
         queries = list()
         query = self.prepare_query(original_query)
         query = " ".join(filter(lambda x: not self.is_stopword(x), query.split()))
@@ -77,8 +86,127 @@ class StopwordsStrategy(BasicStrategy):
             queries.append(og_query)
 
         return queries
-        
 
+class ChunksStrategy(BasicStrategy):
+    """ Implementation of querying chunks strategy. Returns list with queries. Queries
+        are made out of chunks, where one query can have from 1 to all chunks
+    """
+
+    def __init__(self, pathname="./config/stopwords.config.json"):
+        """ Initialize strategy with proper serialization name and 
+            chunker endpoint service.
+
+            Arguments:
+            pathname -- path to list of stopwords 
+        """
+
+        BasicStrategy.__init__(self, "chunks")
+        self.cs = ChunkerService()
+        with open(pathname, "r") as file:
+            self.stopwords = json.load(file)
+        
+    def is_stopword(self, word):
+        """ Check if given word is a stopword
+
+            Arguments:
+            word -- word that we want to check
+        """
+        return word in self.stopwords
+
+    def group_by_annotiations(self, tokens):
+        """ Group tokens by chunk annotations 
+        
+            Arguments:
+            tokens -- list of tokens
+        """
+        annotations = {
+            "chunk_adjp": {},
+            "chunk_agp": {},
+            "chunk_np": {}, 
+            "chunk_vp": {}
+        }
+
+        for word in tokens: 
+            anns = word["ann"]
+            for chunk in anns:
+                if chunk["#text"] != "0":
+                    if chunk["#text"] not in annotations[chunk["@chan"]]:
+                        annotations[chunk["@chan"]][chunk["#text"]] = []
+                    annotations[chunk["@chan"]][chunk["#text"]].append(word["orth"])
+        
+        return annotations
+
+    def group_tokens_into_chunks(self, annotations):
+        """ Change lists of tokens, grouped by annotations and 
+            create one list of chunks. Removes duplicates on the end.
+
+            Arguments:
+            annotations - dictionary of lists, where keys are chunk groups
+        """
+
+        chunks = list()
+        for idx, chunktype in enumerate(annotations):
+            group = annotations[chunktype]
+            for idx, chunk in enumerate(group):
+                chunks.append(" ".join(group[chunk]))
+        chunks = list(dict.fromkeys(chunks))
+
+        return chunks
+        
+    def split_to_chunks(self, query):
+        """ Splits given query into chunks.
+
+            Arguments:
+            query -- original query
+        """
+    
+        self.cs.set_text(query)
+        analysis = self.cs.make_request()
+        tokens = analysis["chunkList"]["chunk"]["sentence"]["tok"]
+
+        annotations = self.group_by_annotiations(tokens)
+        chunks = self.group_tokens_into_chunks(annotations)
+
+        pairs = combinations(chunks, 2)
+        for pair in pairs:
+            if " ".join(pair) in chunks:
+                chunks.remove(" ".join(pair))
+    
+        return chunks
+
+    def generate_queries(self, original_query):
+        """ Create list with queries 
+        
+            Arguments:
+            original_query -- original query
+        """
+
+        query = self.prepare_query(original_query)
+        chunks = self.split_to_chunks(query)
+    
+        queries = list()
+        for size in range(len(chunks) + 1):
+            if size == 0 or size == 1:
+                continue
+            combinator = combinations(chunks, size)
+            comination_list = list(combinator)
+            query_list = list()
+            for comb in comination_list:
+                query_list.append(" ".join(comb))
+            queries += query_list
+
+        final_queries = list()
+        for query in queries:
+            all_stop_words = True
+            for word in query.split(" "):
+                all_stop_words &= self.is_stopword(word)
+
+            if not all_stop_words:
+                final_queries.append(query)
+            
+        return final_queries
+
+     
 class QueryGenerator:
     """ Service responsible for generating new queries based on a given one
         Implements strategy pattern. Actual query generation is performed in 
