@@ -1,0 +1,16 @@
+{
+    "ludzie" : "OSOBA",
+    "cecha" : "WIELKOŚĆ", 
+    "czas" : "DATA",
+    "czas i stosunki czasowe" : "DATA",
+    "ilość" : "WIELKOŚĆ",
+    "osoba" : "OSOBA",
+    "substancja" : "RZECZ",
+    "wytwory ludzkie (nazwy)" : "RZECZ",
+    "miejsca i umiejscowienie" : "MIEJSCE",
+    "cechy ludzi i zwierząt" : "WIELKOŚĆ",
+    "obiekty naturalne" : ["MIEJSCE", "RZECZ"],
+    "jedzenie" : "RZECZ",
+	"ilość, liczebność, jednoski miary" : "WIELKOŚĆ"
+
+}

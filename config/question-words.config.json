@@ -1,0 +1,58 @@
+{
+    "kiedy"     : "DATA",
+
+    "ile"       : "WIELKOŚĆ",
+    "ilu"       : "WIELKOŚĆ",
+    "iloma"     : "WIELKOŚĆ",
+
+    "co"        : "RZECZ",
+    "czego"     : "RZECZ",
+    "czym"      : "RZECZ",
+
+    "gdzie"     : ["MIEJSCE", "RZECZ"],
+    "kto"       : ["OSOBA", "MIEJSCE"],
+    "skąd"      : "MIEJSCE",
+    "komu"      : "OSOBA",
+    "kogo"      : "OSOBA",
+    "kim"       : "OSOBA",
+
+    "czyj"      : "OSOBA",
+    "czyjego"   : "OSOBA",
+    "czyjemu"   : "OSOBA",
+    "czyim"     : "OSOBA",
+    "czyja"     : "OSOBA",
+    "czyje"     : "OSOBA",
+    "czyjej"    : "OSOBA",
+    "czyją"	    : "OSOBA",
+    "czyi"	    : "OSOBA",
+    "czyich"    : "OSOBA",
+    "czyimi"    : "OSOBA",
+
+    "jak"       : "complex", 
+
+    "który"     : "complex",
+    "która"     : "complex",
+    "którą"     : "complex",
+    "które"     : "complex",
+    "którzy"    : "complex",
+    "którymi"   : "complex",
+    "którego"   : "complex",
+    "której"    : "complex",
+    "któremu"   : "complex",
+    "którym"    : "complex",
+    "których"   : "complex",
+
+
+    "jaki"      : "complex",
+    "jakiego"   : "complex",
+    "jakiemu"   : "complex",
+    "jakim"     : "complex",
+    "jaka"	    : "complex",
+    "jakie"     : "complex",
+    "jakiej"    : "complex",
+    "jaką"      : "complex",
+    "jacy"      : "complex",
+    "jakich"    : "complex",
+    "jakimi"    : "complex"
+
+}

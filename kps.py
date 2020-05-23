@@ -7,6 +7,8 @@
 """
 
 from flask import Flask, render_template, request, abort, jsonify
+from algorithm.QuestionTypeRecognition import QuestionTypeRecognition
+
 
 app = Flask(__name__)
 app_name = "KPS - moduł odpowiadania na pytania"
@@ -15,15 +17,19 @@ engines = ["combined", "duckduckgo", "bing", "google", "yahoo"]
 strategies = ["singlequery", "stopwords"]
 
 def find_answer(query, engine, strategy):
-    """ Tutaj napisać kod który wszystko robi xd """
+
+    recognizer = QuestionTypeRecognition()
+    recognizer.set_question(query)
+    domain = recognizer.find_domain()
 
     return {
         "query": query,
         "engine": engine,
         "strategy": strategy,
-        "answer": "<brak>",
+        "answer": domain,
         "url": "<brak>"
     }
+
 
 @app.route("/")
 def index():
@@ -38,7 +44,7 @@ def show_result():
     engine = request.args.get("engine", "combined")
     strategy = request.args.get("strategy", "singlequery")
     query = request.args.get("query")
-
+    
     answer = find_answer(query, engine, strategy)
     return render_template("kps/result.html", app_name=app_name, data=answer)
 

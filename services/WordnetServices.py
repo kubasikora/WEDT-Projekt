@@ -62,15 +62,18 @@ class WordnetService:
             where first element is lemma info and second element is a list 
             with all lemma senses """
 
-        lemma = self.request_lemma_info()
-        if len(lemma) == 0:
+        lemmas = self.request_lemma_info()
+        if len(lemmas) == 0:
             return ([], [])
         else:
             results = []
-            for sense in lemma:
-                id = sense["sense_id"]
-                result = self.request_sense_info(id)
-                result["domain"] = self.get_full_domain(result["domain_id"])
-                results.append(result)
+            for lemma in lemmas:
+                id = lemma["sense_id"]
+                senses = self.request_sense_info(id)
+
+                for sense in senses["homographs"]:
+                    result = sense
+                    result["domain"] = self.get_full_domain(sense["domain_id"])
+                    results.append(result)
 
         return (lemma, results)
