@@ -13,6 +13,7 @@ class ComplexDomainClassifier:
         self.domain = ""
 
     def call_syntax_parser(self):
+    
         parser = SyntaxParserService()
         parser.set_text(self.question)
         res = parser.make_request()
@@ -20,7 +21,7 @@ class ComplexDomainClassifier:
         syntaxInterpreter = SyntaxParserInterpreter(res)
         words = syntaxInterpreter.interpret_result()
 
-        return words
+        return words[0]
 
     def get_domain(self) -> str:
 
@@ -161,9 +162,12 @@ class HowQuestionRecognizer():
 
 class SyntaxParserInterpreter:
 
-    def __init__(self, text):
+    def __init__(self, text = ""):
         self.text = text
     
+    def set_text(self, text):
+        self.text = text
+
     def find(self, key, value):
         if isinstance(value, dict):
             for k, v in value.items():
@@ -178,12 +182,10 @@ class SyntaxParserInterpreter:
                     yield result
 
 
-    def interpret_result(self):
-        words = []
+    def process_sentence(self, words):
+        words_list = []
 
-        tokens = self.text["teiCorpus"]["TEI"]["text"]["body"]["p"]["s"]["seg"]
-
-        for token in tokens:
+        for token in words:
             question_word = ""
             lemma = ""
             pos_tag = ""
@@ -194,17 +196,37 @@ class SyntaxParserInterpreter:
                 if token_type == "orth":
                     question_word = inner_token["string"]
                 
+                
                 if token_type == "disamb":
                     inside_disamb =  inner_token["fs"]["f"]
                     for inside in inside_disamb:
                         if (inside["@name"]) == "interpretation":
                             pos_tag = inside["string"]
                             lemma = pos_tag.split(':')[0]
+                            
+        
+            words_list.append(WordProperties(question_word, lemma, pos_tag))
+        
+        return words_list
 
-               
-            words.append(WordProperties(question_word, lemma, pos_tag))
- 
-        return words
+
+    def interpret_result(self):
+        words_list = []
+        sentence_list = []
+
+        tokens = self.text["teiCorpus"]["TEI"]["text"]["body"]["p"]
+  
+        if isinstance(tokens, list):
+            for sentence in tokens:
+                words = sentence["s"]["seg"]
+                words_list = self.process_sentence(words)
+                sentence_list.append(words_list)
+        else:
+            words = tokens["s"]["seg"]
+            words_list = self.process_sentence(words)
+            sentence_list.append(words_list)
+            
+        return sentence_list
 
 
 
@@ -214,3 +236,6 @@ class WordProperties:
         self.word = word
         self.lemma = lemma
         self.POS = pos
+
+    def __repr__(self):
+        return self.word + " " + self.lemma + " " + self.POS
