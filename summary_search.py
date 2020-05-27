@@ -42,6 +42,28 @@ def create_query_strategy(strategy):
 
     return strategy_algorithm
 
+def get_summaries_by_engine(queries, engine):
+    snippet_service = create_snippet_service(engine)
+    results = list()
+    for query in queries:
+        results += snippet_service.process_query(query)
+    
+    return results
+
+def get_summaries_combined(queries):
+    processors = list()
+    processors.append(DuckDuckGoService())
+    processors.append(BingService())
+    processors.append(GoogleService())
+    processors.append(YahooService())
+
+    results = list()
+    for query in queries:
+        for processor in processors:
+            results += processor.process_query(query)
+
+    return results
+
 @app.route("/")
 def index():
     data = {
@@ -61,22 +83,9 @@ def show_results():
     queries = query_generator.generate_queries(query)
 
     if engine != "combined":
-        snippet_service = create_snippet_service(engine)
-        results = list()
-        for query in queries:
-            results += snippet_service.process_query(query)
-
+        results = get_summaries_by_engine(queries, engine)
     else:
-        processors = list()
-        processors.append(DuckDuckGoService())
-        processors.append(BingService())
-        processors.append(GoogleService())
-        processors.append(YahooService())
-
-        results = list()
-        for query in queries:
-            for processor in processors:
-                results += processor.process_query(query)
+        results = get_summaries_combined(queries)
         
     return render_template('summary/result.html', 
                             app_name=app_name, 
@@ -85,19 +94,15 @@ def show_results():
                             strategy=strategy, 
                             data=results)
 
-
 @app.route("/search/<engine>/<strategy>/<query>", methods=["GET"])
 def search(engine, strategy, query):
-    snippet_service = create_snippet_service(engine)
     strategy_algorithm = create_query_strategy(strategy)
-
     query_generator = QueryGenerator(strategy_algorithm)
     queries = query_generator.generate_queries(query)
-
-    results = list()
-    for query in queries:
-        results += snippet_service.process_query(query)
-           
+    if engine == "combined":
+        results = get_summaries_combined(queries)
+    else:
+        results = get_summaries_by_engine(queries, engine)
     return jsonify(results)
 
 @app.route("/combined/<strategy>/<query>", methods=["GET"])
@@ -105,18 +110,7 @@ def combined_results(strategy, query):
     strategy_algorithm = create_query_strategy(strategy)
     query_generator = QueryGenerator(strategy_algorithm)
     queries = query_generator.generate_queries(query)
-
-    processors = list()
-    processors.append(DuckDuckGoService())
-    processors.append(BingService())
-    processors.append(GoogleService())
-    processors.append(YahooService())
-
-    results = list()
-    for query in queries:
-        for processor in processors:
-            results += processor.process_query(query)
-
+    results = get_summaries_combined(queries)
     return jsonify(results)
 
 @app.route("/engines", methods=["GET"])
