@@ -17,20 +17,16 @@ engines = ["combined", "duckduckgo", "bing", "google", "yahoo"]
 strategies = ["singlequery", "stopwords"]
 
 def find_answer(query, engine, strategy):
-
-    #recognizer = QuestionTypeRecognition()
-    #recognizer.set_question(query)
-    #print ("yuhua")
-
-    extract_answer = AnswerExtraction(query, "")
-    extract_answer.find_summaries(engine, strategy)
-    answer = extract_answer.find_answer()
-    #domain = recognizer.find_domain()
-    #print ("yuhu0")
-    #if domain != "Domain not found":
-    #    extract_answer = AnswerExtraction(query, domain)
-    #    extract_answer.find_summaries(engine, strategy)
-    #    answer = extract_answer.find_answer()
+        
+    recognizer = QuestionTypeRecognition()
+    recognizer.set_question(query)
+  
+    domain = recognizer.find_domain()
+   
+    if domain != "Domain not found":
+       extract_answer = AnswerExtraction(query, domain)
+       extract_answer.find_summaries(engine, strategy)
+       answer = extract_answer.find_answer()
 
     return {
         "query": query,
@@ -67,4 +63,4 @@ def ask(query):
     return jsonify(answer)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="localhost",port=5010)

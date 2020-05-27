@@ -238,4 +238,4 @@ class WordProperties:
         self.POS = pos
 
     def __repr__(self):
-        return self.word + " " + self.lemma + " " + self.POS
+        return  self.word

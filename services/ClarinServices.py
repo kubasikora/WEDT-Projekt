@@ -151,11 +151,11 @@ class TaggerService(SynchronousClarinService):
     """
     
     def __init__(self, 
-                 use_wcrft2=True, 
+                 use_wcrft2=False, 
                  use_morfeusz2=True,
-                 use_morfoDita=False, 
+                 use_morfoDita=True, 
                  all_forms=False, 
-                 guesser=False, 
+                 guesser=True, 
                  use_present_language_model=True):
         """ Initialize service with proper lpmn command. Uses wcrft2 and 
             morfoDita tagger. By default, uses wcrft2 tagger.
