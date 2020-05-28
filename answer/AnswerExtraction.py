@@ -7,6 +7,8 @@ from services.ClarinServices import TaggerService, NERService
 from services.WordnetServices import WordnetService
 from services.SummaryService import SummaryService
 from answer.NGram import NGram
+import re
+import collections
 import json
 
 class AnswerExtraction:
@@ -30,13 +32,13 @@ class AnswerExtraction:
         
         return tmp_domain
 
-    def make_tagger_parse(self, query):
+    def make_tagger_parse(self, query, format):
         parser = TaggerService()
         parser.set_text(query)
         res = parser.make_request()
 
         syntax_parser =TaggerInterpreter(res)
-        word_list = syntax_parser.interpret_result()
+        word_list = syntax_parser.interpret_result(format)
         return word_list
 
     def find_summaries(self, engine, strategy):
@@ -171,7 +173,8 @@ class AnswerExtraction:
 
     def find_answer(self):
         print("start finding anwer")
-        query_list = self.make_tagger_parse(self.query)
+        query_list = self.make_tagger_parse(self.query, "LIST")
+
         query_list = query_list[0]
 
         query_lemmas = []
@@ -182,13 +185,23 @@ class AnswerExtraction:
         summary_list = []
         print("end tagging query")
 
-    
+        if self.domain == "DATA":
+            tagger_format = "COMBINED"
+        else:
+            tagger_format = "LIST"
+
         for summary in self.summaries:
             snippet = summary['snippet']
             if snippet != '':
-                result_list = self.make_tagger_parse(snippet)
+                result_list = self.make_tagger_parse(snippet, tagger_format)
                 summary_list.append(result_list)
         print("end tagging summaries")
+
+
+        if self.domain == "DATA":
+            d_regex = DataRegex(summary_list)
+            answer = d_regex.find_answer()
+            return answer
 
 
         uni, bi, tri = self.create_ngram_list(summary_list)
@@ -251,7 +264,8 @@ class TaggerInterpreter:
     def set_text(self, text):
         self.text = text
 
-    def interpret_result(self):
+    def interpret_result(self,format):
+
         words_list = []
         sentence_list = []
 
@@ -260,31 +274,46 @@ class TaggerInterpreter:
         if isinstance(tokens, list):
             for sentence in tokens:
                 words = sentence["tok"]
-                words_list = self.process_sentence(words)
+                words_list = self.process_sentence(words,format)
                 sentence_list.append(words_list)
         else:
             words = tokens["tok"]
-            words_list = self.process_sentence(words)
+            words_list = self.process_sentence(words,format)
             sentence_list.append(words_list)
             
+  
         return sentence_list
 
-    def process_sentence(self, words):
-        words_list = []
 
-        for token in words:
-    
-            question_word = ""
-            lemma = ""
-            pos_tag = ""
+    def process_sentence(self, words, format):
 
-            question_word = token["orth"]
-            lemma = token["lex"]["base"]
-            pos_tag = token["lex"]["ctag"]
-                        
-            words_list.append(WordProperties(question_word, lemma, pos_tag))
+        if format == "LIST":
+            words_list = []
 
-        return words_list
+            for token in words:
+        
+                question_word = ""
+                lemma = ""
+                pos_tag = ""
+
+                question_word = token["orth"]
+                lemma = token["lex"]["base"]
+                pos_tag = token["lex"]["ctag"]
+                            
+                words_list.append(WordProperties(question_word, lemma, pos_tag))
+
+            return words_list
+        
+        else:
+
+            words_list = ""
+            
+            for token in words:
+                lemma = token["lex"]["base"]
+
+                words_list = words_list + " " + lemma
+
+            return words_list
 
 
 
@@ -324,3 +353,57 @@ class NERParser:
                 domain = "RZECZ"
         
         return domain
+
+class DataRegex:
+    def __init__(self, summaries):
+        self.summaries = summaries
+
+    def append_found_regex(self, current_list, summary, regex):
+        new_answer = re.findall(regex, summary)
+        if len(new_answer) == 0: return current_list
+        current_list = current_list + new_answer
+        return current_list
+        
+
+    def check_threshold(self, full_dates, short_dates, month, numbers, hour, dayweek):
+        
+        result = []
+
+        number_lists = [full_dates, short_dates, month, numbers, hour, dayweek]
+        print(number_lists)
+        for single_list in number_lists:
+
+            if(len(single_list) > 0):
+                if(single_list[0][1] > minimum_appearance):
+                    result.append(single_list[0][0])
+          
+        return result
+
+    def find_answer(self):
+        full_dates = []
+        short_dates = []
+        month = []
+        numbers = []
+        hour = []
+        dayweek = []
+
+        for summary in self.summaries:
+            
+            full_dates = self.append_found_regex(full_dates, summary[0], "([\d]{1,2}\s(?:styczeń|luty|marzec|kwiecień|maj|czerwiec|lipiec|sierpień|wrzesień|październik|listopad|grudzień)\s[\d]{4})")
+            short_dates = self.append_found_regex(short_dates, summary[0],"([\d]{1,2}\s(?:styczeń|luty|marzec|kwiecień|maj|czerwiec|lipiec|sierpień|wrzesień|październik|listopad|grudzień)\s)")
+            month = self.append_found_regex(month, summary[0],"(\s(?:styczeń|luty|marzec|kwiecień|maj|czerwiec|lipiec|sierpień|wrzesień|październik|listopad|grudzień)\s)")
+            numbers = self.append_found_regex(numbers,summary[0], "\d+")
+            hour = self.append_found_regex(hour,summary[0], "\d{1,2}[.:]\d{1,2}")
+            dayweek =  self.append_found_regex(dayweek,summary[0], "(\s(?:poniedziałek|wtorek|środa|czwartek|piątek|sobota|niedziela)\s)")
+
+        all_list = full_dates+short_dates+month+numbers+hour+dayweek
+        all_list = collections.Counter(all_list).most_common()
+        print(all_list)
+
+        minimum_appearance = 2
+        result = []
+        for res in all_list:
+            if res[1] > minimum_appearance:
+                result.append(res[0])
+        
+        return  result
