@@ -15,7 +15,7 @@ class QuestionTypeRecognition:
     def find_domain(self) -> str:
         
         if self.question:
-
+            
             self.domain = ""
 
             basic_classifier = BasicDomainClassifier(self.question)
@@ -30,5 +30,6 @@ class QuestionTypeRecognition:
             else :
                 self.domain = tmp_domain
 
+        print("Found domain " + self.domain)
         return self.domain
         

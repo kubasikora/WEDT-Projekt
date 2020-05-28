@@ -1,0 +1,9 @@
+{
+    "summary_search_localhost" : "http://localhost:5000",
+    "minimal_regex_appearance" : 3 ,
+    "minimal_ngram_appearance" : 3
+
+
+
+
+}

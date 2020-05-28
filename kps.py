@@ -8,7 +8,7 @@
 
 from flask import Flask, render_template, request, abort, jsonify
 from algorithm.QuestionTypeRecognition import QuestionTypeRecognition
-from answer.AnswerExtraction import AnswerExtraction
+from algorithm.AnswerExtraction import AnswerExtraction
 
 app = Flask(__name__)
 app_name = "KPS - moduł odpowiadania na pytania"
@@ -22,18 +22,20 @@ def find_answer(query, engine, strategy):
     recognizer.set_question(query)
   
     domain = recognizer.find_domain()
-   
+    url = "<brak>"
+    answer = "<brak>"
+
     if domain != "Domain not found":
        extract_answer = AnswerExtraction(query, domain)
        extract_answer.find_summaries(engine, strategy)
-       answer = extract_answer.find_answer()
+       [answer,url] = extract_answer.find_answer()
 
     return {
         "query": query,
         "engine": engine,
         "strategy": strategy,
         "answer": answer,
-        "url": "<brak>"
+        "url": url
     }
 
 
