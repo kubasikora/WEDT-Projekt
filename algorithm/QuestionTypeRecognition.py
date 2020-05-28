@@ -6,11 +6,15 @@ class QuestionTypeRecognition:
     def __init__(self):
         self.question = ""
         self.domain = ""
+        self.position = -1
 
     def set_question(self, question: str) -> str:
 
         self.question = question
         return self.question
+
+    def get_position(self):
+        return self.position
 
     def find_domain(self) -> str:
         
@@ -29,6 +33,7 @@ class QuestionTypeRecognition:
                 self.domain = "Domain not found"
             else :
                 self.domain = tmp_domain
+                self.position = tmp_pos
 
         print("Found domain " + self.domain)
         return self.domain

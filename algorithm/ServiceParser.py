@@ -15,7 +15,6 @@ class WordnetInterpreter:
                 tmp_domain = self.wordnet_map.get(wordnet_domain)
 
                 if tmp_domain is not None:
-                    print("worndet "+ tmp_domain + " " +wordnet_domain)
                     self.domain = tmp_domain
                     break
         

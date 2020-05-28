@@ -26,9 +26,10 @@ def find_answer(query, engine, strategy):
     answer = "<brak>"
 
     if domain != "Domain not found":
-       extract_answer = AnswerExtraction(query, domain)
-       extract_answer.find_summaries(engine, strategy)
-       [answer,url] = extract_answer.find_answer()
+        pos = recognizer.get_position()
+        extract_answer = AnswerExtraction(query, pos, domain)
+        extract_answer.find_summaries(engine, strategy)
+        [answer,url] = extract_answer.find_answer()
 
     return {
         "query": query,
