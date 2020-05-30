@@ -1,7 +1,12 @@
 
 from nltk.util import ngrams
-
+import json
 class NGram:
+
+    def __init__(self,stopwords_path="./config/stopwords.config.json" ):
+
+        with open(stopwords_path, "r") as read_file:
+            self.stopwords = json.load(read_file)
 
     def set_text(self, text):
         self.words = text
@@ -120,3 +125,32 @@ class NGram:
             index=index+1
         
         return new_ngram_list
+
+    def split_by_stopwords(self, ngram_list, is_uni):
+        no_stop_gram = [[],[]]
+        stop_gram = [[],[]]
+
+        index = 0
+
+        for ngram in ngram_list[0]:
+ 
+            if_stopword = True
+
+            if(is_uni):
+                if ngram not in self.stopwords: 
+                    if_stopword = False
+            else:
+                for word in ngram:
+                    if word not in self.stopwords: 
+                        if_stopword = False
+
+            if if_stopword :
+                stop_gram[0].append(ngram_list[0][index])
+                stop_gram[1].append(ngram_list[1][index])
+            else:
+                no_stop_gram[0].append(ngram_list[0][index])
+                no_stop_gram[1].append(ngram_list[1][index])
+
+            index=index+1
+
+        return no_stop_gram, stop_gram

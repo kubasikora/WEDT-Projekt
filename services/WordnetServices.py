@@ -68,12 +68,15 @@ class WordnetService:
         else:
             results = []
             for lemma in lemmas:
-                id = lemma["sense_id"]
-                senses = self.request_sense_info(id)
+                lemma_word = lemma["lemma"]
 
-                for sense in senses["homographs"]:
-                    result = sense
-                    result["domain"] = self.get_full_domain(sense["domain_id"])
-                    results.append(result)
+                if lemma_word.lower() == self.word.lower():
+                    id = lemma["sense_id"]
+                    senses = self.request_sense_info(id)
+
+                    for sense in senses["homographs"]:
+                        result = sense
+                        result["domain"] = self.get_full_domain(sense["domain_id"])
+                        results.append(result)
 
         return (lemma, results)

@@ -34,7 +34,6 @@ class QuestionTypeRecognition:
             else :
                 self.domain = tmp_domain
                 self.position = tmp_pos
-
-        print("Found domain " + self.domain)
+                
         return self.domain
         

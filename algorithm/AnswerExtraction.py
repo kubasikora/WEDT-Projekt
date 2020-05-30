@@ -10,7 +10,7 @@ import json
 
 class AnswerExtraction:
 
-    def __init__(self, query, pos, domain,  wordnet_domain_path = "config/wordnet-categories.config.json", parameters_path = "config/parameters.config.json"):
+    def __init__(self, query, pos, domain,  wordnet_domain_path = "config/wordnet-categories.config.json", parameters_path = "config/parameters.config.json", stopwords_path="./config/stopwords.config.json"):
         self.query = query
         self.position = pos
         self.domain = domain
@@ -25,7 +25,6 @@ class AnswerExtraction:
             self.parameters = json.load(read_file)
 
     def find_summaries(self, engine, strategy):
-
         s = SummaryService(self.parameters["summary_search_localhost"])             
         self.summaries = s.get_snippets_by_engine(self.query, engine, strategy)
 
@@ -63,11 +62,14 @@ class AnswerExtraction:
         index = 0
         print(ngram_list[0])
         for word in ngram_list[0]:
+            domains = ""
+            domain = ""
             print(word)
             domains = wordnet_parser.get_wordnet_domains(word)
             domain = wordnet_parser.convert_to_custom_domain(domains)
+            print(domain)
 
-            if domain is None:                         
+            if not domain:                         
                 NER_service = NERService()
                 NER_service.set_text(word)
                 res = NER_service.make_request()
@@ -75,7 +77,8 @@ class AnswerExtraction:
                 NER_parser = NERInterpreter()
                 NER_parser.set_text(res)
                 domain = NER_parser.interpret_result()
-                print("NER "+ word + " " +domain)
+                if domain:
+                    print("NER "+ word + " " +domain)
 
             if self.check_domain(word, domain): 
                 self.answer = word
@@ -124,9 +127,11 @@ class AnswerExtraction:
 
     def find_summary_lemmas(self, tagger_format):
         summary_list = []
-
+        
         for summary in self.summaries:
             snippet = summary['snippet']
+            title = summary['title']
+            snippet = title + ' ' + snippet
             if snippet != '':
                 result_list = self.make_tagger_parse(snippet, tagger_format)
                 summary_list.append(result_list)
@@ -169,20 +174,27 @@ class AnswerExtraction:
         bi  = nGram.filter_ngram_list(bi, query_lemmas, minimal_appearance, False)
         tri = nGram.filter_ngram_list(tri, query_lemmas, minimal_appearance, False)
        
+        uni, uni_stop =  nGram.split_by_stopwords(uni, True)
+        bi, bi_stop =  nGram.split_by_stopwords(bi, False)
+        tri, tri_stop = nGram.split_by_stopwords(tri, False)
+
         bi = nGram.convert_bigrams_to_string(bi)
         tri = nGram.convert_trigrams_to_string(tri)  
+
+        bi_stop = nGram.convert_bigrams_to_string(bi_stop)
+        tri_stop = nGram.convert_trigrams_to_string(tri_stop)  
 
         print("End filtering ngram")
         print("Start finding anwer in ngram")          
 
-
         if not self.find_answer_in_ngram(tri):
             if not self.find_answer_in_ngram(bi):
-                result = self.find_answer_in_ngram(uni)
+                if not self.find_answer_in_ngram(uni):
+                    if not self.find_answer_in_ngram(tri_stop):
+                        if not self.find_answer_in_ngram(bi_stop):
+                            result = self.find_answer_in_ngram(uni_stop)
         
         print("End finding answer")
         return self.answer, self.url
-
-
 
 

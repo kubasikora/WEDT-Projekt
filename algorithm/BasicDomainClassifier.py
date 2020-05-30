@@ -54,5 +54,5 @@ class BasicDomainClassifier:
                     self.position = positions[0]
 
         print("End checking basic domain")
-
+        print(self.domain)
         return [self.domain, self.position]

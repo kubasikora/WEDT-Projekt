@@ -124,27 +124,63 @@ class WhichQuestionRecognizer(QuestionRecognizer):
         return self.words[self.pos].POS
 
 
+    def find_noun_with_correct_declension(self, index, question_declension, wordnet_parser):
+
+        """ find domain in wordnet if word is noun and declension is consistent with question_declension"""
+        if((self.check_declension(question_declension, self.words[index].POS)) and (self.check_if_noun(self.words[index]))):
+            domains = wordnet_parser.get_wordnet_domains(self.words[index].lemma)
+            self.domain = wordnet_parser.convert_to_custom_domain(domains)
+            return True
+        else:
+            return False
+
+
     """ TODO first find noun till verb position, then adjective, than noun after verb """
     def get_domain(self) -> str:
         print("Begin checking complex domain")
 
-        index, verb, end = self.get_essential_position()
+        begin, verb, end = self.get_essential_position()
         question_declension = self.get_question_word_declension()
            
         wordnet_parser = WordnetInterpreter(self.wordnet_map)
 
-        while index < end :
+        """ find noun with correct declension between interrogative pronoun and verb """
+        index = begin
+        while index < verb :
 
-            """ find domain in wordnet if word is noun and declension is consistent with question_declension"""
-            if((self.check_declension(question_declension, self.words[index].POS)) and (self.check_if_noun(self.words[index]))):
+            if(self.find_noun_with_correct_declension(index, question_declension, wordnet_parser)):
+                print("End checking complex domain")
+                print(self.domain)
+                return self.domain
+
+            index = index +1
+        
+        """ find adj with correct declension between interrogative pronoun and verb """
+        index = begin
+        while index < verb :
+            if self.words[index].POS.find('adj') != -1:
 
                 domains = wordnet_parser.get_wordnet_domains(self.words[index].lemma)
                 self.domain = wordnet_parser.convert_to_custom_domain(domains)
-                break
+
+                print("End checking complex domain")
+                print(self.domain)
+                return self.domain
+
+            index = index+1
+
+        """ find noun with correct declension between verb and end """
+        index = verb + 1
+        while index < end :
+            if(self.find_noun_with_correct_declension(index, question_declension, wordnet_parser)):
+                print("End checking complex domain")
+                print(self.domain)
+                return self.domain
 
             index = index +1
 
         print("End checking complex domain")
+        print(self.domain)
         return self.domain
 
 

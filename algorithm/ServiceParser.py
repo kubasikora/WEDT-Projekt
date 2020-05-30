@@ -7,6 +7,7 @@ class WordnetInterpreter:
         self.domain = ""
 
     def convert_to_custom_domain(self, wordnet_domains):
+        self.domain = ""
         if len(wordnet_domains) > 0 :
 
             for wordnet_domain in wordnet_domains:
@@ -29,7 +30,7 @@ class WordnetInterpreter:
         
         for defs in res[1]:
             domains.append(defs['domain'])
-
+  
         return domains
 
 class NERInterpreter:
@@ -47,15 +48,25 @@ class NERInterpreter:
         tokens = self.text["chunkList"]["chunk"]["sentence"]["tok"]
 
         is_all_ner = True
-        nam_category = None
-
+        nam_category = ""
 
         for word in tokens:
+
             if 'ann' in word:
                 res = word["ann"]
-                nam_category = res['@chan']
+                tmp_nam_category = res['@chan']
+
+                """ different nam_category found """
+                if nam_category:
+                    if nam_category != tmp_nam_category:
+                        is_all_ner = False
+                        break
+                nam_category = tmp_nam_category
+
             else:
+    
                 is_all_ner = False
+                break
 
         if is_all_ner:
             if nam_category =="nam_liv":
@@ -109,6 +120,7 @@ class TaggerInterpreter:
                 lemma = ""
                 pos_tag = ""
 
+                
                 question_word = token["orth"]
                 lemma = token["lex"]["base"]
                 pos_tag = token["lex"]["ctag"]
