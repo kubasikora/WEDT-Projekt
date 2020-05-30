@@ -126,7 +126,7 @@ class WhichQuestionRecognizer(QuestionRecognizer):
 
     def check_if_plural_gen(self, pos):
         if pos.find(':pl:') != -1:
-            if pos.find(':gen:' != -1):
+            if pos.find(':gen:') != -1:
                 return True
         return False
 
@@ -151,7 +151,6 @@ class WhichQuestionRecognizer(QuestionRecognizer):
             return False
 
 
-    """ TODO first find noun till verb position, then adjective, than noun after verb """
     def get_domain(self) -> str:
         print("Begin checking complex domain")
 
@@ -173,7 +172,7 @@ class WhichQuestionRecognizer(QuestionRecognizer):
                         print(self.domain)
                         return self.domain
 
-                index = index +1
+                    index = index +1
                     
 
         """ find noun with correct declension between interrogative pronoun and verb """

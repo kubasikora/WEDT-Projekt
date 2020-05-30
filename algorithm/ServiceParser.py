@@ -50,23 +50,37 @@ class NERInterpreter:
         is_all_ner = True
         nam_category = ""
 
+        index = 0
+    
         for word in tokens:
 
-            if 'ann' in word:
-                res = word["ann"]
-                tmp_nam_category = res['@chan']
-
-                """ different nam_category found """
-                if nam_category:
-                    if nam_category != tmp_nam_category:
-                        is_all_ner = False
-                        break
-                nam_category = tmp_nam_category
-
-            else:
-    
+            if isinstance(word, list):
                 is_all_ner = False
                 break
+
+            else:
+                if 'ann' in word:                
+                    res = word["ann"]
+                    #print (res)
+
+                    if index == 0 and  "@head" not in res:
+                        is_all_ner = False
+                        break
+
+                    tmp_nam_category = res['@chan']
+
+                    """ different nam_category found """
+                    if nam_category:
+                        if nam_category != tmp_nam_category:
+                            is_all_ner = False
+                            break
+                    nam_category = tmp_nam_category
+
+                else:
+                    is_all_ner = False
+                    break
+
+                index = index + 1
 
         if is_all_ner:
             if nam_category =="nam_liv":

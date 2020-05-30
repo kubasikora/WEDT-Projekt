@@ -139,6 +139,7 @@ class AnswerExtraction:
         return summary_list
 
     def find_answer(self):
+
         print("Begin finding answer")
         print("Begin tagging")
 
@@ -170,6 +171,7 @@ class AnswerExtraction:
         minimal_appearance = self.count_number_of_summary_by_percent(self.parameters["minimal_ngram_appearance"])
 
         print("Start filtering ngram")
+        print(query_lemmas)
         uni = nGram.filter_ngram_list(uni, query_lemmas, minimal_appearance, True)
         bi  = nGram.filter_ngram_list(bi, query_lemmas, minimal_appearance, False)
         tri = nGram.filter_ngram_list(tri, query_lemmas, minimal_appearance, False)
