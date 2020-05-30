@@ -114,6 +114,7 @@ class WhichQuestionRecognizer(QuestionRecognizer):
         return False
 
     def check_if_noun(self, word):
+       
         noun = [':subst:', ':depr:']
         for j in noun:
             if word.POS.find(j) != -1:
@@ -123,11 +124,26 @@ class WhichQuestionRecognizer(QuestionRecognizer):
     def get_question_word_declension(self):
         return self.words[self.pos].POS
 
+    def check_if_plural_gen(self, pos):
+        if pos.find(':pl:') != -1:
+            if pos.find(':gen:' != -1):
+                return True
+        return False
+
+    def find_noun_with_matching_declension(self, index, question_declension, wordnet_parser):
+
+        """ find domain in wordnet if word is noun and declension is consistent with question_declension"""
+        if((self.check_declension(question_declension, self.words[index].POS)) and (self.check_if_noun(self.words[index]))):
+            domains = wordnet_parser.get_wordnet_domains(self.words[index].lemma)
+            self.domain = wordnet_parser.convert_to_custom_domain(domains)
+            return True
+        else:
+            return False
 
     def find_noun_with_correct_declension(self, index, question_declension, wordnet_parser):
 
         """ find domain in wordnet if word is noun and declension is consistent with question_declension"""
-        if((self.check_declension(question_declension, self.words[index].POS)) and (self.check_if_noun(self.words[index]))):
+        if((self.check_if_plural_gen(self.words[index].POS)) and (self.check_if_noun(self.words[index]))):
             domains = wordnet_parser.get_wordnet_domains(self.words[index].lemma)
             self.domain = wordnet_parser.convert_to_custom_domain(domains)
             return True
@@ -144,12 +160,29 @@ class WhichQuestionRecognizer(QuestionRecognizer):
            
         wordnet_parser = WordnetInterpreter(self.wordnet_map)
 
+        if begin < end:
+            """ question like "ktory z" """
+            if self.words[begin].lemma == "z":
+                print("question ktory z")
+                index = begin
+                while index < verb :
+                    print(self.words[index])
+                    if(self.find_noun_with_correct_declension(index, question_declension, wordnet_parser)):
+                        print("End checking complex domain")
+                        print(self.words[index])
+                        print(self.domain)
+                        return self.domain
+
+                index = index +1
+                    
+
         """ find noun with correct declension between interrogative pronoun and verb """
         index = begin
         while index < verb :
 
-            if(self.find_noun_with_correct_declension(index, question_declension, wordnet_parser)):
+            if(self.find_noun_with_matching_declension(index, question_declension, wordnet_parser)):
                 print("End checking complex domain")
+                print(self.words[index])
                 print(self.domain)
                 return self.domain
 
@@ -164,6 +197,7 @@ class WhichQuestionRecognizer(QuestionRecognizer):
                 self.domain = wordnet_parser.convert_to_custom_domain(domains)
 
                 print("End checking complex domain")
+                print(self.words[index])
                 print(self.domain)
                 return self.domain
 
@@ -172,8 +206,9 @@ class WhichQuestionRecognizer(QuestionRecognizer):
         """ find noun with correct declension between verb and end """
         index = verb + 1
         while index < end :
-            if(self.find_noun_with_correct_declension(index, question_declension, wordnet_parser)):
+            if(self.find_noun_with_matching_declension(index, question_declension, wordnet_parser)):
                 print("End checking complex domain")
+                print(self.words[index])
                 print(self.domain)
                 return self.domain
 
