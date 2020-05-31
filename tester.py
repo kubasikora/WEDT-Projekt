@@ -20,7 +20,10 @@ def get_answer_from_kps(question):
         kps_answer = json.loads(answer.text)
         kps_answer["real_answer"] = real_answer      
     except:
-        kps_answer["real_answer"] = "NIE ZNALEZIONO"       
+        kps_answer = {}
+        kps_answer["query"] = question[0]
+        kps_answer["real_answer"] = question[1]
+        kps_answer["answer"] = "NIE ZNALEZIONO"       
     return kps_answer
 
 
