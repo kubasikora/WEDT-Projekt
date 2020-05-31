@@ -9,17 +9,20 @@ import pandas as pd
 from multiprocessing.dummy import Pool as ThreadPool
 import requests, json
 
-
 def get_answer_from_kps(question):
     query = question[0]
     real_answer = question[1]
     params = {"engine": "google", "strategy": "singlequery"}
     url =f"http://localhost:5010/ask/{query}"
     print(url)
-    answer = requests.get(url, params=params)
-    kps_answer = json.loads(answer.text)
-    kps_answer["real_answer"] = real_answer
+    try:
+        answer = requests.get(url, params=params)
+        kps_answer = json.loads(answer.text)
+        kps_answer["real_answer"] = real_answer      
+    except:
+        kps_answer["real_answer"] = "NIE ZNALEZIONO"       
     return kps_answer
+
 
 test_data = pd.read_excel("./pytania.xlsx", converters={
                                                 'Pytanie':str, 
