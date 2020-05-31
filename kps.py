@@ -14,7 +14,7 @@ app = Flask(__name__)
 app_name = "KPS - moduł odpowiadania na pytania"
 
 engines = ["combined", "duckduckgo", "bing", "google", "yahoo"]
-strategies = ["singlequery", "stopwords"]
+strategies = ["singlequery", "stopwords", "chunks"]
 
 def find_answer(query, engine, strategy):
         

@@ -1,3 +1,10 @@
+"""
+Podział testów ze względu na strategię: 
+- Alicja - singlequery
+- Marysia - stopwords
+- Kuba - chunks
+"""
+
 import pandas as pd
 from multiprocessing.dummy import Pool as ThreadPool
 import requests, json
