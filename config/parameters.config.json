@@ -1,7 +1,7 @@
 {
     "summary_search_localhost" : "http://localhost:5000",
-    "minimal_regex_appearance" : 30 ,
-    "minimal_ngram_appearance" : 30
+    "minimal_regex_appearance" : 25 ,
+    "minimal_ngram_appearance" : 25
 
 
 }

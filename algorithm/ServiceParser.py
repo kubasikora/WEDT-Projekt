@@ -106,7 +106,10 @@ class TaggerInterpreter:
     def interpret_result(self,format):
 
         words_list = []
-        sentence_list = []
+        if format == "LIST":
+            sentence_list = []
+        else :
+            sentence_list = ""
 
         tokens = self.text["chunkList"]["chunk"]["sentence"]
         
@@ -114,11 +117,21 @@ class TaggerInterpreter:
             for sentence in tokens:
                 words = sentence["tok"]
                 words_list = self.process_sentence(words,format)
-                sentence_list.append(words_list)
+
+                if format =="LIST":
+                    sentence_list.append(words_list)
+                else:
+                    sentence_list = sentence_list + " " + words_list
         else:
             words = tokens["tok"]
             words_list = self.process_sentence(words,format)
-            sentence_list.append(words_list)
+
+            if format =="LIST":
+                sentence_list.append(words_list)
+            else:
+                sentence_list = sentence_list + " " + words_list
+
+        
             
         return sentence_list
 

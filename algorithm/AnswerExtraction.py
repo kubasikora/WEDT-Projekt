@@ -132,9 +132,12 @@ class AnswerExtraction:
             snippet = summary['snippet']
             title = summary['title']
             snippet = title + ' ' + snippet
+        
             if snippet != '':
                 result_list = self.make_tagger_parse(snippet, tagger_format)
                 summary_list.append(result_list)
+               
+            
 
         return summary_list
 
@@ -153,6 +156,7 @@ class AnswerExtraction:
 
         """ find lemma from summaries """
         summary_list = self.find_summary_lemmas(tagger_format)
+        print(summary_list)
 
         print("End tagging")
 
@@ -162,7 +166,7 @@ class AnswerExtraction:
             regex_type = data_type_recognition.recognize_type()
             d_regex = DataRegex(summary_list, minimal_appearance, regex_type)
             answer = d_regex.find_answer()
-            return answer
+            return answer, self.url
 
         nGram = NGram()
 
