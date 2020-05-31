@@ -15,3 +15,6 @@ Program zajmuje się odpytywaniem popularnych wyszukiwarek internetowych, celem 
 
 ### Program `kps.py`
 Program który odpowiada na zadane pytania. Komunikuje się z innymi serwisami aby uzyskać potrzebną bazę wiedzy, wyniki analizy morfologicznej, rozkłady zdania oraz inne informacje potrzebne do ekstrakcji odpowiedzi.
+
+### Program `tester.py`
+Moduł do półautomatycznego testowania dokładności naszego rozwiązania. Pobiera pytania z arkusza kalkulacyjnego `pytania.xlsx` a zebrane odpowiedzi zapisuje w pliku `wyniki.xlsx`. W celu przetestowania rozwiązania, oba serwery `kps` i `zapytajka` należy uruchomić w trybie produkcyjnym. Aby to zrobić należy uruchomić komendę `gunicorn -w 4 -b 127.0.0.1:5000 --timeout 10000 summary_search:app` oraz `gunicorn -w 4 -b 127.0.0.1:5010 --timeout 10000 kps:app`. Po uruchomieniu obu usług, należy uruchomić program testujący jako zwykły skrypt `python tester.py`.

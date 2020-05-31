@@ -1,9 +1,9 @@
 """ Aby uruchomić produkcyjną wersję należy skorzystać z gunicorna 
     Uruchamiamy poleceniem:
-    gunicorn -w THREADS -b HOST:PORT kps_server:app 
+    gunicorn -w THREADS -b HOST:PORT kps:app 
     - THREADS - liczba niezależnych workerów (wątków)
     - HOST - host, dla localhosta ustawić 127.0.0.1
-    - PORT - port, można wybrać dowolny, polecam 5000
+    - PORT - port, można wybrać dowolny, polecam 5010
 """
 
 from flask import Flask, render_template, request, abort, jsonify
