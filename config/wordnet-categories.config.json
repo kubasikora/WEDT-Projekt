@@ -11,6 +11,6 @@
     "cechy ludzi i zwierząt" : "WIELKOŚĆ",
     "obiekty naturalne" : ["MIEJSCE", "RZECZ"],
     "jedzenie" : "RZECZ",
-	"ilość, liczebność, jednoski miary" : "WIELKOŚĆ"
-
+	"ilość, liczebność, jednoski miary" : "WIELKOŚĆ",
+    "przymiotniki jakościowe" : "WIELKOŚĆ"
 }

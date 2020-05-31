@@ -6,6 +6,8 @@ from algorithm.DataRegex import DataRegex, DataTypeRecognition
 from services.SummaryService import SummaryService
 from algorithm.NGram import NGram
 
+from copy import deepcopy
+
 import json
 
 class AnswerExtraction:
@@ -50,7 +52,19 @@ class AnswerExtraction:
         print(number)
         return number
 
-    def find_answer_in_ngram(self, ngram_list):
+    def check_if_number(self, index, ngram_split_list):
+        if_all_number = True
+
+        print (ngram_split_list[0][index])
+        for word in ngram_split_list[0][index]:
+            d_regex = DataRegex(word, 0, "number")
+            answer = d_regex.find_answer()
+            if not answer:
+                if_all_number = False
+
+        return if_all_number
+
+    def find_answer_in_ngram(self, ngram_list, ngram_split_list):
    
         length = len(ngram_list[0])
 
@@ -62,6 +76,14 @@ class AnswerExtraction:
         index = 0
         print(ngram_list[0])
         for word in ngram_list[0]:
+            
+            if self.domain == "WIELKOŚĆ" :
+                if self.check_if_number(index, ngram_split_list):
+                    self.answer = word
+                    self.url = self.extract_url(ngram_list[1][index])
+                    return True
+
+
             domains = ""
             domain = ""
             print(word)
@@ -170,35 +192,37 @@ class AnswerExtraction:
 
         nGram = NGram()
 
-        uni, bi, tri = nGram.create_ngram_list(summary_list)
+        uni_split, bi_split, tri_split = nGram.create_ngram_list(summary_list)
    
         minimal_appearance = self.count_number_of_summary_by_percent(self.parameters["minimal_ngram_appearance"])
 
         print("Start filtering ngram")
         print(query_lemmas)
-        uni = nGram.filter_ngram_list(uni, query_lemmas, minimal_appearance, True)
-        bi  = nGram.filter_ngram_list(bi, query_lemmas, minimal_appearance, False)
-        tri = nGram.filter_ngram_list(tri, query_lemmas, minimal_appearance, False)
-       
-        uni, uni_stop =  nGram.split_by_stopwords(uni, True)
-        bi, bi_stop =  nGram.split_by_stopwords(bi, False)
-        tri, tri_stop = nGram.split_by_stopwords(tri, False)
+        uni_split = nGram.filter_ngram_list(uni_split, query_lemmas, minimal_appearance, True)
+        bi_split  = nGram.filter_ngram_list(bi_split, query_lemmas, minimal_appearance, False)
+        tri_split = nGram.filter_ngram_list(tri_split, query_lemmas, minimal_appearance, False)
 
-        bi = nGram.convert_bigrams_to_string(bi)
-        tri = nGram.convert_trigrams_to_string(tri)  
+        uni_split, uni_stop_split =  nGram.split_by_stopwords(uni_split, True)
+        bi_split, bi_stop_split =  nGram.split_by_stopwords(bi_split, False)
+        tri_split, tri_stop_split = nGram.split_by_stopwords(tri_split, False)
 
-        bi_stop = nGram.convert_bigrams_to_string(bi_stop)
-        tri_stop = nGram.convert_trigrams_to_string(tri_stop)  
+        uni = uni_split
+        bi = nGram.convert_bigrams_to_string(deepcopy(bi_split))
+        tri = nGram.convert_trigrams_to_string(deepcopy(tri_split))  
+
+        uni_stop = uni_stop_split
+        bi_stop = nGram.convert_bigrams_to_string(deepcopy(bi_stop_split))
+        tri_stop = nGram.convert_trigrams_to_string(deepcopy(tri_stop_split))  
 
         print("End filtering ngram")
         print("Start finding anwer in ngram")          
 
-        if not self.find_answer_in_ngram(tri):
-            if not self.find_answer_in_ngram(bi):
-                if not self.find_answer_in_ngram(uni):
-                    if not self.find_answer_in_ngram(tri_stop):
-                        if not self.find_answer_in_ngram(bi_stop):
-                            result = self.find_answer_in_ngram(uni_stop)
+        if not self.find_answer_in_ngram(tri, tri_split):
+            if not self.find_answer_in_ngram(bi, bi_split):
+                if not self.find_answer_in_ngram(uni, uni_split):
+                    if not self.find_answer_in_ngram(tri_stop, tri_stop_split):
+                        if not self.find_answer_in_ngram(bi_stop, bi_stop_split):
+                            result = self.find_answer_in_ngram(uni_stop, uni_stop_split)
         
         print("End finding answer")
         return self.answer, self.url

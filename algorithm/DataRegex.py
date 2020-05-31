@@ -41,9 +41,9 @@ class DataRegex:
 
         if len(new_answer) == 0: return current_list
         current_list = current_list + new_answer
-        print (new_answer)
-        print(summary)
-        print("\n\n")
+        #print (new_answer)
+        #print(summary)
+        #print("\n\n")
         return current_list
         
     def find_answer(self):
@@ -52,7 +52,7 @@ class DataRegex:
 
         #print(self.data_type)
 
-        print (self.data_type)
+        #print (self.data_type)
         if self.data_type == "hour":
             regex_list.append("\d{1,2}\.\d{1,2}")
             regex_list.append("\d{1,2}\s:\s\d{1,2}")
@@ -83,6 +83,9 @@ class DataRegex:
         elif self.data_type == "range":
             regex_list.append("\d{4}\s-\s\d{4}")
             all_list.append(list())
+        elif self.data_type == "number":
+            regex_list.append("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?")
+            all_list.append(list())
         else:
             regex_list.append("([\d]{1,2}\s(?:styczeń|luty|marzec|kwiecień|maj|czerwiec|lipiec|sierpień|wrzesień|październik|listopad|grudzień)\s[\d]{4})")
             regex_list.append("([\d]{1,2}\s(?:styczeń|luty|marzec|kwiecień|maj|czerwiec|lipiec|sierpień|wrzesień|październik|listopad|grudzień)\s)")
@@ -111,7 +114,7 @@ class DataRegex:
             all_list[index] = collections.Counter(single_list).most_common()
             index = index + 1
 
-        print(all_list)
+        #print(all_list)
         result = ""
         for single_list in all_list:
             for res in single_list:

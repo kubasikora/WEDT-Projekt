@@ -61,11 +61,17 @@ class NERInterpreter:
             else:
                 if 'ann' in word:                
                     res = word["ann"]
-                    #print (res)
+                    print (res)
 
                     if index == 0 and  "@head" not in res:
                         is_all_ner = False
                         break
+
+                    if '#text' in res:
+                        value = res['#text']
+                        if value == '0':
+                            is_all_ner = False
+                            break
 
                     tmp_nam_category = res['@chan']
 
