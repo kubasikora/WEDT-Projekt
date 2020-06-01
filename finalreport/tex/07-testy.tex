@@ -1,0 +1,37 @@
+\subsection{Metodologia testowania}
+Testowanie stworzonego systemu odbywało się w sposób półautomatyczny. Napisany został skrypt tester.py, który w sposób automatyczny wysyła zapytania do systemu z pytaniami pobranymi z pliku .xlsx. Plik wejściowy oprócz pytań zawiera także kolumnę ze spodziewanymi odpowiedziami. Po skompletowaniu odpowiedzi na wszystkie zadane pytania,  uzyskane wyniki są zapisywane do wyjściowego formularza .xlsx. Aby ułatwić proces oceny, w pliku tym oprócz odpowiedzi i pytań znajdują się także skopiowane z pliku wejściowego spodziewane odpowiedzi i parametry systemu.
+
+Stworzenie automatycznej weryfikacji odpowiedzi jest zadaniem nietrywialnym. Ponadto trudno byłoby zagwarantować poprawność takiego narzędzia. Z tego powodu ocena poprawności udzielonych odpowiedzi odbywa się manualnie. 
+
+\subsection{Zbiór testowy}
+W~celu weryfikacji poprawności naszego rozwiązania, przygotowaliśmy zbiór danych testowych, składający się ponad 250 pytań o~ogólnej tematyce. Przygotowując pytania, staraliśmy się równomiernie podzielić zbiór pomiędzy pięć typów potencjalnej odpowiedzi. Pytania pochodziły głównie z~popularnych teleturniejów takich jak Milionerzy czy Jeden z~dziesięciu ale również z~innych popularnych quizów internetowych oraz konkursów wiedzy dla młodzieży.
+
+\begin{figure}[h!]
+    \begin{tikzpicture}
+        \pie [rotate = 180]
+        {20.3/OSOBA,
+         19.9/MIEJSCE,
+         19.6/DATA,
+         20.3/WIELKOŚĆ,
+         19.9/RZECZ}
+    \end{tikzpicture}
+    \label{fig:rozklad-typow-odpowiedzi}  
+    \caption{Rozkład typów oczekiwanych odpowiedzi w~przygotowanej bazie pytań}
+\end{figure}
+
+Z~powodu charakteru pytań o~fakty, większość oczekiwanych odpowiedzi to rzeczowniki lub liczebniki. Oprócz tego, pojawią się również pytania o~cechy: przymiotniki i~przysłówki.
+
+Duży zbiór danych pozwoli nam na przeprowadzenie badań nad poprawnością odpowiedzi systemu. Oprócz gotowego systemu, powstanie moduł badający procent poprawnych odpowiedzi w~sposób automatyczny. Aby tak badać poprawność, moduł ten musi mieć dostęp do poprawnych odpowiedzi. Co więcej, odpowiedź w~systemie powinna być przechowywana we wszystkich możliwych formach, ponieważ system może zwracać odpowiedź w~dowolnym przypadku, osobie czy liczbie. Problem ten został szerzej opisany w~artykule~\cite{brill2002analysis}.
+
+Węzeł do automatycznego badania poprawności odpowiedzi pozwoli nam na przeprowadzenie dodatkowych badań nad zasadnością pewnych elementów w~systemie oraz wartości parametrów modułów. Modularność projektowanego systemu pozwoli nam na wyłączanie pewnych komponentów takich jak słownik synonimów, dzięki czemu będziemy mogli znaleźć optymalny kompromis pomiędzy dokładnością odpowiedzi a~czasem oczekiwania na odpowiedź.
+
+\begin{figure}[h!]
+    \begin{tikzpicture}
+        \pie [rotate = 180]
+        {62.5/Rzeczowniki,
+         29.8/Liczebniki,
+         7.7/Przymiotniki/przysłówki}
+    \end{tikzpicture}
+    \label{fig:rozklad-typow-odpowiedzi2}  
+    \caption{Rozkład części mowy oczekiwanych odpowiedzi w~przygotowanej bazie pytań}
+\end{figure}

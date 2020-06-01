@@ -1,0 +1,85 @@
+\documentclass{article}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+
+\usepackage{WEDTreport}
+% Use the postscript times font!
+\usepackage{times}
+\usepackage{soul}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{luainputenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{caption}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{subfig}
+\usepackage{pgf-pie}
+
+\urlstyle{same}
+	
+\title{Wprowadzenie do eksploracji danych tekstowych w sieci WWW\\ Odpowiadanie na pytania}
+
+\author{
+Maria Konieczka, Alicja Poturała, Jakub Sikora
+\affiliations
+numery albumów: 283410, 283415, 283418 \\
+\emails
+maria.konieczka.stud@pw.edu.pl, alicja.poturala.stud@pw.edu.pl, jakub.sikora2.stud@pw.edu.pl
+}
+
+\newcommand{\todo}[1]{\textcolor{blue}{\textbf{TO DO:} #1}}
+\newcommand{\opracowanyartykul}[1]{\textcolor{teal}{\textbf{Artykuł:} #1\\}}
+
+\begin{document}
+\maketitle
+
+\section{Wprowadzenie}
+\label{sec:wprowadzenie}
+\input{tex/01-wprowadzenie.tex}
+
+\section{Definicja problemu}
+\label{sec:wprowadzenie}
+\input{tex/02-problem.tex}
+
+\section{Przegląd literatury}
+\label{sec:przeglad}
+\input{tex/03-przeglad-literatury.tex}
+
+\section{Opis rozwiązania}
+\label{sec:opis-rozwiazania}
+\input{tex/04-opis-rozwiazania.tex}
+
+\section{Szczegóły implementacyjne}
+\label{sec:implementacja}
+\input{tex/05-implementacja.tex}
+
+\section{Instrukcja obsługi}
+\label{sec:instrukcja}
+\input{tex/06-instrukcja.tex}
+
+\section{Testy rozwiązania}
+\label{sec:testy}
+\input{tex/07-testy.tex}
+
+\section{Wnioski i perspektywy rozwoju}
+\label{sec:wnioski}
+\input{tex/08-wnioski.tex}
+
+\section{Podsumowanie}
+\label{sec:podsumowanie}
+\input{tex/09-podsumowanie.tex}
+
+
+\bibliographystyle{abbrv}
+\bibliography{bibliography}
+
+\end{document}

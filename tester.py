@@ -38,7 +38,7 @@ test_data = pd.read_excel("./pytania.xlsx", converters={
 columns = test_data.columns
 questions = test_data.values
 
-pool = ThreadPool(4)
+pool = ThreadPool(1)
 results = pool.map(get_answer_from_kps, questions)
 pool.close()
 pool.join()
