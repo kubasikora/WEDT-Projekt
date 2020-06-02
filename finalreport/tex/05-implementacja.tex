@@ -1,5 +1,3 @@
-\todo{Opis implementacji systemu}
-
 Przygotowany system odpowiadania na pytania został zaprojektowany w~oparciu o~modularne mikrousługi, komunikujące się ze sobą wykorzystując REST API. Takie podejście pozwoliło nam wykorzystać zewnętrzne usługi, oferujące narzędzia do przetwarzania języka naturalnego, bez ich instalacji na lokalnej maszynach. Zastosowanie architektury mikroserwisowej pozwala również na prostsze skalowanie rozwiązania oraz łatwiejsze udostępnianie systemu w~sieci WWW.
 
 \begin{figure}[h]
@@ -11,7 +9,20 @@ Przygotowany system odpowiadania na pytania został zaprojektowany w~oparciu o~m
 
 Na rysunku~\ref{fig:microservices} przedstawiony został ogólny schemat komunikacji pomiędzy poszczególnymi usługami. Centralną częścią systemu jest moduł \texttt{KPS}. Jego rolą jest zlecanie zadań innym usługom, analiza zwróconych przez nie wyników, a przede wszystkim odpowiadanie na pytania. Został on w~całości napisany w~języku Python, wykorzystując do komunikacji bibliotekę \texttt{Flask}.
 
-Zadawanie pytań odbywa się przy użyciu aplikacji klienckiej. Dzięki temu że moduł \texttt{KPS} wystawia REST API umożliwiające odpytywanie, aplikacją kliencką może być każdy program, który jest w~stanie obsługiwać gniazda BSD oraz wiadomości w~formacie JSON. Do normalnego użytku, moduł \texttt{KPS} udostępnia prostą aplikację kliencką możliwą do uruchomienia z~poziomu przeglądarki, natomiast do automatycznego testowania, wykorzystany został skrypt w~języku Python. \todo{opisać implementacje pakietu algorithm, klasy i powiazania}
+Zadawanie pytań odbywa się przy użyciu aplikacji klienckiej. Dzięki temu że moduł \texttt{KPS} wystawia REST API umożliwiające odpytywanie, aplikacją kliencką może być każdy program, który jest w~stanie obsługiwać gniazda BSD oraz wiadomości w~formacie JSON. Do normalnego użytku, moduł \texttt{KPS} udostępnia prostą aplikację kliencką możliwą do uruchomienia z~poziomu przeglądarki, natomiast do automatycznego testowania, wykorzystany został skrypt w~języku Python.
+
+Kod realizujący zadanie ekstrakcji informacji, z~którego korzysta omawiany moduł, został zagregowany w~pakiet \texttt{algorithm}. W~skład tego pakietu wchodzą:
+\begin{itemize}
+    \item algorytm ekstrakcji odpowiedzi,
+    \item typ domeny podstawowej,
+    \item typ domeny złożonej,
+    \item zestaw wyrażeń regularnych do wykrywania dat,
+    \item typ n-gramowy,
+    \item generator n-gramów,
+    \item klasyfikator typu pytania,
+    \item klasyfikator typu odpowiedzi,
+    \item serwisy do parsowania odpowiedzi z~usług zewnętrznych.
+\end{itemize}
 
 Drugim kluczowym modułem, który został w~całości przygotowany przez nasz zespół, był moduł \texttt{Zapytajka}. Jego rolą w~systemie jest agregacja podsumowań z~czterech różnych wyszukiwarek internetowych. Spełnia on rolę interfejsu pomiędzy aplikacją IR a~siecią~WWW. Moduł ten, podobnie jak poprzedni, został przygotowany przy pomocy języka Python i~biblioteki \texttt{Flask}. Moduł ten udostępnia proste REST API do komunikacji \textit{proces-proces} oraz prosty interfejs graficzny do komunikacji \textit{człowiek-proces}.
 
@@ -39,7 +50,7 @@ Wykorzystując ogólnie dostępne REST API z~systemu CLARIN, nasz system wykorzy
 
 Oprócz systemu CLARIN, nasze rozwiązanie wykorzystywało również REST API udostępnione przez usługę \textit{plWordNet}, służącą do zamiany słów na odpowiadające im lemmy.
 
-Integracja z~zewnętrznymi systemami została zrealizowana za pomocą specjalnie przygotowanych interfejsów dostępowych, zagregowanych w~jeden pakiet języka \texttt{Python} nazwany \texttt{services}. W~skład tego pakietu wchodzą klasy służące do komunikacji z~usługami zewnętrznymi oraz wyszukiwarkami internetowymi. Na rysunku~\ref{fig:services-classes} przedstawiony został diagram klas, który przedstawia jakie klasy zawiera ten pakiet oraz jakie relacje występują pomiędzy nimi.
+Komunikacja z~zewnętrznymi systemami została zrealizowana za pomocą specjalnie przygotowanych interfejsów dostępowych, zagregowanych w~jeden pakiet języka \texttt{Python} nazwany \texttt{services}. W~skład tego pakietu wchodzą klasy służące do komunikacji z~usługami zewnętrznymi oraz wyszukiwarkami internetowymi. Na rysunku~\ref{fig:services-classes} przedstawiony został diagram klas, który przedstawia jakie klasy zawiera ten pakiet oraz jakie relacje występują pomiędzy nimi.
 
 \begin{figure}[h]
     \centering
