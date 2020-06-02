@@ -8,5 +8,7 @@
 *.out
 *.synctex.gz
 *.synctex(busy)
+*.snm
+*.nav
 
 PrezentacjaWEDT.pdf
