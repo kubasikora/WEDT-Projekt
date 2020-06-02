@@ -83,13 +83,27 @@
 \section{Wprowadzenie w problem}
 
 \begin{frame}
-  \frametitle{Odpowiadanie na pytania}
-
+  \frametitle{Definicja zadania}
+  \begin{block}{Zadanie odpowiadania na pytania}
+    Zadanie odpowiadania na pytania polega na automatycznej \begin{itemize}
+      \item analizie otrzymanego pytania w~języku naturalnym,
+      \item wyszukiwaniu odpowiednich dokumentów,
+      \item ekstrakcji wiedzy,
+      \item generacji odpowiedzi, również w~języku naturalnym. 
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
   \frametitle{Założenia systemu}
-
+  \begin{block}{Główne założenia systemu:}
+  \begin{itemize}
+    \item pytania zadawane są w~języku polskim,
+    \item system analizuje wiedzę zapisaną w~postaci podsumowań wyników wyszukiwarek internetowych,
+    \item system odpowiada na zamknięty zestaw kategorii (domen),
+    \item system odpowiada w~postaci jednego do trzech wyrazów, nie zajmujemy się generacją zdań.
+  \end{itemize}
+\end{block}
 \end{frame}
 
 \section{Algorytm wyszukiwania odpowiedzi}
@@ -195,7 +209,34 @@
 \section{Wyniki badań}
 \begin{frame}
   \frametitle{Badanie wyszukiwarek internetowych}
-
+  \begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            grid=both,
+            width=\columnwidth,
+            height=7.5cm,
+            ybar,
+            ymin=0,
+            bar width=0.5cm,
+            enlarge x limits=0.2,
+            area legend,
+            legend style={at={(0.5,-0.15)},
+            anchor=north,
+            legend columns=2},
+            ylabel={Liczba odpowiedzi},
+            symbolic x coords={dobra, częściowo, błędna, brak},
+            xtick=data,
+            nodes near coords,
+            x label style={
+            fixed},
+            ]
+        \legend{google, duckduckgo}
+        \addplot coordinates {(dobra,80) (częściowo,8) (błędna,137) (brak,31)};
+        \addplot coordinates {(dobra,66) (częściowo,3) (błędna,111) (brak,76)};
+		\end{axis}
+        \end{tikzpicture}
+        \label{fig:porownanie-wyszukiwarek}
+  \end{figure}
 \end{frame}
 
 \begin{frame}
@@ -206,11 +247,45 @@
 \section{Wnioski i przemyślenia}
 \begin{frame}
   \frametitle{Wnioski z projektu}
+  \begin{block}{Wychwytywanie dat}
+    Wyrażenia regularne dobrze sprawdzają się przy odpowiadaniu na pytania o~daty.
+  \end{block}
+
+  \begin{block}{Pytania jakościowe i ilościowe}
+    Przedstawiony algorytm słabo radzi sobie z pytaniami jakościowymi (\textit{jak?}) oraz ilościowymi (\textit{ile?}), z~racji ich ogólnego charakteru.
+  \end{block}
+
+  \begin{block}{Półautomatyczne testowanie}
+    W~przypadku testowania systemu tego typu, wymagana jest obecność człowieka do jakościowego oceniania wygenerowanych odpowiedzi.
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perspektywy rozwoju}
+  \begin{block}{Zwiększenie liczby obsługiwanych domen}
+    Większa liczba domen pozwoli na odpowiadanie na większą ilość pytań. Docelowo, program może obsługiwać wszystkie domeny z~\textit{plWordNetu}.
+  \end{block}
+
+  \begin{block}{Analiza pełnych dokumentów}
+    Analiza pełnych dokumentów zamiast podsumowań pozwoliłaby na zwiększenie bazy wiedzy.
+  \end{block}
+
+  \begin{block}{Klasyfikacja typów}
+    Klasyfikatory oparte o~sieci neuronowe mogłyby pozwolić na zwiększenie dokładności klasyfikacji typu pytania i~odpowiedzi.
+  \end{block}
 
 \end{frame}
 
 \begin{frame}
-  \frametitle{Przemyślenia dotyczące zadania odpowiadania}
+  \frametitle{Podsumowanie}
+  W~ramach projektu z~przedmiotu WEDT udało się zrealizować:
+  \begin{itemize}
+    \item działający system oparty o IR, odpowiadający na pytania w~języku polskim,
+    \item moduł integrujący ogólnodostępne narzędzia, wpisujący się w~nowoczesną architekturę opartą o~mikroserwisy,
+    \item moduł zbierający dane z~wyszukiwarek internetowych,
+    \item szereg eksperymentów testujących podstawowe parametry systemu,
+    \item przedstawić możliwości rozwoju przygotowanego systemu.
+  \end{itemize}
 
 \end{frame}
 
