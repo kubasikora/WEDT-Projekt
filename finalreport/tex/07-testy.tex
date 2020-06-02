@@ -110,3 +110,59 @@ W tabelach \ref{tab:googleStopwords} i \ref{tab:DuckStopwords} przedstawione zos
 W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wyników eksperymentów dla obu przeglądarek. Warto zwrócić uwagę na spodziewaną różnicę pomiędzy pokryciem dla obu konfiguracji. Pomimo tego, że \textit{DuckDuckGo} zwraca kilkakrotnie razy więcej podsumowań, ich jakość jest stosunkowo niska i system nie odpowiedział na około $30\%$ pytań. W porównaniu dla \textit{Google} pokrycie wynosi około $88\%$. Pomimo znacznej różnicy w pokryciu, precyzje uzyskanych odpowiedzi dla obu przeglądarek są do siebie zbliżone.
 
 \subsubsection{Testowanie strategii tworzenia zapytań}
+Druga seria eksperymentów polegała na testowaniu systemu pod kątem wykorzystywanej strategii. Postanowiono, że każda strategia zostanie sprawdzona przy użyciu wyszukiwarki \textit{Google}. 
+
+Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategii zostały przedstawione w tabelach \ref{tab:googleStopwords}, \ref{tab:GoogleSingle} oraz \ref{tab:GoogleChunks}.
+
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		DATA&27&3&9&11&$\num{0.82}$&$\num{0.65}$ \\ \hline
+		WIELKOŚĆ&8&1&5&38&$\num{0.90}$&$\num{0.17}$ \\ \hline
+		MIEJSCE&16&0&10&25&$\num{0.80}$&$\num{0.39}$ \\ \hline
+		RZECZ&15&2&3&31&$\num{0.94}$&$\num{0.31}$\\ \hline
+		OSOBA&19&3&7&23&$\num{0.87}$&$\num{0.42}$\\ \hline
+	\end{tabular}
+	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{Google} oraz strategii \textit{singleQuery}}
+	
+	\label{tab:GoogleSingle}
+	
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		DATA&&&&&$\num{}$&$\num{}$ \\ \hline
+		WIELKOŚĆ&&&&&$\num{}$&$\num{}$ \\ \hline
+		MIEJSCE&&&&&$\num{}$&$\num{}$ \\ \hline
+		RZECZ&&&&&$\num{}$&$\num{}$\\ \hline
+		OSOBA&&&&&$\num{}$&$\num{}$\\ \hline
+	\end{tabular}
+	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{Google} oraz strategii \textit{chunks}}
+	
+	\label{tab:GoogleChunks}
+	
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{strategia} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		\textit{stopwords}&80&8&31&137&$\num{0.88}$&$\num{0.36}$ \\ \hline
+		\textit{singleQuery}&85&9&34&128&$\num{0.87}$&$\num{0.38}$ \\ \hline
+		\textit{chunks}&&&&&$\num{}$&$\num{}$ \\ \hline
+	\end{tabular}
+	\caption{Porównanie otrzymanych wyników dla poszczególnych strategii i przeglądarki \textit{Google}}
+	
+	\label{tab:porownanieStrat}
+	
+\end{table}
