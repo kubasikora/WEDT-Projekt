@@ -1,7 +1,24 @@
 \subsection{Metodologia testowania}
-Testowanie stworzonego systemu odbywało się w sposób półautomatyczny. Napisany został skrypt tester.py, który w sposób automatyczny wysyła zapytania do systemu z pytaniami pobranymi z pliku .xlsx. Plik wejściowy oprócz pytań zawiera także kolumnę ze spodziewanymi odpowiedziami. Po skompletowaniu odpowiedzi na wszystkie zadane pytania,  uzyskane wyniki są zapisywane do wyjściowego formularza .xlsx. Aby ułatwić proces oceny, w pliku tym oprócz odpowiedzi i pytań znajdują się także skopiowane z pliku wejściowego spodziewane odpowiedzi i parametry systemu.
+Testowanie stworzonego systemu odbywało się w sposób półautomatyczny. Napisany został skrypt tester.py, który w sposób automatyczny wysyła zapytania do systemu. Pytania pobierane są z arkuszu kalkulacyjnego, w którym znajdują się także spodziewane odpowiedzi. Po skompletowaniu odpowiedzi na wszystkie zadane pytania,  uzyskane wyniki są zapisywane do wyjściowego formularza. Aby ułatwić proces oceny, do pliku wyjściowego oprócz zwróconej odpowiedzi zapisywane są także parametry systemu, treści pytań oraz spodziewane odpowiedzi pochodzące z pliku wejściowego.
 
-Stworzenie automatycznej weryfikacji odpowiedzi jest zadaniem nietrywialnym. Ponadto trudno byłoby zagwarantować poprawność takiego narzędzia. Z tego powodu ocena poprawności udzielonych odpowiedzi odbywa się manualnie. 
+Stworzenie automatycznej weryfikacji odpowiedzi jest zadaniem nietrywialnym. Ponadto trudno byłoby zagwarantować poprawność takiego narzędzia. Z tego powodu podjęta została decyzja o manualnym sposobie oceny poprawności odpowiedzi.
+
+Wyróżnione zostały cztery rodzaje odpowiedzi:
+\begin{enumerate}
+	\item poprawne,
+	\item częściowo poprawne - są to odpowiedzi, w których zabrakło detali (na przykład odpowiedź \textit{włócznia} na pytanie \textit{Co Otto III podarował Bolesławowi Chrobremu?}, gdzie poprawną odpowiedzią byłaby \textit{włócznia św. Maurycego}),
+	\item brak odpowiedzi, 
+	\item niepoprawne.
+\end{enumerate}
+
+Do oceny jakości systemu wykorzystano dwa wskaźniki: pokrycie i precyzję.
+\begin{equation}
+		coverage =  \frac{n - n_n}{n}
+	\end{equation}
+\begin{equation}
+		precission = \frac{n_g}{n - n_n}
+\end{equation}
+gdzie $n$ to liczba zadanych pytań, $n_n$ to liczba pytań, na które nie została udzielona odpowiedź a $n_g$ to liczba pytań, na które została udzielona w pełni poprawna odpowiedź. 
 
 \subsection{Zbiór testowy}
 W~celu weryfikacji poprawności naszego rozwiązania, przygotowaliśmy zbiór danych testowych, składający się ponad 250 pytań o~ogólnej tematyce. Przygotowując pytania, staraliśmy się równomiernie podzielić zbiór pomiędzy pięć typów potencjalnej odpowiedzi. Pytania pochodziły głównie z~popularnych teleturniejów takich jak Milionerzy czy Jeden z~dziesięciu ale również z~innych popularnych quizów internetowych oraz konkursów wiedzy dla młodzieży.
@@ -21,10 +38,6 @@ W~celu weryfikacji poprawności naszego rozwiązania, przygotowaliśmy zbiór da
 
 Z~powodu charakteru pytań o~fakty, większość oczekiwanych odpowiedzi to rzeczowniki lub liczebniki. Oprócz tego, pojawią się również pytania o~cechy: przymiotniki i~przysłówki.
 
-Duży zbiór danych pozwoli nam na przeprowadzenie badań nad poprawnością odpowiedzi systemu. Oprócz gotowego systemu, powstanie moduł badający procent poprawnych odpowiedzi w~sposób automatyczny. Aby tak badać poprawność, moduł ten musi mieć dostęp do poprawnych odpowiedzi. Co więcej, odpowiedź w~systemie powinna być przechowywana we wszystkich możliwych formach, ponieważ system może zwracać odpowiedź w~dowolnym przypadku, osobie czy liczbie. Problem ten został szerzej opisany w~artykule~\cite{brill2002analysis}.
-
-Węzeł do automatycznego badania poprawności odpowiedzi pozwoli nam na przeprowadzenie dodatkowych badań nad zasadnością pewnych elementów w~systemie oraz wartości parametrów modułów. Modularność projektowanego systemu pozwoli nam na wyłączanie pewnych komponentów takich jak słownik synonimów, dzięki czemu będziemy mogli znaleźć optymalny kompromis pomiędzy dokładnością odpowiedzi a~czasem oczekiwania na odpowiedź.
-
 \begin{figure}[h!]
     \begin{tikzpicture}
         \pie [rotate = 180]
@@ -36,13 +49,71 @@ Węzeł do automatycznego badania poprawności odpowiedzi pozwoli nam na przepro
     \caption{Rozkład części mowy oczekiwanych odpowiedzi w~przygotowanej bazie pytań}
 \end{figure}
 
+\subsection{Uzyskane wyniki}
+
+\subsubsection{Testowanie różnych wyszukiwarek}
+W ramach pierwszej serii eksperymentów sprawdziliśmy jak wybór wyszukiwarki wpływa na jakość odpowiedzi. Przeprowadzono testy dla wyszukiwarki \textit{Google} oraz \textit{DuckDuckGo}. Wybór wyszukiwarek nie był przypadkowy. Spośród dostępnych wyszukiwarek \textit{Google} zwraca najmniej podsumowań, natomiast \textit{DuckDuckGo} najwięcej. Z drugiej strony jakość streszczeń pozyskanych z \textit{Google} jest największa, a te otrzymane z \textit{DuckDuckGo} często odbiegają od tematu. Testy zostały przeprowadzone dla startegii \textit{stopwords}.
+
+W tabelach \ref{tab:googleStopwords} i \ref{tab:DuckStopwords} przedstawione zostały otrzymane wyniki z podziałem na typy oczekiwanych odpowiedzi. $n_g$ to liczba poprawnych odpowiedzi, $n_{pg}$ to liczba częściowo poprawnych odpowiedzi, $n_n$ odpowiada za liczbę nieudzielonych odpowiedzi, $n_w$ za liczbę niepoprawnych odpowiedzi, natomiast $cov.$ i $prec.$ to odpowiednio uzyskane pokrycie oraz precyzja.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+	
+	\hline
+	\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+	DATA&24&3&10&13&$\num{0.80}$&$\num{0.60}$ \\ \hline
+	WIELKOŚĆ&9&1&5&37&$\num{0.90}$&$\num{0.19}$ \\ \hline
+	MIEJSCE&16&0&7&28&$\num{0.86}$&$\num{0.36}$ \\ \hline
+	RZECZ&12&2&3&34&$\num{0.94}$&$\num{0.25}$\\ \hline
+	OSOBA&19&2&6&25&$\num{0.88}$&$\num{0.41}$\\ \hline
+	\end{tabular}
+	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{Google} oraz strategii \textit{stopwords}}
+	
+	\label{tab:googleStopwords}
+	
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		DATA&24&1&18&7&$\num{0.64}$&$\num{0.75}$ \\ \hline
+		WIELKOŚĆ&5&1&10&36&$\num{0.81}$&$\num{0.12}$ \\ \hline
+		MIEJSCE&12&0&18&21&$\num{0.65}$&$\num{0.36}$ \\ \hline
+		RZECZ&11&1&14&25&$\num{0.73}$&$\num{0.30}$\\ \hline
+		OSOBA&14&0&16&22&$\num{0.69}$&$\num{0.39}$\\ \hline
+	\end{tabular}
+	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{DuckDuckGo} oraz strategii \textit{stopwords}}
+	
+	\label{tab:DuckStopwords}
+	
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{preglądarka} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		\textit{Google}&80&8&31&137&$\num{0.88}$&$\num{0.36}$ \\ \hline
+		\textit{DuckDuckGo}&66&3&76&111&$\num{0.70}$&$\num{0.37}$ \\ \hline
+	\end{tabular}
+	\caption{Porównanie otrzymanych wyników dla przeglądarek \textit{Google} oraz \textit{DuckDuckGo}}
+	
+	\label{tab:porownanieWysz}
+	
+\end{table}
+
+W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wyników eksperymentów dla obu przeglądarek. Warto zwrócić uwagę na spodziewaną różnicę pomiędzy pokryciem dla obu konfiguracji. Pomimo tego, że \textit{DuckDuckGo} zwraca kilkakrotnie razy więcej podsumowań, ich jakość jest stosunkowo niska i system nie odpowiedział na około $30\%$ pytań. W porównaniu dla \textit{Google} pokrycie wynosi około $88\%$. Pomimo znacznej różnicy w pokryciu, precyzje uzyskanych odpowiedzi dla obu przeglądarek są do siebie zbliżone.
 
 \begin{figure}
     \begin{tikzpicture}
         \begin{axis}[
             grid=both,
             width=\columnwidth,
-            title=Porównanie wyników dwóch wyszukiwarek,
             ybar,
             ymin=0,
             bar width=0.5cm,
@@ -61,7 +132,127 @@ Węzeł do automatycznego badania poprawności odpowiedzi pozwoli nam na przepro
         \legend{google, duckduckgo}
         \addplot coordinates {(dobra,80) (częściowo,8) (błędna,137) (brak,31)};
         \addplot coordinates {(dobra,66) (częściowo,3) (błędna,111) (brak,76)};
-        
-        \end{axis}
+		\end{axis}
         \end{tikzpicture}
+        \label{fig:porownanie-wyszukiwarek}
+        \caption{Porównanie wyników odpowiadania, bazujących na dwóch różnych wyszukiwarkach internetowych}
 \end{figure}
+
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            grid=both,
+            width=\columnwidth,
+            ybar,
+            ymin=0,
+            bar width=0.2cm,
+            enlarge x limits=0.12,
+            area legend,
+            legend style={at={(0.5,-0.15)},
+            anchor=north,
+            legend columns=2},
+            ylabel={Liczba odpowiedzi},
+            symbolic x coords={data, wielkość, miejsce, rzecz, osoba},
+            xtick=data,
+            nodes near coords,
+            x label style={
+            fixed},
+            ]
+        \legend{dobrze, częściowo, błędna, brak}
+		\addplot coordinates {(data,24) (wielkość,5) (miejsce,12) (rzecz,11) (osoba, 14)};	
+		\addplot coordinates {(data,1) (wielkość,1) (miejsce,0) (rzecz,1) (osoba, 0)};
+		\addplot coordinates {(data,7) (wielkość,36) (miejsce,21) (rzecz,25) (osoba, 22)};
+		\addplot coordinates {(data,18) (wielkość,10) (miejsce,18) (rzecz,14) (osoba, 16)};
+		\end{axis}
+        \end{tikzpicture}
+        \label{fig:duckduckgo-wynik}
+        \caption{Szczegółowe wyniki odpowiadania przy użyciu wyszukiwarki \textit{DuckDuckGo}}
+\end{figure}
+
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            grid=both,
+            width=\columnwidth,
+            ybar,
+            ymin=0,
+            bar width=0.2cm,
+            enlarge x limits=0.12,
+            area legend,
+            legend style={at={(0.5,-0.15)},
+            anchor=north,
+            legend columns=2},
+            ylabel={Liczba odpowiedzi},
+            symbolic x coords={data, wielkość, miejsce, rzecz, osoba},
+            xtick=data,
+            nodes near coords,
+            x label style={
+            fixed},
+            ]
+        \legend{dobrze, częściowo, błędna, brak}
+		\addplot coordinates {(data,24) (wielkość,9) (miejsce,16) (rzecz,12) (osoba, 19)};	
+		\addplot coordinates {(data,3) (wielkość,1) (miejsce,0) (rzecz,2) (osoba, 2)};
+		\addplot coordinates {(data,13) (wielkość,37) (miejsce,28) (rzecz,34) (osoba, 25)};
+		\addplot coordinates {(data,10) (wielkość,5) (miejsce,7) (rzecz,3) (osoba, 6)};
+		\end{axis}
+        \end{tikzpicture}
+        \label{fig:google-wyniki}
+        \caption{Szczegółowe wyniki odpowiadania przy użyciu wyszukiwarki \textit{Google}}
+\end{figure}
+
+\subsubsection{Testowanie strategii tworzenia zapytań}
+Druga seria eksperymentów polegała na testowaniu systemu pod kątem wykorzystywanej strategii. Postanowiono, że każda strategia zostanie sprawdzona przy użyciu wyszukiwarki \textit{Google}. 
+
+Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategii zostały przedstawione w tabelach \ref{tab:googleStopwords}, \ref{tab:GoogleSingle} oraz \ref{tab:GoogleChunks}.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		DATA&27&3&9&11&$\num{0.82}$&$\num{0.65}$ \\ \hline
+		WIELKOŚĆ&8&1&5&38&$\num{0.90}$&$\num{0.17}$ \\ \hline
+		MIEJSCE&16&0&10&25&$\num{0.80}$&$\num{0.39}$ \\ \hline
+		RZECZ&15&2&3&31&$\num{0.94}$&$\num{0.31}$\\ \hline
+		OSOBA&19&3&7&23&$\num{0.87}$&$\num{0.42}$\\ \hline
+	\end{tabular}
+	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{Google} oraz strategii \textit{singleQuery}}
+	
+	\label{tab:GoogleSingle}
+	
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		DATA&&&&&$\num{}$&$\num{}$ \\ \hline
+		WIELKOŚĆ&&&&&$\num{}$&$\num{}$ \\ \hline
+		MIEJSCE&&&&&$\num{}$&$\num{}$ \\ \hline
+		RZECZ&&&&&$\num{}$&$\num{}$\\ \hline
+		OSOBA&&&&&$\num{}$&$\num{}$\\ \hline
+	\end{tabular}
+	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{Google} oraz strategii \textit{chunks}}
+	
+	\label{tab:GoogleChunks}
+	
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c| }
+		
+		\hline
+		\textbf{strategia} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+		\textit{stopwords}&80&8&31&137&$\num{0.88}$&$\num{0.36}$ \\ \hline
+		\textit{singleQuery}&85&9&34&128&$\num{0.87}$&$\num{0.38}$ \\ \hline
+		\textit{chunks}&&&&&$\num{}$&$\num{}$ \\ \hline
+	\end{tabular}
+	\caption{Porównanie otrzymanych wyników dla poszczególnych strategii i przeglądarki \textit{Google}}
+	
+	\label{tab:porownanieStrat}
+	
+\end{table}
