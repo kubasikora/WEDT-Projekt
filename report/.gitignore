@@ -8,5 +8,5 @@
 *.out
 *.synctex.gz
 *.synctex(busy)
-
+*.snm
 SprawozdanieWEDT.pdf

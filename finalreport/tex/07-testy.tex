@@ -35,3 +35,33 @@ Węzeł do automatycznego badania poprawności odpowiedzi pozwoli nam na przepro
     \label{fig:rozklad-typow-odpowiedzi2}  
     \caption{Rozkład części mowy oczekiwanych odpowiedzi w~przygotowanej bazie pytań}
 \end{figure}
+
+
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            grid=both,
+            width=\columnwidth,
+            title=Porównanie wyników dwóch wyszukiwarek,
+            ybar,
+            ymin=0,
+            bar width=0.5cm,
+            enlarge x limits=0.2,
+            area legend,
+            legend style={at={(0.5,-0.15)},
+            anchor=north,
+            legend columns=2},
+            ylabel={Liczba odpowiedzi},
+            symbolic x coords={dobra, częściowo, błędna, brak},
+            xtick=data,
+            nodes near coords,
+            x label style={
+            fixed},
+            ]
+        \legend{google, duckduckgo}
+        \addplot coordinates {(dobra,80) (częściowo,8) (błędna,137) (brak,31)};
+        \addplot coordinates {(dobra,66) (częściowo,3) (błędna,111) (brak,76)};
+        
+        \end{axis}
+        \end{tikzpicture}
+\end{figure}
