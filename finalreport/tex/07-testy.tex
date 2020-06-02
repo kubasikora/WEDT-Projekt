@@ -54,7 +54,7 @@ Z~powodu charakteru pytań o~fakty, większość oczekiwanych odpowiedzi to rzec
 \subsubsection{Testowanie różnych wyszukiwarek}
 W ramach pierwszej serii eksperymentów sprawdziliśmy jak wybór wyszukiwarki wpływa na jakość odpowiedzi. Przeprowadzono testy dla wyszukiwarki \textit{Google} oraz \textit{DuckDuckGo}. Wybór wyszukiwarek nie był przypadkowy. Spośród dostępnych wyszukiwarek \textit{Google} zwraca najmniej podsumowań, natomiast \textit{DuckDuckGo} najwięcej. Z drugiej strony jakość streszczeń pozyskanych z \textit{Google} jest największa, a te otrzymane z \textit{DuckDuckGo} często odbiegają od tematu. Testy zostały przeprowadzone dla startegii \textit{stopwords}.
 
-W tabelach \ref{tab:googleStopwords} i \ref{tab:DuckStopwords} przedstawione zostały otrzymane wyniki z podziałem na typy oczekiwanych odpowiedzi. $n_g$ to liczba poprawnych odpowiedzi, $n_{pg}$ to liczba częściowo poprawnych odpowiedzi, $n_n$ odpowiada za liczbę nieudzielonych odpowiedzi, $n_w$ za liczbę niepoprawnych odpowiedzi, natomiast $cov.$ i $prec.$ to odpowiednio uzyskane pokrycie oraz precyzja.
+W tabelach \ref{tab:googleStopwords} i \ref{tab:DuckStopwords} oraz na wykresach \ref{fig:google-wyniki} i \ref{fig:duckduckgo-wynik} przedstawione zostały otrzymane wyniki z podziałem na typy oczekiwanych odpowiedzi. $n_g$ to liczba poprawnych odpowiedzi, $n_{pg}$ to liczba częściowo poprawnych odpowiedzi, $n_n$ odpowiada za liczbę nieudzielonych odpowiedzi, $n_w$ za liczbę niepoprawnych odpowiedzi, natomiast $cov.$ i $prec.$ to odpowiednio uzyskane pokrycie oraz precyzja.
 
 \begin{table}[h]
 	\centering
@@ -107,7 +107,7 @@ W tabelach \ref{tab:googleStopwords} i \ref{tab:DuckStopwords} przedstawione zos
 	
 \end{table}
 
-W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wyników eksperymentów dla obu przeglądarek. Warto zwrócić uwagę na spodziewaną różnicę pomiędzy pokryciem dla obu konfiguracji. Pomimo tego, że \textit{DuckDuckGo} zwraca kilkakrotnie razy więcej podsumowań, ich jakość jest stosunkowo niska i system nie odpowiedział na około $30\%$ pytań. W porównaniu dla \textit{Google} pokrycie wynosi około $88\%$. Pomimo znacznej różnicy w pokryciu, precyzje uzyskanych odpowiedzi dla obu przeglądarek są do siebie zbliżone.
+W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wyników eksperymentów dla obu przeglądarek. Warto zwrócić uwagę na spodziewaną różnicę pomiędzy pokryciem dla obu konfiguracji. Pomimo tego, że \textit{DuckDuckGo} zwraca kilkakrotnie razy więcej podsumowań, ich jakość jest stosunkowo niska i system nie odpowiedział na około $30\%$ pytań. W porównaniu dla \textit{Google} pokrycie wynosi około $88\%$. Pomimo znacznej różnicy w pokryciu, precyzje uzyskanych odpowiedzi dla obu przeglądarek są do siebie zbliżone. Wykres \ref{fig:porownanie-wyszukiwarek} zawiera porównanie sumarycznych wyników dla badanych przeglądarek.
 
 \begin{figure}
     \begin{tikzpicture}
@@ -134,8 +134,8 @@ W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wynikó
         \addplot coordinates {(dobra,66) (częściowo,3) (błędna,111) (brak,76)};
 		\end{axis}
         \end{tikzpicture}
-        \label{fig:porownanie-wyszukiwarek}
-        \caption{Porównanie wyników odpowiadania, bazujących na dwóch różnych wyszukiwarkach internetowych}
+        
+        \caption{Porównanie wyników odpowiadania, bazujących na dwóch różnych wyszukiwarkach internetowych} \label{fig:porownanie-wyszukiwarek}
 \end{figure}
 
 \begin{figure}
@@ -165,8 +165,8 @@ W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wynikó
 		\addplot coordinates {(data,18) (wielkość,10) (miejsce,18) (rzecz,14) (osoba, 16)};
 		\end{axis}
         \end{tikzpicture}
-        \label{fig:duckduckgo-wynik}
-        \caption{Szczegółowe wyniki odpowiadania przy użyciu wyszukiwarki \textit{DuckDuckGo}}
+        
+        \caption{Szczegółowe wyniki odpowiadania przy użyciu wyszukiwarki \textit{DuckDuckGo}}\label{fig:duckduckgo-wynik}
 \end{figure}
 
 \begin{figure}
@@ -196,8 +196,8 @@ W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wynikó
 		\addplot coordinates {(data,10) (wielkość,5) (miejsce,7) (rzecz,3) (osoba, 6)};
 		\end{axis}
         \end{tikzpicture}
-        \label{fig:google-wyniki}
-        \caption{Szczegółowe wyniki odpowiadania przy użyciu wyszukiwarki \textit{Google}}
+        
+        \caption{Szczegółowe wyniki odpowiadania przy użyciu wyszukiwarki \textit{Google}}\label{fig:google-wyniki}
 \end{figure}
 
 \subsubsection{Testowanie strategii tworzenia zapytań}
@@ -229,11 +229,11 @@ Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategi
 		
 		\hline
 		\textbf{typPytania} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
-		DATA&&&&&$\num{}$&$\num{}$ \\ \hline
-		WIELKOŚĆ&&&&&$\num{}$&$\num{}$ \\ \hline
-		MIEJSCE&&&&&$\num{}$&$\num{}$ \\ \hline
-		RZECZ&&&&&$\num{}$&$\num{}$\\ \hline
-		OSOBA&&&&&$\num{}$&$\num{}$\\ \hline
+		DATA&18&2&19&11&$\num{0.62}$&$\num{0.58}$ \\ \hline
+		WIELKOŚĆ&3&2&19&28&$\num{0.63}$&$\num{0.09}$ \\ \hline
+		MIEJSCE&16&0&17&18&$\num{0.67}$&$\num{0.47}$ \\ \hline
+		RZECZ&12&1&9&29&$\num{0.82}$&$\num{0.29}$\\ \hline
+		OSOBA&8&1&24&19&$\num{0.54}$&$\num{0.29}$\\ \hline
 	\end{tabular}
 	\caption{Podsumowanie wyników uzyskanych dla przeglądarki \textit{Google} oraz strategii \textit{chunks}}
 	
@@ -249,10 +249,103 @@ Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategi
 		\textbf{strategia} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
 		\textit{stopwords}&80&8&31&137&$\num{0.88}$&$\num{0.36}$ \\ \hline
 		\textit{singleQuery}&85&9&34&128&$\num{0.87}$&$\num{0.38}$ \\ \hline
-		\textit{chunks}&&&&&$\num{}$&$\num{}$ \\ \hline
+		\textit{chunks}&57&6&88&105&$\num{0.66}$&$\num{0.34}$ \\ \hline
 	\end{tabular}
 	\caption{Porównanie otrzymanych wyników dla poszczególnych strategii i przeglądarki \textit{Google}}
 	
 	\label{tab:porownanieStrat}
 	
 \end{table}
+
+\begin{figure}
+	\begin{tikzpicture}
+	\begin{axis}[
+	grid=both,
+	width=\columnwidth,
+	ybar,
+	ymin=0,
+	bar width=0.4cm,
+	enlarge x limits=0.2,
+	area legend,
+	legend style={at={(0.5,-0.15)},
+		anchor=north,
+		legend columns=2},
+	ylabel={Liczba odpowiedzi},
+	symbolic x coords={dobra, częściowo, błędna, brak},
+	xtick=data,
+	nodes near coords,
+	x label style={
+		fixed},
+	]
+	\legend{stopwords, singlequery, chunks}
+	\addplot coordinates {(dobra,80) (częściowo,8) (błędna,137) (brak,31)};
+	\addplot coordinates {(dobra,85) (częściowo,9) (błędna,128) (brak,34)};
+	\addplot coordinates {(dobra,57) (częściowo,6) (błędna,105) (brak,88)};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Porównanie wyników odpowiadania, bazujących na dwóch różnych strategiach tworzenia zapytań} \label{fig:porownanie-strategie}
+\end{figure}
+
+\begin{figure}
+	\begin{tikzpicture}
+	\begin{axis}[
+	grid=both,
+	width=\columnwidth,
+	ybar,
+	ymin=0,
+	bar width=0.2cm,
+	enlarge x limits=0.12,
+	area legend,
+	legend style={at={(0.5,-0.15)},
+		anchor=north,
+		legend columns=2},
+	ylabel={Liczba odpowiedzi},
+	symbolic x coords={data, wielkość, miejsce, rzecz, osoba},
+	xtick=data,
+	nodes near coords,
+	x label style={
+		fixed},
+	]
+	\legend{dobrze, częściowo, błędna, brak}
+	\addplot coordinates {(data,27) (wielkość,8) (miejsce,16) (rzecz,15) (osoba, 19)};	
+	\addplot coordinates {(data,3) (wielkość,1) (miejsce,0) (rzecz,2) (osoba, 3)};
+	\addplot coordinates {(data,11) (wielkość,38) (miejsce,25) (rzecz,31) (osoba, 23)};
+	\addplot coordinates {(data,9) (wielkość,5) (miejsce,10) (rzecz,3) (osoba, 7)};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Szczegółowe wyniki odpowiadania przy użyciu strategii \textit{singleQuery} oraz wyszukiwarki \textit{Google}}\label{fig:google-wyniki-single}
+\end{figure}
+
+\begin{figure}
+	\begin{tikzpicture}
+	\begin{axis}[
+	grid=both,
+	width=\columnwidth,
+	ybar,
+	ymin=0,
+	bar width=0.2cm,
+	enlarge x limits=0.12,
+	area legend,
+	legend style={at={(0.5,-0.15)},
+		anchor=north,
+		legend columns=2},
+	ylabel={Liczba odpowiedzi},
+	symbolic x coords={data, wielkość, miejsce, rzecz, osoba},
+	xtick=data,
+	nodes near coords,
+	x label style={
+		fixed},
+	]
+	\legend{dobrze, częściowo, błędna, brak}
+	\addplot coordinates {(data,18) (wielkość,3) (miejsce,16) (rzecz,12) (osoba, 8)};	
+	\addplot coordinates {(data,2) (wielkość,2) (miejsce,0) (rzecz,1) (osoba, 1)};	
+	\addplot coordinates {(data,11) (wielkość,28) (miejsce,18) (rzecz,29) (osoba, 19)};
+	\addplot coordinates {(data,19) (wielkość,19) (miejsce,17) (rzecz,9) (osoba, 24)};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Szczegółowe wyniki odpowiadania przy użyciu strategii \textit{chunks} oraz wyszukiwarki \textit{Google}}\label{fig:google-wyniki-chunks}
+\end{figure}
