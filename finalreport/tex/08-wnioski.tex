@@ -1,51 +1,16 @@
 
 
 
-jak typ oczekiwanejodpowiedzi określonyjest więcj niż jednym słowem to nie da się tak
-zależymy od dostępności internetu i serwisów i od ich struktury
-
-da się odszukać odpowiedź
-
-
-testowanie - automatyczne testowanie 
-silnik parowy - maszyna parowa
-Olga Tokarczuk Wisława Szymborska
-trochę inaczej godziny do napisania
-
-do cech sięśrednio nadaje : jaki post obowiązuje w piatek ? mięsny 
-fajnie bo jest modularny
-lepiej sobie nie bedzie radzł bo opiera się na logice
-
-2. jak typ oczekiwanejodpowiedzi określonyjest więcj niż jednym słowem to nie da się tak
-3. maszyna parowy 
-6. nie do końća sobie radzimy jak są liczby vs wyrazy i w ogóle odmiany św. święty
 
 
 
-\subsection{Pojawiające się problemy}
+\subsection{Problematyczne aspekty systemu}
 
-daty sobie radzą najlepiej 
+Korzystanie z zewnętrznych usług z systemu \emph{CLARIN} jak i wyszukiwarek internetowych jest jednocześnie ogromną zaletę jak i wadą naszego systemu. Wśród minusów takiego rozwiązania można wymienić to, że odpowiadanie na pytania działa wyłącznie wtedy, gdy dostępne jest połączenie internetowe oraz działają usługi \emph{CLARIN}. Dwukrotnie zdarzyło nam się, że usługi systemu \emph{CLARIN} przez cały dzień nie były dostępne, co sprawiało, że nasz system nie działał. Dodatkowo korzystanie z tych usług sprawia, że czas potrzebny na zwrócenie odpowiedzi na pytanie znacząco się wydłuża. Kolejną wadą jest też pewne uzależnienie od formy aktualnie zwracanej przez usługę. Zarówno w zewnętrznych usługach systemu \emph{CLARIN}, jak i wyszukiwarkach internetowych mogą zostać wprowadzone zmiany, które sprawią, że format zwracanych przez nie rezultatów zmieni się i nasz system może wtedy przestać poprawnie działać aż do wprowadzenia przez nas aktualizacji. 
 
-pytania z Jak
+Ryzykownym założeniem w naszym systemie jest także ograniczenie się do uni-, bi- i trigramów, co uniemożliwiło odszukanie odpowiedzi na pytanie \emph{Jak nazywali się trzej słynni bracia z legendy?}, ponieważ odpowiedź \emph{Lech, Czech i Rus} zawiera 4 wyrazy. Założyliśmy jednak, że w tak krótkich podsumowaniach prawdopodobieństwo odnalezienia powtarzających się n-gramów o długości większej niż 3 jest niskie.
 
-w ogóle język polski
-
-niejednoznaczność odmiany
-
-niedokładność narzędzi
-
-który z 
-
-co ile
-
-to co zwraca CLARIN, wyszukiwarki tak samo
-
-jakieś powiązanie pomiędzy focusem większym a szukanym typem odpowiedzi (domeny wordnetpl),
-typ pytania nie określa typu odpowiedzi
-
-n-gramy nie zawsze zawierają odpowiedzi, za długie są, typ odpowiedzi 
-
-czas działania, płatne apki
+Problemy występowały także przy określaniu typu oczekiwanej odpowiedzi na podstawie typu pytania. W szczególności nie zawsze wykorzystywane przez nas reguły sprawiały, że typ oczekiwanej odpowiedzi został poprawnie określony. Przykładem na to jest pytanie \emph{Pod jakim pseudonimem pisał Aleksander Głowacki?} Na podstawie rzeczownika \emph{pseudonim} nie da się określić jednoznacznie typu odpowiedzi, ponieważ pseudonimem mogłby być wyraz z domeny MIEJSCE, RZECZ jak i OSOBA.
 
 \subsection{Perspektywy rozwoju}
 Z uwagi na dużą modularność systemu, poszczególne aspekty naszego rozwiązania łatwo poddać ewentualnym przeróbkom. Po przeprowadzeniu testów zgromadziliśmy pewne przemyślenia, które poprawiłyby jakość odpowiedzi zwracanych przez nasz system. 
@@ -70,7 +35,7 @@ Przy analizie wyników zaobserwowaliśmy, że w naszym systemie są elementy, kt
 
 Dodatkowo można by wprowadzić większą liczbę parametrów, w szczególności rozdzielić parametr \emph{minimum\_ngram\_appearance} na osobny dla uni-, bi- i trigramów. Tak samo można by zbadać i oceniać prawdopodobieństwo z jakim dana domena występuje przy danym typie pytania. Przykładowo jak często na pytanie \emph{Gdzie?} odpowiedź będzie dotyczyła miejsca, a jak często rzeczy. Tak samo pewne wagi można by przyporządkować do wyrażeń regularnych, aby faworyzować wyszukiwanie całych dat nad zwracaniem informacji tylko o miesiącu. 
 
+Pewne udoskonalenia można by także wprowadzić w module rozpoznawania typu oczekiwanej odpowiedzi. Obecnie w drugim etapie typ oczekiwanej odpowiedzi określany jest na podstawie analizy pojedynczego wyrazu. Być może w niektórych przypadkach nie będzie to wystarczające i niezbędne okazałoby się przeanalizowanie całej grupy wyrazów znajdujących się za zaimkiem pytającym lub chociażby znalezienie zależności pomiędzy nimi. 
+
 Ostatnim aspektem do rozważenia jest odnalezienie narzędzia, o ile takowe istnieje, które zwróciłoby leksemy uwzględniające zwroty o długości większej niż jeden wyraz. Przykładowo obecnie nasz system ma problem z odpowiedzią na pytanie o maszynę parową, ponieważ odnajdywane są leksemy \emph{maszyna} i \emph{parowy}. Bigram \emph{maszyna parowy} nie zostanie odnaleziony w bazie \emph{WordnetPl}. Wyszukanie oryginalnej formy wyrazów również może nie zwrócić poprawnej odpowiedzi, ponieważ narzędzie \emph{WordnetPl} dla odmienionego zwrotu (przykładowo \emph{maszyną parową}) również nie zwróci żadnego wyniku.
-
-
 
