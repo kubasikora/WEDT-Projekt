@@ -136,7 +136,7 @@
     \item stopwords,
     \item chunks.
   \end{itemize}
-  Wytworzenie kilku zapytań z~jednego pytania, zwiększa bazę zebranych podsumowań.
+  Wytworzenie kilku zapytań z~jednego pytania zwiększa bazę zebranych podsumowań.
 \end{frame}
 
 \begin{frame}
@@ -153,7 +153,7 @@
 
 \begin{frame}
   \frametitle{Klasyfikacja typu pytania}
-  W~międzyczasie, system dokonuje klasyfikacji typu pytania. Wyróżniamy 16 typów pytań. Klasyfikacja typu pytania odbywa się przy użyciu wyrażeń regularnych wyszukujących zaimki pytające, związane z~danym typem. Docelowo, typ pytania będzie potrzebny do określenia jednego z~typów odpowiedzi:
+  W~międzyczasie, system dokonuje klasyfikacji typu pytania. Wyróżniamy 16 typów pytań. Klasyfikacja typu pytania odbywa się przy użyciu wyrażeń regularnych wyszukujących zaimki pytające związane z~danym typem. Docelowo typ pytania będzie potrzebny do określenia jednego z~typów odpowiedzi:
   \begin{itemize}
     \item \texttt{DATA},
     \item \texttt{MIEJSCE},
@@ -165,7 +165,7 @@
 
 \begin{frame}
   \frametitle{Klasyfikacja typu odpowiedzi}
-  Na podstawie typu pytania, określany jest typ odpowiedzi. W~przypadku oczywistych typów pytań, jeden zaimek pytający odpowiada jednemu typowi odpowiedzi. 
+  Na podstawie typu pytania określany jest typ odpowiedzi. W~przypadku oczywistych typów pytań, jeden zaimek pytający odpowiada jednemu typowi odpowiedzi. 
   \begin{center}
     \textit{czyj?} --- \texttt{OSOBA}
   \end{center}
@@ -177,13 +177,13 @@
 
 \begin{frame}
   \frametitle{Wyszukiwanie odpowiedzi}
-  Każde otrzymane podsumowanie przetwarzane jest narzędziem \textit{tagger}, w~celu zamiany słów na odpowiadające im leksemy. Następnie, w~zależności od oczekiwanego typu odpowiedzi,
-  na podsumowaniach stosowane są albo wyrażenia regularne albo podział na n-gramy i~filtracja względem częstości.
+  Każde otrzymane podsumowanie przetwarzane jest narzędziem \textit{tagger} w~celu zamiany słów na odpowiadające im leksemy. Następnie, w~zależności od oczekiwanego typu odpowiedzi,
+  na podsumowaniach stosowane są albo wyrażenia regularne, albo podział na n-gramy i~filtracja względem częstości.
 \end{frame}
 
 \begin{frame}
   \frametitle{Zwrócenie odpowiedzi}
-  Wraz z~uzyskaną odpowiedzią, użytkownikowi zwracany jest link do dokumentu, którego podsumowanie ostatecznie zwróciło odpowiedź. Jeżeli użytkownik korzystał z~dedykowanego interfejsu graficznego, może wrócić do strony głównej i~zadać pytanie jeszcze raz.
+  Wraz z~uzyskaną odpowiedzią użytkownikowi zwracany jest link do dokumentu, którego podsumowanie ostatecznie zwróciło odpowiedź. Jeżeli użytkownik korzystał z~dedykowanego interfejsu graficznego, może wrócić do strony głównej i~zadać pytanie jeszcze raz.
 \end{frame}
 
 \section{Implementacja i korzystanie z systemu}
@@ -331,7 +331,7 @@
   \end{block}
 
   \begin{block}{Pytania jakościowe i ilościowe}
-    Przedstawiony algorytm słabo radzi sobie z pytaniami jakościowymi (\textit{jak?}) oraz ilościowymi (\textit{ile?}), z~racji ich ogólnego charakteru.
+    Przedstawiony algorytm słabo radzi sobie z pytaniami jakościowymi (\textit{jak?}) oraz ilościowymi (\textit{ile?}) z~racji ich ogólnego charakteru.
   \end{block}
 
   \begin{block}{Półautomatyczne testowanie}
@@ -342,7 +342,7 @@
 \begin{frame}
   \frametitle{Perspektywy rozwoju}
   \begin{block}{Zwiększenie liczby obsługiwanych domen}
-    Większa liczba domen pozwoli na odpowiadanie na większą ilość pytań. Docelowo, program może obsługiwać wszystkie domeny z~\textit{plWordNetu}.
+    Większa liczba domen pozwoli na odpowiadanie na większą liczbę pytań. Docelowo program może obsługiwać wszystkie domeny z~\textit{plWordNetu}.
   \end{block}
 
   \begin{block}{Analiza pełnych dokumentów}
@@ -350,7 +350,7 @@
   \end{block}
 
   \begin{block}{Klasyfikacja typów}
-    Klasyfikatory oparte o~sieci neuronowe mogłyby pozwolić na zwiększenie dokładności klasyfikacji typu pytania i~odpowiedzi.
+    Klasyfikatory oparte na sieciach neuronowych mogłyby pozwolić na zwiększenie dokładności klasyfikacji typu pytania i~odpowiedzi.
   \end{block}
 
 \end{frame}
