@@ -120,37 +120,70 @@
 
 \begin{frame}
   \frametitle{Akwizycja pytania}
-
+    \begin{itemize}
+      \item zadawanie pytań odbywa się poprzez dedykowany interfejs graficzny, bądź specjalne REST API,
+      \item każde pytanie jest analizowane w sposób indywidualny, bez przechowywania wcześniejszych pytań i utrzymywania kontekstu,
+      \item nie zakładamy również żadnego profilowania użytkowników, ponieważ typowe pytania o fakty, są ze sobą słabo powiązane,
+      \item przy zadaniu każdego pytania użytkownik może wybrać strategię i silnik wyszukiwania.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Generacja zapytań}
-
+  Generacja zapytań to proces wytwarzania specjalnych zapytań do wyszukiwarki, w~zależności od obranej strategii. W~projekcie zaimplementowane zostały trzy strategie:
+  \begin{itemize}
+    \item singlequery,
+    \item stopwords,
+    \item chunks.
+  \end{itemize}
+  Wytworzenie kilku zapytań z~jednego pytania, zwiększa bazę zebranych podsumowań.
 \end{frame}
 
 \begin{frame}
   \frametitle{Wyszukiwanie podsumowań}
-
+  Przygotowany zbiór zapytań jest wykorzystywany przez \textit{webscrapowaniu} stron popularnych wyszukiwarek internetowych. System emuluje zachowanie przeglądarki Firefox, pobiera i~renderuje dokument HTML, następnie wycina z~dokumentu wszystkie interesujące podsumowania.
+  System obsługuje kilka wyszukiwarek internetowych:
+  \begin{itemize}
+    \item google,
+    \item yahoo,
+    \item bing,
+    \item duckduckgo.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Klasyfikacja typu pytania}
-
+  W~międzyczasie, system dokonuje klasyfikacji typu pytania. Wyróżniamy 16 typów pytań. Klasyfikacja typu pytania odbywa się przy użyciu wyrażeń regularnych wyszukujących zaimki pytające, związane z~danym typem. Docelowo, typ pytania będzie potrzebny do określenia jednego z~typów odpowiedzi:
+  \begin{itemize}
+    \item \texttt{DATA},
+    \item \texttt{MIEJSCE},
+    \item \texttt{WIELKOŚĆ},
+    \item \texttt{OSOBA},
+    \item \texttt{RZECZ}.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Klasyfikacja typu odpowiedzi}
-
+  Na podstawie typu pytania, określany jest typ odpowiedzi. W~przypadku oczywistych typów pytań, jeden zaimek pytający odpowiada jednemu typowi odpowiedzi. 
+  \begin{center}
+    \textit{czyj?} --- \texttt{OSOBA}
+  \end{center}
+  Dla niektórych typów pytań, nie da się jednoznacznie określić typu odpowiedzi. W~takim przypadku korzystamy z~listy możliwych typów odpowiedzi.
+  \begin{center}
+    \textit{jak?} --- \texttt{[WIELKOŚĆ, OSOBA, MIEJSCE, RZECZ]}
+  \end{center}
 \end{frame}
 
 \begin{frame}
   \frametitle{Wyszukiwanie odpowiedzi}
-
+  Każde otrzymane podsumowanie przetwarzane jest narzędziem \textit{tagger}, w~celu zamiany słów na odpowiadające im leksemy. Następnie, w~zależności od oczekiwanego typu odpowiedzi,
+  na podsumowaniach stosowane są albo wyrażenia regularne albo podział na n-gramy i~filtracja względem częstości.
 \end{frame}
 
 \begin{frame}
   \frametitle{Zwrócenie odpowiedzi}
-
+  Wraz z~uzyskaną odpowiedzią, użytkownikowi zwracany jest link do dokumentu, którego podsumowanie ostatecznie zwróciło odpowiedź. Jeżeli użytkownik korzystał z~dedykowanego interfejsu graficznego, może wrócić do strony głównej i~zadać pytanie jeszcze raz.
 \end{frame}
 
 \section{Implementacja i korzystanie z systemu}
@@ -239,9 +272,55 @@
   \end{figure}
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{Badanie wyszukiwarek internetowych}
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+      \hline
+      \textbf{przeglądarka} & $n_g$ &$n_{pg}$&$n_n$&$n_w$&$cov.$&$prec.$  \\ \hline
+      \textit{Google}&80&8&31&137&$\num{0.88}$&$\num{0.36}$ \\ \hline
+      \textit{DuckDuckGo}&66&3&76&111&$\num{0.70}$&$\num{0.37}$ \\ \hline
+    \end{tabular}
+    \caption{Porównanie otrzymanych wyników dla przeglądarek \textit{Google} oraz \textit{DuckDuckGo}}
+    
+    \label{tab:porownanieWysz}
+    
+  \end{table}
+\end{frame}
+
 \begin{frame}
   \frametitle{Badanie strategii generacji zapytań}
-
+  \begin{figure}
+    \begin{tikzpicture}
+    \begin{axis}[
+    grid=both,
+    width=\columnwidth,
+    height=7.5cm,
+    ybar,
+    ymin=0,
+    bar width=0.4cm,
+    enlarge x limits=0.2,
+    area legend,
+    legend style={at={(0.5,-0.15)},
+      anchor=north,
+      legend columns=3},
+    ylabel={Liczba odpowiedzi},
+    symbolic x coords={dobra, częściowo, błędna, brak},
+    xtick=data,
+    nodes near coords,
+    x label style={
+      fixed},
+    ]
+    \legend{stopwords, singlequery, chunks}
+    \addplot coordinates {(dobra,80) (częściowo,8) (błędna,137) (brak,31)};
+    \addplot coordinates {(dobra,85) (częściowo,9) (błędna,128) (brak,34)};
+    \addplot coordinates {(dobra,57) (częściowo,6) (błędna,105) (brak,88)};
+    \end{axis}
+    \end{tikzpicture}
+    \label{fig:porownanie-strategie}
+  \end{figure}
 \end{frame}
 
 \section{Wnioski i przemyślenia}
