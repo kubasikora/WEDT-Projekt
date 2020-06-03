@@ -52,7 +52,7 @@ Z~powodu charakteru pytań o~fakty, większość oczekiwanych odpowiedzi to rzec
 \subsection{Uzyskane wyniki}
 
 \subsubsection{Testowanie różnych wyszukiwarek}
-W ramach pierwszej serii eksperymentów sprawdziliśmy jak wybór wyszukiwarki wpływa na jakość odpowiedzi. Przeprowadzono testy dla wyszukiwarki \textit{Google} oraz \textit{DuckDuckGo}. Wybór wyszukiwarek nie był przypadkowy. Spośród dostępnych wyszukiwarek \textit{Google} zwraca najmniej podsumowań, natomiast \textit{DuckDuckGo} najwięcej. Z drugiej strony jakość streszczeń pozyskanych z \textit{Google} jest największa, a te otrzymane z \textit{DuckDuckGo} często odbiegają od tematu. Testy zostały przeprowadzone dla startegii \textit{stopwords}.
+W ramach pierwszej serii eksperymentów sprawdziliśmy jak wybór wyszukiwarki wpływa na jakość odpowiedzi. Przeprowadzono testy dla wyszukiwarki \textit{Google} oraz \textit{DuckDuckGo}. Wybór wyszukiwarek nie był przypadkowy. Spośród dostępnych wyszukiwarek \textit{Google} zwraca najmniej podsumowań, natomiast \textit{DuckDuckGo} najwięcej. Z drugiej strony jakość streszczeń pozyskanych z \textit{Google} jest największa, a te otrzymane z \textit{DuckDuckGo} często odbiegają od tematu. Testy zostały przeprowadzone dla strategii \textit{stopwords}.
 
 W tabelach \ref{tab:googleStopwords} i \ref{tab:DuckStopwords} oraz na wykresach \ref{fig:google-wyniki} i \ref{fig:duckduckgo-wynik} przedstawione zostały otrzymane wyniki z podziałem na typy oczekiwanych odpowiedzi. $n_g$ to liczba poprawnych odpowiedzi, $n_{pg}$ to liczba częściowo poprawnych odpowiedzi, $n_n$ odpowiada za liczbę nieudzielonych odpowiedzi, $n_w$ za liczbę niepoprawnych odpowiedzi, natomiast $cov.$ i $prec.$ to odpowiednio uzyskane pokrycie oraz precyzja.
 
@@ -203,7 +203,7 @@ W tabeli \ref{tab:porownanieWysz} znajduje się porównanie sumarycznych wynikó
 \subsubsection{Testowanie strategii tworzenia zapytań}
 Druga seria eksperymentów polegała na testowaniu systemu pod kątem wykorzystywanej strategii. Postanowiono, że każda strategia zostanie sprawdzona przy użyciu wyszukiwarki \textit{Google}. 
 
-Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategii zostały przedstawione w tabelach \ref{tab:googleStopwords}, \ref{tab:GoogleSingle} oraz \ref{tab:GoogleChunks}.
+Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategii zostały przedstawione w tabelach \ref{tab:googleStopwords}, \ref{tab:GoogleSingle} oraz \ref{tab:GoogleChunks} oraz wykresach \ref{fig:google-wyniki}, \ref{fig:google-wyniki-single} i \ref{fig:google-wyniki-chunks}.
 
 \begin{table}[h]
 	\centering
@@ -240,6 +240,11 @@ Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategi
 	\label{tab:GoogleChunks}
 	
 \end{table}
+
+Porównanie uzyskanych rezultatów zostało przedstawione w tabeli \ref{tab:porownanieStrat} oraz na wykresie \ref{fig:porownanie-strategie}. Można zauważyć, że stosunkowo niewielkie pokrycie zostało otrzymane dla strategii \textit{chunks}. Otrzymany rezultat może być spowodowany wysokim zaszumieniem danych. Większość wśród rozważanych podsumowań zdecydowanie za bardzo odbiegało od tematu i dlatego system nie odpowiedział aż na 88 pytań. Najwyższa precyzja została osiągnięta dla strategii \textit{singleQuery}. Z obserwacji wynika, że wyszukiwarka \textit{Google} zwraca około ośmiu podsumowań dla każdego zapytania. Okazało się, że badanie niecałych 10. podsumowań dla pojedynczego zapytania pozwalało na uzyskanie odpowiedzi na 85 z 256 pytań. 
+
+Porównując statystyki dla wszystkich badanych strategii, można zauważyć, że stosunkowo najgorzej system odpowiada na pytania o wielkość. Kategoria ta jest najbardziej różnorodna i stosunkowo najtrudniej jest wydobyć przedmiot zapytania.
+
 
 \begin{table}[h]
 	\centering
@@ -349,3 +354,5 @@ Uzyskane wyniki z podziałem na poszczególne typy pytań dla różnych strategi
 	
 	\caption{Szczegółowe wyniki odpowiadania przy użyciu strategii \textit{chunks} oraz wyszukiwarki \textit{Google}}\label{fig:google-wyniki-chunks}
 \end{figure}
+
+Uzyskane rezultaty są zadowalające. Naszym założeniem było by stworzyć system, który będzie w stanie odpowiedzieć z minimum $30\%$ precyzją. Każda z badanych konfiguracji spełniła to założenie. Precyzja wahała się w przedziale $<34\%, 38\%>$. Wybór wyszukiwarki oraz strategii bardziej wpływał na pokrycie. Parametr ten wahał się od $66\%$ dla strategii \textit{chunks} do aż $88\%$ dla strategii \textit{stopwords} i wyszukiwarki \textit{Google}. 
