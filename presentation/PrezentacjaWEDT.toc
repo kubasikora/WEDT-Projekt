@@ -3,4 +3,4 @@
 \beamer@sectionintoc {2}{Algorytm wyszukiwania odpowiedzi}{6}{0}{2}
 \beamer@sectionintoc {3}{Implementacja i korzystanie z systemu}{15}{0}{3}
 \beamer@sectionintoc {4}{Wyniki bada\IeC {\'n}}{20}{0}{4}
-\beamer@sectionintoc {5}{Wnioski i przemy\IeC {\'s}lenia}{23}{0}{5}
+\beamer@sectionintoc {5}{Wnioski i przemy\IeC {\'s}lenia}{24}{0}{5}
