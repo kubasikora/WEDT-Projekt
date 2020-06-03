@@ -29,7 +29,7 @@ Pierwszym krokiem algorytmu jest akwizycja pytania od użytkownika systemu. Każ
 \subsubsection{Klasyfikacja typu pytania}
 W~kolejnym kroku następuje klasyfikacja typu pytania, a zaraz po niej określenie typu oczekiwanej odpowiedzi. Klasy pytań są definiowane przez zaimki pytające, podobnie jak w~\cite{gupta2012survey}. W naszym systemie wyróżniamy 16 rodzajów pytań. Rozpoznawane są zarówno formy podstawowe zaimków pytających, jak i formy odmienione.
 
-Klasyfikacja typu pytania jest ściśle powiązana z pierwszym z dwóch etapów rozpoznawania typu odpowiedzi. Aby wykryć typ pytania, słowa z zapytania są kolejno sprawdzane w przygotowanym słowniku zawierającym pary typPytania-typOdpowiedzi, gdzie typPytania jest kluczem, natomiast typOdpowiedzi wartością. Słowo z zapytania, które jako pierwsze będzie miało przyporządkowaną wartość w słowniku, informuje o typie pytania. Od tej reguły istnieje jeden wyjątek, który wymusza sprawdzenie również kolejnych wyrazów z zapytania. Przy pytaniach \emph{Co ile ... ?}, typ pytania jest określony przez drugi wyraz z zapytania posiadający odpowiednik w słowniku. Rozpoznawane pary typPytania-typOdpowiedzi przedstawiono w tabeli \ref{tab:tabelaPytOdp}.
+Klasyfikacja typu pytania jest ściśle powiązana z pierwszym z dwóch etapów rozpoznawania typu odpowiedzi. Aby wykryć typ pytania, słowa z zapytania są kolejno sprawdzane w przygotowanym słowniku zawierającym pary typPytania-typOdpowiedzi, gdzie typPytania jest kluczem, natomiast typOdpowiedzi wartością. Słowo z zapytania, które jako pierwsze będzie miało przyporządkowaną wartość w słowniku, informuje o typie pytania. Od tej reguły istnieje jeden wyjątek, który wymusza sprawdzenie również kolejnych wyrazów z zapytania. Przy pytaniach \emph{Co ile ... ?}, typ pytania jest określony przez drugi wyraz z zapytania posiadający odpowiednik w słowniku. Rozpoznawane pary typPytania-typOdpowiedzi przedstawiono w tabeli~\ref{tab:tabelaPytOdp}.
 
 \begin{table}[h]
 	\centering
@@ -50,7 +50,7 @@ Klasyfikacja typu pytania jest ściśle powiązana z pierwszym z dwóch etapów 
 		dokąd? & MIEJSCE \\ \hline
 		gdzie & MIEJSCE, RZECZ \\ \hline
 		kto & OSOBA, MIEJSCE \\ \hline
-		jak & comples \\ \hline
+		jak & complex \\ \hline
 		który? & complex \\ \hline
 		jaki? & complex  \\  \hline
 	\end{tabular}
