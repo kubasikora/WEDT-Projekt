@@ -292,7 +292,35 @@
 
 \begin{frame}
   \frametitle{Badanie strategii generacji zapytań}
-
+  \begin{figure}
+    \begin{tikzpicture}
+    \begin{axis}[
+    grid=both,
+    width=\columnwidth,
+    height=7.5cm,
+    ybar,
+    ymin=0,
+    bar width=0.4cm,
+    enlarge x limits=0.2,
+    area legend,
+    legend style={at={(0.5,-0.15)},
+      anchor=north,
+      legend columns=3},
+    ylabel={Liczba odpowiedzi},
+    symbolic x coords={dobra, częściowo, błędna, brak},
+    xtick=data,
+    nodes near coords,
+    x label style={
+      fixed},
+    ]
+    \legend{stopwords, singlequery, chunks}
+    \addplot coordinates {(dobra,80) (częściowo,8) (błędna,137) (brak,31)};
+    \addplot coordinates {(dobra,85) (częściowo,9) (błędna,128) (brak,34)};
+    \addplot coordinates {(dobra,57) (częściowo,6) (błędna,105) (brak,88)};
+    \end{axis}
+    \end{tikzpicture}
+    \label{fig:porownanie-strategie}
+  \end{figure}
 \end{frame}
 
 \section{Wnioski i przemyślenia}
